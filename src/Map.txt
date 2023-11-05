@@ -1,0 +1,35 @@
+create temp point
+  click easy button
+  show cursor
+  click cursor
+  draw point
+  hide cursor
+
+create temp shape
+  click drawingToolBar button
+  show drawingToolBar
+  click shape button
+  set shapeType
+  hide drawingToolBar
+  show cursor
+  click cursor
+  draw shape
+  hide cursor
+  set shapeType to point
+
+open contextMenu
+  rightclick shape
+  show contextMenu
+  set ID to state
+
+edit temp shape
+  click edit menu
+  hide contextMenu
+  show controlPoints
+  show cursor
+
+delete temp shape
+  click delete menu
+  hide contextMenu
+  delete shape
+  set ID null to state
