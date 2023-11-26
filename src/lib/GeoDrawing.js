@@ -61,29 +61,44 @@
         break;        
       case 'polygon':
         sh = polygon([
-          [addPoint(p, 175, 0),
+          [
+            addPoint(p, 175, 0),
             addPoint(p, 175, 120),
             addPoint(p, 175, 240),
-            addPoint(p, 175, 0)]
-          ]);
+            addPoint(p, 175, 0)
+          ]
+        ]);
         break;
       case 'multipolygon':
         sh = multiPolygon([
-          [[addPoint(p, 175, 0),
-            addPoint(p, 175, 120),
-            addPoint(p, 175, 240),
-            addPoint(p, 175, 0)]],
-          [[
-            addPoint(p, 275, 180),
-            addPoint(p, 190, 120),
-            addPoint(p, 190, 240),
-            addPoint(p, 275, 180),
-          ]]
+          [
+            [
+              addPoint(p, 175, 0),
+              addPoint(p, 175, 120),
+              addPoint(p, 175, 240),
+              addPoint(p, 175, 0)
+            ],
+            [
+              addPoint(p, 70, 25),
+              addPoint(p, 50, 120),
+              addPoint(p, 45, 240),
+              addPoint(p, 70, 25)
+            ]
+          ],
+          [
+            [
+              addPoint(p, 275, 180),
+              addPoint(p, 190, 120),
+              addPoint(p, 190, 240),
+              addPoint(p, 275, 180)
+            ]
+          ]
         ]);
         break;
       default:
         break;
     }
+    console.log(JSON.stringify(sh))
     sh.properties.id = Math.random().toString(36).substring(2, 10);
     sh.properties.type = 0;
     sh.properties.data = 'TestData';
@@ -108,9 +123,13 @@
         }
         break;
       case 'LineString':
+        pta = coords;
+        break;
       case 'Polygon':
-      case 'MultiPolygon':
-        pta = explodeFeatureToArray(ft)
+        pta = [...new Set(coords.flat().map(f=> JSON.stringify(f)))].map(s=> JSON.parse(s));
+        break;        
+        case 'MultiPolygon':
+        pta = [...new Set(coords.flat(2).map(f=> JSON.stringify(f)))].map(s=> JSON.parse(s));
         break;    
       default:
         break;
@@ -124,7 +143,7 @@
     return mpa;
   }
   
-  const featureToMidPointFeature=(ft)=>{  // Ez tárolja a midpointokat
+  export const featureToMidPointFeature=(ft)=>{  // Ez tárolja a midpointokat
     let coords = ft.geometry.coordinates
     let mpa = [];
     let tmpFeature;
@@ -176,7 +195,7 @@
     return cp;
   }*/
 
-  const findIndexOfCoordArray = (arr, p)=>{
+  export const findIndexOfCoordArray = (arr, p)=>{
     return arr.findIndex(f=> new Set([...f, ...p]).size===2);
   }
 
@@ -243,43 +262,93 @@
   export const removeControlPoint =(f, cor)=>{
     if(f.geometry.type === 'Point') return;
     let i = findIndexOfComplexShapes(f, cor);
-    let fc = f.geometry.coordinates;
-    switch (f.geometry.type) {
-      case 'LineString':
-        if(fc.length>2){
-          fc.splice(i[0],1)
+    if(i){
+      let fc = f.geometry.coordinates;
+      switch (f.geometry.type) {
+        case 'LineString':
+          if(fc.length>2){
+            fc.splice(i[0],1)
+          }
+          break;
+        case 'Polygon':
+          if(fc[i[0]].length>4){
+            if(i[1]===0 ){
+              fc[i[0]].splice(fc[i[0]].length-1,1);
+              fc[i[0]][0] = fc[i[0]][fc[i[0]].length-1];
+            }
+            else{
+              fc[i[0]].splice(i[1],1);
+            }          
+          }
+          break;
+        case 'MultiPolygon':
+          if(fc[i[0]][i[1]].length>4){
+            if(i[2]===0 ){
+              fc[i[0]][i[1]].splice(fc[i[0]][i[1]].length-1,1);
+              fc[i[0]][i[1]][0] = fc[i[0]][i[1]][fc[i[0]][i[1]].length-1];
+            }
+            else{
+              fc[i[0]][i[1]].splice(i[2],1);
+            }
+          }        
+          break;   
+        default:
+          break;
         }
-        break;
-      case 'Polygon':
-        if(fc[i[0]].length>4){
-          if(i[1]===0 ){
-            fc[i[0]].splice(fc[i[0]].length-1,1);
-            fc[i[0]][0] = fc[i[0]][fc[i[0]].length-1];
-          }
-          else{
-            fc[i[0]].splice(i[1],1);
-          }          
-        }
-        break;
-      case 'MultiPolygon':
-        if(fc[i[0]][i[1]].length>4){
-          if(i[2]===0 ){
-            fc[i[0]][i[1]].splice(fc[i[0]][i[1]].length-1,1);
-            fc[i[0]][i[1]][0] = fc[i[0]][i[1]][fc[i[0]][i[1]].length-1];
-          }
-          else{
-            fc[i[0]][i[1]].splice(i[2],1);
-          }
-        }        
-        break;   
-      default:
-        break;
-      }
+    }
       return f;
   }
 
+  export const updateSimpleShape = (f, c, i, cor)=>{
+    let p = f.geometry.param;
+    let mp = c.geometry.coordinates;
+    switch (i[0]) {
+      case 0:
+        f.geometry.coordinates = cor;
+        break;
+      case 1:
+        mp[1] = cor
+        p[0] = (distance(mp[0], mp[1], {units:'meters'})).toFixed(1);
+        if(p.length>1){
+          p[2] = (bearing(mp[0], mp[1]) + 90).toFixed(1);
+        }
+        break;
+      case 2:
+        mp[2] = cor;
+        p[1] = (distance(mp[0], mp[2], {units:'meters'})).toFixed(1);
+        break;
+      default:
+        return false
+    }
+    return f;
+  }
 
-  export const updateShape = (f, cp, idx, cor)=>{
+  export const updateComplexShape = (f, i, cor)=>{
+    if(!i) return
+    let coords = f.geometry.coordinates;
+    switch (f.geometry.type) {
+      case 'LineString':
+        coords[i[0]] = cor;
+        break;
+      case 'Polygon':
+        coords[i[0]][i[1]] = cor;
+        if(i[1] === 0){
+          coords[i[0]][coords[i[0]].length-1] = cor;
+        }
+        break;
+      case 'MultiPolygon':
+        coords[i[0]][i[1]][i[2]] = cor;
+        if(i[2] === 0){
+          coords[i[0]][i[1]][coords[i[0]][i[1]].length-1] = cor;
+        }        
+        break;    
+      default:
+        break;
+    }
+    return f
+  }
+
+  /*export const updateShape = (f, cp, idx, cor)=>{
     if(idx === -1) return;
     if(f.geometry.type === 'Point'){
       let param = f.geometry.param;
@@ -325,7 +394,7 @@
       }
     }
     return f;
-  }
+  }*/
 
   /*export const geoLocation = async()=>{
     const coordinates = await Geolocation.getCurrentPosition({

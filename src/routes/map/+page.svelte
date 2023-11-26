@@ -8,7 +8,6 @@
   //import Cursor from '$lib/Cursor.svelte';
   import Cursor from '$lib/CursorNew.svelte';
 
-
   import Control from "$lib/Control.svelte";
   import Proba from "$lib/Proba.svelte";
   import Modal from "$lib/Modal.svelte";
