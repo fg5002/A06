@@ -58,7 +58,6 @@
   }
 
   const hideControlPoints = ()=>{
-    console.log(JSON.stringify($tempGeo.features[$tempIndex]))
     $controlGeo.features = [];
     showCursor= false;
   }

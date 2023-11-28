@@ -10,14 +10,30 @@
   import {point, lineString, polygon, multiPoint, multiPolygon} from '@turf/helpers'; // npm.install @turf/helpers
   //import { Geolocation } from '@capacitor/geolocation';
   
-  export const pxToMeter=(pixel=1)=> parseFloat((pixel * (get(metersPerPixel))).toFixed(2));
 
+  /**
+  * @typedef LatLng
+  * @type {Object}
+  * @property {number} lat
+  * @property {number} lng
+  */
+
+  /** @typedef LngLatArr
+   * @type {[number, number]}
+  */
+
+ export const pxToMeter=(pixel=1)=> parseFloat((pixel * (get(metersPerPixel))).toFixed(2));
+
+ /** @param {LngLatArr} a @returns {LngLatArr} */
   export const trimCoordArray=(a)=> a.map(c=> parseFloat(c.toFixed(6)));
 
+  /** @param {LatLng} cor @return {LngLatArr} */
   export const latLngToLatLngArray=(cor)=> trimCoordArray([cor.lat, cor.lng]);
-  
+
+  /** @param {LatLng} cor @return {LngLatArr} */
   export const latLngToLngLatArray=(cor)=> trimCoordArray([cor.lng, cor.lat]);
-  
+
+  /** @param {LngLatArr} arr @return {LatLng} */
   export const lngLatArrayToLatLng=(arr)=> {return {lat: parseFloat(arr[1]).toFixed(6), lng: parseFloat(arr[0]).toFixed(6)}}
 
   export const explodeFeatureToArray=(ft)=> explode(ft).features.map(f=> trimCoordArray(f.geometry.coordinates));
@@ -27,12 +43,11 @@
   const addPoint=(pt, dis, ang)=> trimCoordArray(destination(point(pt), pxToMeter(dis), ang, {units: 'meters'}).geometry.coordinates);
 
   export const pointsToEllipse=(f)=>{
-    let pts = [
-      parseFloat(distance(point(f.geometry.coordinates), point(f.geometry.ellipse[0]), {units:'meters'}).toFixed(1)),
-      parseFloat(distance(point(f.geometry.coordinates), point(f.geometry.ellipse[1]), {units:'meters'}).toFixed(1))
+    return [
+      [parseFloat(distance(point(f.geometry.coordinates), point(f.geometry.ellipse[0]), {units:'meters'}).toFixed(1)),
+      parseFloat(distance(point(f.geometry.coordinates), point(f.geometry.ellipse[1]), {units:'meters'}).toFixed(1))],
+      bearing(point(f.geometry.coordinates), point(f.geometry.ellipse[0]))-90
     ]
-    let bp = bearing(point(f.geometry.coordinates), point(f.geometry.ellipse[0]));
-    return [pts, bp-90];
   }
 
   export const pointToCircle=(f)=>{
@@ -44,8 +59,8 @@
       .map(c=> parseFloat(c.toFixed(6)));
   }
 
-  export const drawShape=(shape, p)=> {
-    let sh = point(p);
+  export const drawShape=(shape, cor)=> {
+    let sh = point(cor);
     switch (shape) {
       case 'circle':
         sh.geometry.param = [pxToMeter(50)];
@@ -55,17 +70,17 @@
         break;
       case 'line':
         sh = lineString([
-          addPoint(p, 75, 80),
-          //addPoint(p, 150, 105),
-          addPoint(p, 250, 15)]);
+          addPoint(cor, 75, 80),
+          //addPoint(cor, 150, 105),
+          addPoint(cor, 250, 15)]);
         break;        
       case 'polygon':
         sh = polygon([
           [
-            addPoint(p, 175, 0),
-            addPoint(p, 175, 120),
-            addPoint(p, 175, 240),
-            addPoint(p, 175, 0)
+            addPoint(cor, 175, 0),
+            addPoint(cor, 175, 120),
+            addPoint(cor, 175, 240),
+            addPoint(cor, 175, 0)
           ]
         ]);
         break;
@@ -73,24 +88,24 @@
         sh = multiPolygon([
           [
             [
-              addPoint(p, 175, 0),
-              addPoint(p, 175, 120),
-              addPoint(p, 175, 240),
-              addPoint(p, 175, 0)
+              addPoint(cor, 175, 0),
+              addPoint(cor, 175, 120),
+              addPoint(cor, 175, 240),
+              addPoint(cor, 175, 0)
             ],
             [
-              addPoint(p, 70, 25),
-              addPoint(p, 50, 120),
-              addPoint(p, 45, 240),
-              addPoint(p, 70, 25)
+              addPoint(cor, 70, 25),
+              addPoint(cor, 50, 120),
+              addPoint(cor, 45, 240),
+              addPoint(cor, 70, 25)
             ]
           ],
           [
             [
-              addPoint(p, 275, 180),
-              addPoint(p, 190, 120),
-              addPoint(p, 190, 240),
-              addPoint(p, 275, 180)
+              addPoint(cor, 275, 180),
+              addPoint(cor, 190, 120),
+              addPoint(cor, 190, 240),
+              addPoint(cor, 275, 180)
             ]
           ]
         ]);
@@ -98,7 +113,6 @@
       default:
         break;
     }
-    console.log(JSON.stringify(sh))
     sh.properties.id = Math.random().toString(36).substring(2, 10);
     sh.properties.type = 0;
     sh.properties.data = 'TestData';
@@ -143,7 +157,7 @@
     return mpa;
   }
   
-  export const featureToMidPointFeature=(ft)=>{  // Ez tárolja a midpointokat
+  const convertFeatureToMidPointFeature=(ft)=>{  // Ez tárolja a midpointokat
     let coords = ft.geometry.coordinates
     let mpa = [];
     let tmpFeature;
@@ -173,7 +187,7 @@
     fc.features = [...fc.features, cp];
 
     if(f.geometry.type != 'Point'){
-      let mp = featureToMidPointFeature(f);
+      let mp = convertFeatureToMidPointFeature(f);
       let cp = featureToMultiPoint(mp);
       cp.properties.type = 6;
       fc.features = [...fc.features, cp];
@@ -181,51 +195,30 @@
     return fc;    
   }
 
-  /*export const drawControlPoints=(f)=>{
-    let cp = featureToMultiPoint(f);
-    cp.properties.type = 5;
-    return cp;
-  }*/
-  
-  /*export const drawMidControlPoints=(f)=>{
-    let mp = featureToMidPointFeature(f);
-    //console.log('mp', JSON.stringify(mp))
-    let cp = featureToMultiPoint(mp);
-    cp.properties.type = 6;
-    return cp;
-  }*/
-
-  export const findIndexOfCoordArray = (arr, p)=>{
-    return arr.findIndex(f=> new Set([...f, ...p]).size===2);
+  export const findIndexOfCoordArray = (arr, cor)=>{
+    return arr.findIndex(f=> new Set([...f, ...cor]).size===2);
   }
 
-  export const findIndexOfSimpleShapes = (feature, cor)=> {
-    return findIndexOfCoordArray(feature, cor)
-  }
-
-  export const findIndexOfComplexShapes=(ft, pt)=>{ // az temp rajzon keresi
-    let cor = ft.geometry.coordinates;
+  export const findIndexOfShape=(f, cor)=>{ // az temp rajzon keresi
+    let coords = f.geometry.coordinates;
     let pti = null;
     let w;
-    switch (ft.geometry.type) {
-      case 'Point':
-        w = findIndexOfCoordArray([cor], pt);
-        pti = w>-1 ? [w] : pti;
-        break;
-      case 'LineString':
-        w = findIndexOfCoordArray(cor, pt);
-        pti = w>-1 ? [w] : pti;
+    switch (f.geometry.type) {
+        case 'MultiPoint':
+        case 'LineString':
+          w = findIndexOfCoordArray(coords, cor);
+          pti =  w>-1 ? [w] : pti;
         break;
       case 'Polygon':
-        cor.forEach((v,i)=>{
-          w = findIndexOfCoordArray(v, pt);
+        coords.forEach((v,i)=>{
+          w = findIndexOfCoordArray(v, cor);
           pti = w>-1 ? [i,w] : pti;
         })
         break;
       case 'MultiPolygon':
-        cor.forEach((v,i)=>{
+        coords.forEach((v,i)=>{
           v.forEach((z,j)=>{
-            w = findIndexOfCoordArray(z, pt);
+            w = findIndexOfCoordArray(z, cor);
             pti = w>-1 ? [i,j,w] : pti;
           })
         })
@@ -237,10 +230,9 @@
   }
 
   export const addNewControlPoint=(f, cor)=>{
-    if(f.geometry.type === 'Point') return;
-    let i = findIndexOfComplexShapes(featureToMidPointFeature(f), cor);
+    let i = findIndexOfShape(convertFeatureToMidPointFeature(f), cor);
     let fc = f.geometry.coordinates;
-    if(i != null){ 
+    if(i){ 
       switch (f.geometry.type) {
         case 'LineString':
           fc.splice(i[0] + 1, 0, cor)
@@ -254,14 +246,13 @@
         default:
           break;
         }
-      i[i.length-1] = i[i.length-1]+1;
-      return i;
-    }
+      }
+    return f;
   }
 
   export const removeControlPoint =(f, cor)=>{
     if(f.geometry.type === 'Point') return;
-    let i = findIndexOfComplexShapes(f, cor);
+    let i = findIndexOfShape(f, cor);
     if(i){
       let fc = f.geometry.coordinates;
       switch (f.geometry.type) {
@@ -348,54 +339,6 @@
     return f
   }
 
-  /*export const updateShape = (f, cp, idx, cor)=>{
-    if(idx === -1) return;
-    if(f.geometry.type === 'Point'){
-      let param = f.geometry.param;
-      let points = cp.geometry.coordinates;
-      switch (idx) {
-        case 0:
-          f.geometry.coordinates = cor;
-          break;
-        case 1:
-          points[1] = cor
-          param[0] = (distance(points[0], points[1], {units:'meters'})).toFixed(1);
-          if(param.length>1){
-            param[2] = (bearing(points[0], points[1]) + 90).toFixed(1);
-          }
-          break;
-        case 2:
-          points[2] = cor;
-          param[1] = (distance(points[0], points[2], {units:'meters'})).toFixed(1);
-          break;
-        default:
-          return false
-      }
-    }
-    else{
-      switch (f.geometry.type) {
-        case 'LineString':
-          f.geometry.coordinates[idx[0]] = cor;
-          break;
-        case 'Polygon':
-          f.geometry.coordinates[idx[0]][idx[1]] = cor;
-          if(idx[1] === 0){
-            f.geometry.coordinates[idx[0]][f.geometry.coordinates[idx[0]].length-1] = cor;
-          }
-          break;
-        case 'MultiPolygon':
-          f.geometry.coordinates[idx[0]][idx[1]][idx[2]] = cor;
-          if(idx[2] === 0){
-            f.geometry.coordinates[idx[0]][idx[1]][f.geometry.coordinates[idx[0]][idx[1]].length-1] = cor;
-          }        
-          break;    
-        default:
-          break;
-      }
-    }
-    return f;
-  }*/
-
   /*export const geoLocation = async()=>{
     const coordinates = await Geolocation.getCurrentPosition({
 			enableHighAccuracy: true,
@@ -426,85 +369,3 @@
   /*const getMaxId=(gjs)=> {
     return gjs.features.reduce((a,b)=> b.properties.id > a ? b.properties.id : a, 50);
   }*/
-
-/*   export const cursorSnap=(e, ...args)=>{
-    let cor = e.target.getLatLng();
-    let pt = latLngToLngLatArray(cor).map(c=> parseFloat(c.toFixed(6)));
-    let np;
-    [...args].forEach(fc=> {
-      fc.features.forEach(ft=> {      
-        switch (ft.geometry.type) {
-          case 'LineString':
-            np = getNearestPointOnLine(ft.geometry.coordinates, pt);
-            snapped(cor, np) && e.target.setLatLng(lngLatArrayToLatLng(np));        
-            break;
-          case 'Polygon':
-            ft.geometry.coordinates.forEach(f=> {
-              np = getNearestPointOnLine(f, pt);
-              snapped(cor, np) && e.target.setLatLng(lngLatArrayToLatLng(np));  
-            })      
-            break;
-          case 'MultiPolygon':
-            ft.geometry.coordinates.forEach(p=> {
-              p.forEach(f=> {
-                let np = getNearestPointOnLine(f, pt);
-                snapped(cor, np) && e.target.setLatLng(lngLatArrayToLatLng(np));  
-              })
-            })
-            break;
-          default:
-            break;
-        }
-        explodeFeatureToArray(ft).forEach(p=> snapped(cor, p) && e.target.setLatLng(lngLatArrayToLatLng(p)));
-      })
-    })
-  }
-
-  const snapped =(e, n, dist=15)=> {
-    let res = distance(point(latLngToLngLatArray(e)), point(n), {units: 'meters'});
-    return res < pxToMeter(dist) ? true : false
-  }*/
-
-
-
-  export const cursorSnap=(e, ...args)=>{
-    let pt = latLngToLngLatArray(e.target.getLatLng());
-    let np;
-    [...args].forEach(fc=> {
-      fc.features.forEach(ft=> {      
-        switch (ft.geometry.type) {
-          case 'LineString':
-            np = getNearestPointOnLine(ft.geometry.coordinates, pt);
-            snap(e, np);
-            break;
-          case 'Polygon':
-            ft.geometry.coordinates.forEach(f=> {
-              np = getNearestPointOnLine(f, pt);
-              snap(e, np);  
-            })      
-            break;
-          case 'MultiPolygon':
-            ft.geometry.coordinates.forEach(p=> {
-              p.forEach(f=> {
-                let np = getNearestPointOnLine(f, pt);
-                snap(e, np);
-              })
-            })
-            break;
-          default:
-            break;
-        }
-        explodeFeatureToArray(ft).forEach(np=> snap(e, np));
-      })
-    })
-  }
-
-  const snap =(e, n, dist=15)=> {
-    let dis = distance(point(latLngToLngLatArray(e.target.getLatLng())), point(n), {units: 'meters'});
-    if(dis < pxToMeter(dist)){
-      e.target.setLatLng(lngLatArrayToLatLng(n));
-      /*if(pointIndex>-1){
-        updateShape(d.geometry.coordinates);
-      }*/
-    }
-  }

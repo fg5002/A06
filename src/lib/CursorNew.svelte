@@ -21,12 +21,10 @@
     pxToMeter,
     explodeFeatureToArray,
     drawShape,
-    findIndexOfCoordArray,
-    findIndexOfComplexShapes,
-    findIndexOfSimpleShapes,
+    findIndexOfShape,
     drawControlPoints,
+    addNewControlPoint,
     removeControlPoint,
-    featureToMidPointFeature,
     updateSimpleShape,
     updateComplexShape
   } from '$lib/GeoDrawing.js';
@@ -51,7 +49,18 @@
       bgr = 'bg-orange-400';
       brd = 'border-orange-400'
     }
-  }  
+  }
+
+  /**
+  * @typedef LatLng
+  * @type {Object}
+  * @property {number} lat
+  * @property {number} lng
+  */
+
+  /** @typedef LngLatArr
+  * @type {[number, number]}
+  */
 
   export const cursorSnap=(e, ...args)=>{
     let cor = latLngToLngLatArray(e.detail.latlng);
@@ -80,18 +89,19 @@
           default:
             break;
         }
-        explodeFeatureToArray(ft).forEach(np=> snap(e, np));
+        explodeFeatureToArray(ft).forEach(np=> {
+          snap(e, np);
+        });
       })
     })
   }
 
-  const snap =(e, n, dist=15)=> {
+  const snap = (e, n)=> {
     let cor = latLngToLngLatArray(e.detail.latlng);
-    let dis = distance(point(cor), point(n), {units: 'meters'});
-    if(dis < pxToMeter(dist)){
+    let dist = distance(point(cor), point(n), {units: 'meters'});
+    if(dist < pxToMeter(15)){
+      updateShapes(n);
       e.detail.target.setLatLng(lngLatArrayToLatLng(n));
-      //console.log(e.detail.target)
-      //updateShapes(e.detail.target);
     }
   }
 
@@ -109,72 +119,22 @@
 
   const selectControlPoint = (cor)=>{
     let f = $tempGeo.features[$tempIndex];
-    addNewControlPoint(f, cor);
-    $pointIndex = findIndexOfShape(f, cor);
+    if(f.geometry.type === 'Point'){
+      //$pointIndex = findIndexOfSimpleShape($controlGeo.features[0], cor)
+      $pointIndex = findIndexOfShape($controlGeo.features[0], cor)
+    }
+    else{
+      $tempGeo.features[$tempIndex] = addNewControlPoint(f, cor);
+      $controlGeo = drawControlPoints(f);
+      $pointIndex = findIndexOfShape(f, cor)
+    }
   }
 
-  const drawNewShape=(e)=>{
-    let sh = drawShape($selectedShape, e);
+  const drawNewShape=(cor)=>{
+    let sh = drawShape($selectedShape, cor);
     $tempGeo.features = [...$tempGeo.features, sh];
     $selectedShape = 'point';
     showCursor = false;
-  }
-
-  const findIndexOfShape = (f, e)=>{ // az temp rajzon keresi
-    let cor = f.geometry.coordinates;
-    let pti = null;
-    let w;
-    switch (f.geometry.type) {
-      case 'Point':
-        w = [findIndexOfCoordArray($controlGeo.features[0].geometry.coordinates, e)];
-        pti = w>-1 ? w : pti;
-        break;
-        case 'LineString':
-          w = findIndexOfCoordArray(cor, e);
-          console.log('W', JSON.stringify(w))
-          pti =  w>-1 ? [w] : pti;
-        break;
-      case 'Polygon':
-        cor.forEach((v,i)=>{
-          w = findIndexOfCoordArray(v, e);
-          pti = w>-1 ? [i,w] : pti;
-        })
-        break;
-      case 'MultiPolygon':
-        cor.forEach((v,i)=>{
-          v.forEach((z,j)=>{
-            w = findIndexOfCoordArray(z, e);
-            pti = w>-1 ? [i,j,w] : pti;
-          })
-        })
-        break;   
-      default:
-        break;
-      }
-      console.log('pti', JSON.stringify(pti))
-    return pti;
-  }
-  
-  const addNewControlPoint=(f, cor)=>{
-    if(f.geometry.type === 'Point') return;
-    let i = findIndexOfShape(featureToMidPointFeature(f), cor);
-    let fc = f.geometry.coordinates;
-    if(i){ 
-      switch (f.geometry.type) {
-        case 'LineString':
-          fc.splice(i[0] + 1, 0, cor)
-          break;
-        case 'Polygon':
-          fc[i[0]].splice(i[1] + 1, 0, cor)
-          break;
-        case 'MultiPolygon':
-          fc[i[0]][i[1]].splice(i[2] + 1, 0, cor)
-          break;   
-        default:
-          break;
-        }
-    }
-    $controlGeo = drawControlPoints(f);
   }
 
   const deleteControlPoint = (e)=>{
@@ -185,14 +145,22 @@
     $controlGeo = drawControlPoints(f);
   }
 
-  const updateShapes = (e)=> {
+  const updateShapes = (cor)=> {
     if(!$pointIndex) return
     let f = $tempGeo.features[$tempIndex];
     $tempGeo.features[$tempIndex] = f.geometry.type === 'Point' ?
-    updateSimpleShape(f, $controlGeo.features[0], $pointIndex, latLngToLngLatArray(e.detail.latlng)) :
-    updateComplexShape(f, $pointIndex, latLngToLngLatArray(e.detail.latlng));
+    updateSimpleShape(f, $controlGeo.features[0], $pointIndex, cor) :
+    updateComplexShape(f, $pointIndex, cor);
     $controlGeo = drawControlPoints(f);
   }
+
+  const cursorDrag = (e)=> {
+    //$controlGeo.features.length>0 ? cursorSnap(e, $controlGeo) : cursorSnap(e, ...$visibleShapes, $gpsGeo);
+    updateShapes(latLngToLngLatArray(e.detail.latlng));
+    $pointIndex ? cursorSnap(e, ...$visibleShapes, $gpsGeo) : cursorSnap(e, $controlGeo);
+  }
+
+  const setMapCenter = ()=> $mapState.center = latLngToLatLngArray(map().getCenter());
 
 </script>
 
@@ -200,15 +168,10 @@
   <Marker
     latLng = {cor}
     options={{draggable: true, autoPan: true, autoPanSpeed: 20}}
-
-    on:cursorClick = {(e)=>cursorClick(e)}
-    on:cursorContextMenu = {(e)=>deleteControlPoint(e)}
-    on:cursorDrag = {(e)=> {
-      //$controlGeo.features.length>0 ? cursorSnap(e, $controlGeo) : cursorSnap(e, ...$visibleShapes, $gpsGeo);
-      $pointIndex ? cursorSnap(e, ...$visibleShapes, $gpsGeo) : cursorSnap(e, $controlGeo);
-      updateShapes(e)
-    }}
-    on:dragend = {()=> $mapState.center = latLngToLatLngArray(map().getCenter())}
+    on:cursorClick = {cursorClick}
+    on:cursorContextMenu = {deleteControlPoint}
+    on:cursorDrag = {cursorDrag}
+    on:dragend = {setMapCenter}
     bind:this={cursor}>
   >
     <DivIcon options={{
