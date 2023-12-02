@@ -251,7 +251,6 @@
   }
 
   export const removeControlPoint =(f, cor)=>{
-    if(f.geometry.type === 'Point') return;
     let i = findIndexOfShape(f, cor);
     if(i){
       let fc = f.geometry.coordinates;

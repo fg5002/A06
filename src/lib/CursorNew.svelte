@@ -89,9 +89,7 @@
           default:
             break;
         }
-        explodeFeatureToArray(ft).forEach(np=> {
-          snap(e, np);
-        });
+        explodeFeatureToArray(ft).forEach(np=> snap(e, np));
       })
     })
   }
@@ -138,8 +136,8 @@
   }
 
   const deleteControlPoint = (e)=>{
-    if(!$pointIndex) return;
     let f = $tempGeo.features[$tempIndex];
+    if(!$pointIndex || f.geometry.type === 'Point') return;
     $tempGeo.features[$tempIndex] = removeControlPoint(f, latLngToLngLatArray(e.detail.latlng));
     $pointIndex = null;
     $controlGeo = drawControlPoints(f);
@@ -155,9 +153,12 @@
   }
 
   const cursorDrag = (e)=> {
-    //$controlGeo.features.length>0 ? cursorSnap(e, $controlGeo) : cursorSnap(e, ...$visibleShapes, $gpsGeo);
     updateShapes(latLngToLngLatArray(e.detail.latlng));
-    $pointIndex ? cursorSnap(e, ...$visibleShapes, $gpsGeo) : cursorSnap(e, $controlGeo);
+    if( $controlGeo.features.length>0){
+      $pointIndex ? cursorSnap(e, ...$visibleShapes, $gpsGeo) : cursorSnap(e, $controlGeo);
+    }else{
+      cursorSnap(e, ...$visibleShapes, $gpsGeo)
+    }
   }
 
   const setMapCenter = ()=> $mapState.center = latLngToLatLngArray(map().getCenter());

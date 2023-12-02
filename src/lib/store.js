@@ -3,7 +3,7 @@ import {writable, derived} from 'svelte/store';
 export const mapState = writable({
   center: [47.385599,19.036925],
   zoom : 16,
-  baselayer: "Google",
+  baselayer: "OSM",
   //overlays: ["Taxon", "Geo", "Query"]
   overlays: ["Query", "Temp"]
 })

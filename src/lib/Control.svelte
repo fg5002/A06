@@ -28,6 +28,6 @@
 </script>
 
 
-  <div bind:this={controlContent}>
+  <div class='flex flex-col gap-2' bind:this={controlContent}>
       <slot/>
   </div>

@@ -1,31 +1,31 @@
 <script context="module">
   let open;
   let close;
-
+  
   export const openMenu = (cor)=> {
     open(cor);
   }
-
+  
   export const closeMenu = ()=> {
     close();
   }
-
+  
 </script>
 
 <script>
   import Marker from './Marker.svelte';
   import DivIcon from './DivIcon.svelte';
   
+  let showContextMenu = false;
   let cor;
-  let showMenu = false;
 
   open = (c)=>{
     cor = c
-    showMenu = true
+    showContextMenu = true
   }
 
   close = ()=> {
-    showMenu = false
+    showContextMenu = false
   }
 
 
@@ -41,14 +41,14 @@
 
 </script>
 
-{#if showMenu}
+{#if showContextMenu}
   <Marker
     latLng = {cor}
     options = {markerOptions}
     bind:this={markerElement}
   >
     <DivIcon options={iconOptions}>
-      <div class="w-auto h-auto flex flex-col gap-1 shadow-xl bg-transparent">  
+      <div class="w-auto h-auto flex flex-col shadow-2xl bg-transparent">  
         <slot/>  
       </div>
     </DivIcon>

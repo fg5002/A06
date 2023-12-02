@@ -27,7 +27,10 @@
 </script>
 
 {#if showCustomControl}
-  <div bind:this={controlContent}>
+  <div  
+    class='flex flex-col gap-2'
+    bind:this={controlContent}
+  >
     {#if control}
       <slot/>
     {/if}

@@ -2,7 +2,7 @@
 
   import { createEventDispatcher } from 'svelte';
 
-  export let title;
+  export let title = undefined;
   export let img = undefined;
 
 
@@ -15,12 +15,14 @@
 
 </script>
 
-<div
-  on:pointerup|preventDefault={clickHandler}
-  class="flex items-center justify-left gap-1 h-8 w-auto border-1 border-gray-700 rounded-sm bg-lime-300 p-1 text-lg"
+<button
+  on:click|stopPropagation
+  class="flex items-center justify-left gap-2 w-auto h-auto border-2 border-gray-700 rounded-md shadow-xl bg-lime-300 p-2 text-base"
 >
   {#if img}
-    <img src={img} alt="No" class="w-6 h-6">
+    <img src={img} alt="No" class="w-auto h-6">
   {/if}
-  <span>{title}</span>
-</div>
+  {#if title}
+    <span>{title}</span>
+  {/if}
+</button>
