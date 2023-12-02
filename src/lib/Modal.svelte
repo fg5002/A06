@@ -1,24 +1,20 @@
 <script>
-  import { fly, fade } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
   
-  export let showModal=false;
-  export let backdrop='z-2000';
-  export let main='';
+  export let showModal = false;
 
-  const closeModal=()=> showModal=false;
+  function closeOnOutclick(event) {
+    if (event.target.classList.contains('modal-background')) {
+      showModal = false;
+    }
+  }
 
 </script>
 
 {#if showModal}
-  <div
-    id="modal"
-    class="fixed w-full h-full flex items-end justify-center bg-gray-500 bg-opacity-70 {backdrop}"
-    in:fly={{ y: 500, duration: 300 }}
-    out:fade={{ duration: 400 }}   
-    on:pointerdown|stopPropagation={closeModal}
-  >
-    <div on:pointerdown|stopPropagation class="shadow-xl {main}">
-      <slot/>
+  <div class="fixed inset-0 z-2000 bg-black bg-opacity-30 flex items-center justify-center modal-background" on:pointerdown={closeOnOutclick} transition:fade={{duration: 300}}>
+    <div class="flex flex-col items-center justify-center bg-white p-5 rounded shadow-lg text-center" transition:fade={{duration: 300}}>
+      <slot></slot>
     </div>
   </div>
 {/if}

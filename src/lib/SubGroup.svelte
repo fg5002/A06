@@ -15,7 +15,6 @@
   onMount(()=> {
     subgroup = L.featureGroup.subGroup(markerCluster());
     controlLayers().addOverlay(subgroup, name);
-    //subgroup.on('contextmenu', (e)=> console.log(JSON.stringify(e.layer.feature));
   });
 
   onDestroy(()=> {

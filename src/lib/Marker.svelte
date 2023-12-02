@@ -1,7 +1,6 @@
 <script>
   import { onMount, onDestroy, getContext, setContext, createEventDispatcher } from 'svelte';
   import L from 'leaflet';
-  import {latLngToLngLatArray} from '$lib/GeoDrawing.js';
 
   export let latLng;
   export let options;
@@ -12,7 +11,6 @@
   const dispatch = createEventDispatcher();
 
   const map = getContext(L.Map);
-
 
   onMount(()=>{
     if (map){
@@ -26,7 +24,7 @@
   })
   
   onDestroy(()=>{
-    marker?.off('click');
+    marker?.off('click contextmenu drag dragend');
     marker?.remove();
     marker = undefined
   })

@@ -1,33 +1,9 @@
-<script context="module">
-  let open;
-  let close;
-  
-  export const openMenu = (cor)=> {
-    open(cor);
-  }
-  
-  export const closeMenu = ()=> {
-    close();
-  }
-  
-</script>
-
 <script>
   import Marker from './Marker.svelte';
   import DivIcon from './DivIcon.svelte';
   
-  let showContextMenu = false;
-  let cor;
-
-  open = (c)=>{
-    cor = c
-    showContextMenu = true
-  }
-
-  close = ()=> {
-    showContextMenu = false
-  }
-
+  export let showContextMenu = false;
+  export let cor;
 
   let markerElement;
 
@@ -48,7 +24,7 @@
     bind:this={markerElement}
   >
     <DivIcon options={iconOptions}>
-      <div class="w-auto h-auto flex flex-col shadow-2xl bg-transparent">  
+      <div class="w-auto h-auto flex flex-col gap-1 shadow-2xl bg-transparent">  
         <slot/>  
       </div>
     </DivIcon>
