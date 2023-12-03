@@ -161,7 +161,7 @@
     on:cursorClick = {cursorClick}
     on:cursorContextMenu = {deleteControlPoint}
     on:cursorDrag = {cursorDrag}
-    on:dragend = {setMapCenter}
+    on:cursorDragEnd = {setMapCenter}
     bind:this={cursor}>
   >
     <DivIcon options={{
