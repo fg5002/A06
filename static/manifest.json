@@ -1,11 +1,11 @@
 {
 	"id": "ffd-A06-pwa App",
-	"short_name": "SvelteKit + SQLite",
+	"short_name": "A06",
 	"start_url": "/",
 	"scope": "/",
 	"display": "standalone",
 	"orientation": "any",
-	"theme_color": "#00d1b2",
+	"theme_color": "#A3E635",
 	"background_color": "#ffffff",
 	"dir": "ltr",
 	"lang": "en",
