@@ -154,6 +154,11 @@
       options={{ minZoom: 7, maxZoom: 21, attribution: '&copy; Google Maps'}}
     />
     <TileLayer
+      name={'ArcGIS'}
+      url={'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.jpg'}
+      options={{ minZoom: 7, maxZoom: 19, attribution: '&copy; ArcGIS'}}
+    />    
+    <TileLayer
       name={'Esri'}
       url={'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'}
       options={{ minZoom: 7, maxZoom: 19, attribution: '&copy; ESRI'}}
