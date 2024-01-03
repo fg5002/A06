@@ -118,7 +118,7 @@
   </Control>
   
   <Control position={'bottomleft'}>
-    <MenuItem  title={"Quick point"} img={'images/map-marker.svg'} on:click={drawQuickPoint}/>
+    <MenuItem img={'images/map-marker.svg'} on:click={drawQuickPoint}/>
   </Control>
   
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
