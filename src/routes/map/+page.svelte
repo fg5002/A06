@@ -16,6 +16,8 @@
   import Modal from "$lib/Modal.svelte";
   import Drawer from "$lib/Drawer.svelte";
   import SveltyPicker from 'svelty-picker';
+  
+  import TaxonEditor from "$lib/TaxonEditor.svelte";
 
 
   let showCursor = false;
@@ -24,10 +26,12 @@
   let showContextMenu = false;
   let drawingToolbar = false;
   let showDrawer = false;
+  let showEditor = false;
   let calDate = new Date().toISOString().split('T')[0];
 
   const toggleModal = ()=> showModal=!showModal;
   const toggleDrawer = ()=> showDrawer=!showDrawer;
+  const toggleEditor = ()=> showEditor=!showEditor;
   
   const openEditing = (e)=>{
     cursorPos = e.detail.pos;
@@ -94,7 +98,9 @@
   />
 </Drawer>
 
-<Modal bind:showModal>
+<TaxonEditor bind:showEditor/>
+
+<Modal bind:showModal zindex = 2000 position = center>
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
     Your browser does not support the audio element
@@ -110,7 +116,7 @@
   </Control>
 
   <Control position={'topleft'}>      
-    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={()=> console.log('Empty')}/>  
+    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
   </Control>
   
   <Control position={'topright'}>
