@@ -19,7 +19,7 @@
     bind:showCalendar
     bind:calDate={currDate}
   />
-  <div class="flex flex-col gap-2 h-[60vh] bg-transparent">
+  <div class="flex flex-col gap-2 h-[60vh] bg-transparent rounded-md">
     <div class="flex gap-2 bg-transparent">
       <div class="text-center text-2xl font-bold text-justify-center py-1">
         {currDate}
