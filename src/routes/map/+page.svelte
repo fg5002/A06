@@ -18,6 +18,7 @@
   import SveltyPicker from 'svelty-picker';
   
   import TaxonEditor from "$lib/TaxonEditor.svelte";
+  import BigModal from "$lib/BigModal.svelte";
 
 
   let showCursor = false;
@@ -98,9 +99,10 @@
   />
 </Drawer>
 
+<BigModal position = start/>
 <TaxonEditor bind:showEditor/>
 
-<Modal bind:showModal zindex = 2000 position = center>
+<Modal bind:showModal zindex=2000 position=center>
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
     Your browser does not support the audio element
@@ -112,7 +114,7 @@
   <Cursor bind:showCursor cor={cursorPos}/>
 
   <Control position={'topleft'}>
-    <MenuItem  title={"Drawer"} img={'images/svgviewer-output.svg'} on:click={toggleDrawer}/>       
+    <MenuItem img={'images/svgviewer-output.svg'} on:click={toggleDrawer}/>       
   </Control>
   
   <Control position={'topright'}>
