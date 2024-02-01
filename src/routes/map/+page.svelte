@@ -114,13 +114,13 @@
   <Control position={'topleft'}>
     <MenuItem  title={"Drawer"} img={'images/svgviewer-output.svg'} on:click={toggleDrawer}/>       
   </Control>
-
-  <Control position={'topleft'}>      
-    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
-  </Control>
   
   <Control position={'topright'}>
     <MenuItem img={'images/edit.svg'} on:click={toggleModal}/>
+  </Control>
+
+  <Control position={'topright'}>      
+    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
   </Control>
   
   <Control position={'bottomleft'}>
