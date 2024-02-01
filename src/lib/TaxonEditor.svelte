@@ -19,7 +19,7 @@
     bind:showCalendar
     bind:calDate={currDate}
   />
-  <div class="flex flex-col gap-2 h-full bg-transparent">
+  <div class="flex flex-col gap-2 h-[60vh] bg-transparent">
     <div class="flex gap-2 bg-transparent">
       <div class="text-center text-2xl font-bold text-justify-center py-1">
         {currDate}
@@ -31,16 +31,12 @@
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>
-    <div class="bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md">
-      <span class="bg-transparent p-1 font-bold hover:bg-red-300">Erdei pocok</span>
-      <span class="bg-transparent p-1 hover:bg-red-300">(Microtus sylvestris)</span>
-      <br/>
-      <span class="bg-transparent p-1 hover:bg-red-300">2ad</span>
-      <span class="bg-transparent p-1 hover:bg-red-300">3juv</span>
-      <br/>
-      <span class="bg-transparent p-1 hover:bg-red-300">Valami magvakat rágcsáltak és közben hangosan cincogtak mellé. Valami magvakat rágcsáltak és közben hangosan cincogtak mellé.</span>
-      <br/>
-      <span class="bg-transparent p-1 text-red-500 hover:bg-red-300 hover:text-black">Ócsag Attila</span>
+    <div class="flex flex-row content-start flex-wrap gap-2 bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
+      <div class="mr-2 bg-transparent hover:bg-red-300"><b>Erdei pocok</b> (Microtus sylvestris)</div>
+      <div class="mr-2 bg-transparent hover:bg-red-300">2ad</div>
+      <div class="mr-2 bg-transparent hover:bg-red-300">3juv</div>
+      <div class="mr-2 bg-transparent hover:bg-red-300">Hangosan cincogva kergették egymást a bokrok között.</div>
+      <div class="mr-2 bg-transparent text-red-500 hover:bg-red-300 hover:text-black">Ócsag Attila</div>
     </div>
 
   </div>
