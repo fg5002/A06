@@ -11,11 +11,13 @@
     })
   }
 
-  const focus = async(node)=> {
+  /*const focus = async(node)=> {
     await waiter(500);
     node.focus(); 
-  }
+  }*/
 
+  const focus = (node)=>  node.focus();
+  
 </script>
 
 <Modal bind:showModal={showBigModal} zindex=2000 bg_class={bgClass} position={position}>
