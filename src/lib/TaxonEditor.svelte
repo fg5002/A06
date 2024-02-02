@@ -10,8 +10,6 @@
 
   const toggleCalendar = ()=> showCalendar=!showCalendar;
 
-  //const focus = (node)=> node.focus();
-
 </script>
 
 <BigModal bind:showBigModal={showEditor} bgClass=taxon position=start>
@@ -31,12 +29,12 @@
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>
-    <div class="flex flex-row content-start items-start flex-wrap gap-2 bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
-      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Taxon')}><b>Erdei pocok</b> (Microtus sylvestris)</span>
-      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Ad')}>2ad</span>
-      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Juv')}>3juv</span>
-      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Note')}>Hangosan cincogva kergették egymást a bokrok között.</span>
-      <span class="mr-2 select-none bg-transparent text-red-500 hover:bg-red-300 hover:text-black on:pointerup={()=>alert('Observer')}">Ócsag Attila</span>
+    <div class="flex content-start items-start flex-wrap gap-2 bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto whitespace-normal">
+      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Taxon')}><b>Cserregő nádiposzáta</b> (Acrocephalus scirpaceus)</span>
+      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Ad')}>2ad</span>
+      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Juv')}>3juv</span>
+      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Note')}>Run on the field.</span>
+      <span class="mr-2 select-none bg-red-300 text-black" on:pointerup={()=>alert('observer')}>Wintermann Eleonóra Lujza, Kolozsvári Grandpierre Emil</span>
     </div>
 
   </div>
