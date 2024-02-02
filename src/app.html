@@ -5,13 +5,7 @@
 		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<title>A06</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-		<script>
-			if ("virtualKeyboard" in navigator) {
-				console.log(navigator.virtualKeyboard.overlaysContent); // false
-				navigator.virtualKeyboard.overlaysContent = true; // Opt out of the automatic handling.
-			}
-		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, interactive-widget=overlays-content">
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">
