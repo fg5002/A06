@@ -5,12 +5,13 @@
   export let bgClass = "xx";
   export let position = "center" 
 
-  const focus = (node)=> node.focus(); 
-
   if ("virtualKeyboard" in navigator) {
     console.log(navigator.virtualKeyboard.overlaysContent); // false
     navigator.virtualKeyboard.overlaysContent = true; // Opt out of the automatic handling.
   }
+  
+  const focus = (node)=> node.focus(); 
+
 
 </script>
 
