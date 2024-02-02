@@ -29,7 +29,7 @@
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>
-    <div class="flex content-start items-start flex-wrap gap-2 bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto whitespace-normal">
+    <div class="flex flex-wrap gap-2 content-start items-start bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
       <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Taxon')}><b>Cserregő nádiposzáta</b> (Acrocephalus scirpaceus)</span>
       <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Ad')}>2ad</span>
       <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Juv')}>3juv</span>
