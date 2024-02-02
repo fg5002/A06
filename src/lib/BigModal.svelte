@@ -5,7 +5,16 @@
   export let bgClass = "xx";
   export let position = "center" 
 
-  const focus = (node)=> node.focus(); 
+  const waiter = (ms)=> {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), ms);
+    })
+  }
+
+  const focus = async(node)=> {
+    await waiter(500);
+    node.focus(); 
+  }
 
 </script>
 
