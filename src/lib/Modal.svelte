@@ -17,11 +17,11 @@
 
 {#if showModal}
   <div 
-    class="fixed inset-0 bg-neutral-300 bg-opacity-75 flex justify-center items-{position} {bg_class} z-{zindex}"
+    class="fixed inset-0 p-2 bg-neutral-300 bg-opacity-75 flex justify-center items-{position} {bg_class} z-{zindex}"
     on:pointerdown={closeOnOutclick} 
     transition:fade={{duration:300}}
   >
-    <div class="shadow-lg bg-transparent rounded-md max-h-[50vh]" 
+    <div class="flex shadow-lg bg-transparent rounded-md max-h-[50vh] max-w-full" 
       transition:fade={{duration:300}}
     >
       <slot></slot>

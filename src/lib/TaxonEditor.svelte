@@ -32,11 +32,11 @@
       </button>
     </div>
     <div class="flex flex-row content-start items-start flex-wrap gap-2 bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
-      <div class="mr-2 select-none bg-transparent hover:bg-red-300"><b>Erdei pocok</b> (Microtus sylvestris)</div>
-      <div class="mr-2 select-none bg-transparent hover:bg-red-300">2ad</div>
-      <div class="mr-2 select-none bg-transparent hover:bg-red-300">3juv</div>
-      <div class="mr-2 select-none bg-transparent hover:bg-red-300">Hangosan cincogva kergették egymást a bokrok között.</div>
-      <div class="mr-2 select-none bg-transparent text-red-500 hover:bg-red-300 hover:text-black">Ócsag Attila</div>
+      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Taxon')}><b>Erdei pocok</b> (Microtus sylvestris)</span>
+      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Ad')}>2ad</span>
+      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Juv')}>3juv</span>
+      <span class="mr-2 select-none bg-transparent hover:bg-red-300" on:pointerup={()=>alert('Note')}>Hangosan cincogva kergették egymást a bokrok között.</span>
+      <span class="mr-2 select-none bg-transparent text-red-500 hover:bg-red-300 hover:text-black on:pointerup={()=>alert('Observer')}">Ócsag Attila</span>
     </div>
 
   </div>

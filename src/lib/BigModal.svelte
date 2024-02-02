@@ -10,7 +10,7 @@
 </script>
 
 <Modal bind:showModal={showBigModal} zindex=2000 bg_class={bgClass} position={position}>
-  <div class="flex flex-col gap-4 p-4 bg-lime-200 w-screen border-zinc-500 border-2 rounded-md justify-items-center">
+  <div class="flex flex-col h-full p-2 gap-4 bg-lime-200 w-screen border-zinc-500 border-2 rounded-md justify-items-center">
     <div class="flex flex-col h-full w-full">
       <slot/>
     </div>
