@@ -20,16 +20,13 @@
     })
     .on('click',()=> {
       dispatch('mapClick');
-      console.log('map clicked')
     })    
     .on('dragend',()=> {
       $mapState.center = latLngToLatLngArray(map.getCenter());
-      console.log('center: ', JSON.stringify($mapState.center))
     })
     .on('zoomend',()=> {
       $mapState.zoom = map.getZoom();
       $mapState.center = latLngToLatLngArray(map.getCenter());
-      console.log('zoom:', JSON.stringify($mapState.zoom));
     })
     .on('baselayerchange',(e)=> {
       $mapState.baselayer= e.name;

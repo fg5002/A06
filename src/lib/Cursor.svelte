@@ -3,7 +3,8 @@
   import Marker from "$lib/Marker.svelte";
   import DivIcon from "$lib/DivIcon.svelte";
   import distance from '@turf/distance';  // npm.install @turf/distance
-  import {point} from '@turf/helpers'; // npm.install @turf/helpers  
+  import {point} from '@turf/helpers'; // npm.install @turf/helpers
+  import {mapState, visibleShapes, gpsGeo, controlGeo, pointIndex, selectedShape, tempGeo, tempIndex} from '$lib/store';
 
   import {
     latLngToLatLngArray,
@@ -20,7 +21,6 @@
     updateSimpleShape,
     updateComplexShape
   } from '$lib/GeoDrawing.js';
-  import {mapState, visibleShapes, gpsGeo, controlGeo, pointIndex, selectedShape, tempGeo, tempIndex} from '$lib/store';
 
   export let showCursor=false;
   export let cor;

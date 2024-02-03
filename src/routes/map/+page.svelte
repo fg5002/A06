@@ -22,7 +22,7 @@
 
 
   let showCursor = false;
-  let cursorPos = $mapState.center;
+  let cursorPos;
   let showModal = false;
   let showContextMenu = false;
   let drawingToolbar = false;
@@ -30,7 +30,9 @@
   let showEditor = false;
   let calDate = new Date().toISOString().split('T')[0];
   let map;
-
+  
+  $: cursorPos = $mapState.center;
+  
   const toggleModal = ()=> showModal=!showModal;
   const toggleDrawer = ()=> showDrawer=!showDrawer;
   const toggleEditor = ()=> showEditor=!showEditor;

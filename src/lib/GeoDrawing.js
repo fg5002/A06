@@ -343,7 +343,7 @@
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject,{
           timeout: 15000,
-          maximumAge: 5000,
+          maximumAge: 1000,
           enableHighAccuracy: true
         });
       });
@@ -370,7 +370,7 @@
     }
   }
     
-  function locationError(error) {
+  const locationError = (error)=> {
     switch(error.code) {
       case error.PERMISSION_DENIED:
         return "User denied the request for geolocation.";

@@ -12,7 +12,7 @@
 
   onMount(()=>{
     if (map){
-      scale = L.control.scale({position, imperial, maxWidth: 400}).addTo(map());
+      scale = L.control.scale({position, imperial, maxWidth: 200}).addTo(map());
     }
   })
 
