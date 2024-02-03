@@ -10,7 +10,7 @@
   import Control from "$lib/Control.svelte";
   import LeafletContextMenu from "$lib/LeafletContextMenu.svelte";
   import {tempGeo, mapState, dailyData, geoData, queryData, gpsGeo, controlGeo, selectedShape, tempIndex, pointIndex} from '$lib/store';
-  import { drawControlPoints } from '$lib/GeoDrawing.js';
+  import { drawControlPoints, getCoords } from '$lib/GeoDrawing.js';
   import MenuItem from "$lib/MenuItem.svelte";
   import SubGroup from "$lib/SubGroup.svelte";
   import Modal from "$lib/Modal.svelte";
@@ -29,6 +29,7 @@
   let showDrawer = false;
   let showEditor = false;
   let calDate = new Date().toISOString().split('T')[0];
+  let map;
 
   const toggleModal = ()=> showModal=!showModal;
   const toggleDrawer = ()=> showDrawer=!showDrawer;
@@ -84,7 +85,18 @@
     if(drawingToolbar){
       drawingToolbar = false
     }
-  } 
+  }
+
+  const getGPS = async()=>{
+    let g = await getCoords();
+    if(g.geometry){
+      $gpsGeo.features=[g];
+      let cor = g.geometry.coordinates;
+      g.geometry.param[0]>1000 ? map.getMap().flyTo([cor[1], cor[0]], 13) : map.getMap().flyTo([cor[1], cor[0]]);
+    }else{
+      alert(g);
+    }
+  }
 
 </script>
 
@@ -109,7 +121,7 @@
   </audio>
 </Modal>
 
-<Leaflet on:mapClick={mapClick}>
+<Leaflet on:mapClick={mapClick } bind:this={map}>
 
   <Cursor bind:showCursor cor={cursorPos}/>
 
@@ -128,7 +140,11 @@
   <Control position={'bottomleft'}>
     <MenuItem img={'images/map-marker.svg'} on:click={drawQuickPoint}/>
   </Control>
-  
+
+  <Control position={'bottomleft'}>
+    <MenuItem img={'images/map-marker.svg'} on:click={getGPS}/>
+  </Control>
+
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
     <MenuItem  title={"Edit"} on:click={beginEdit}/> 
     <MenuItem  title={"Taxoneditor"} on:click={()=> console.log('Empty')}/> 

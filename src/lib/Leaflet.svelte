@@ -8,6 +8,9 @@
   let map;
   let mapElement;
 
+  export const getMap = () => map;
+
+
   const dispatch = createEventDispatcher();
 
   onMount(()=> {

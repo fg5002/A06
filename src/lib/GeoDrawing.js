@@ -338,32 +338,51 @@
     return f
   }
 
-  /*export const geoLocation = async()=>{
-    const coordinates = await Geolocation.getCurrentPosition({
-			enableHighAccuracy: true,
-			timeout: 5000,
-			maximumAge: 100
-		});
-    if(coordinates) {
-      let cor = [coordinates.coords.longitude, coordinates.coords.latitude];
-      let rd = (coordinates.coords.accuracy).toFixed(1);
-      let tmpFeature =
+  export const getCoords= async()=>{
+    try{
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject,{
+          timeout: 15000,
+          maximumAge: 5000,
+          enableHighAccuracy: true
+        });
+      });
+
+      let cor = [ position.coords.longitude, position.coords.latitude ];
+      cor = cor.map(s=>parseFloat(s.toFixed(6)));
+      let tmpPoint =
       {
         "type": "Feature",
         "properties": {
+          data: "GPS",
           type: 3,
-          param: [parseFloat(rd<2 ? pxToMeter(5) : rd)]
+          id: 'G15'
         },
         "geometry": {
           "type": "Point",
+          "param": [parseFloat(position.coords.accuracy.toFixed(1))],
           "coordinates": cor
         }
-      }
-      return tmpFeature
-    }else{
-      throw new Error()
+      } 
+      return tmpPoint;
+    } catch(e) {
+      return locationError(e)
     }
-  }*/
+  }
+    
+  function locationError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        return "User denied the request for geolocation.";
+      case error.POSITION_UNAVAILABLE:
+        return "Location information is currently unavailable.";
+      case error.TIMEOUT:
+        return "Request for user location timed out.";
+      case error.UNKNOWN_ERROR:
+        return "An unknown error occurred.";
+    }
+  
+  }
   
   /*const getMaxId=(gjs)=> {
     return gjs.features.reduce((a,b)=> b.properties.id > a ? b.properties.id : a, 50);
