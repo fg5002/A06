@@ -27,9 +27,8 @@
     </div>
     <div class="w-full">
       <input 
-      class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
-      type="text" 
-      use:focus
+        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
+        type="text"
       >
     </div>
   </div>

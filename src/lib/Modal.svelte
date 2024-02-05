@@ -21,7 +21,7 @@
     on:pointerdown={closeOnOutclick} 
     transition:fade={{duration:300}}
   >
-    <div class="flex shadow-lg bg-transparent rounded-md max-h-[100vh] xl:max-w-[75vh]" 
+    <div class="flex shadow-lg bg-transparent rounded-md max-h-[100vh] xl:max-w-[75vh] xl:mt-24" 
       transition:fade={{duration:300}}
     >
       <slot></slot>
