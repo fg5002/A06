@@ -1,13 +1,14 @@
 <script>
-  import { fade } from 'svelte/transition';
+  import { fade , fly} from 'svelte/transition';
   
   export let showModal = false;
-  export let zindex = 1000;
-  export let position = "center";
-  export let bg_class = "modal-background";
+  export let backdropClasses = "items-center z-2000";
+  export let modalClass = "baseModal";
+  export let mainClasses= "";
+
 
   function closeOnOutclick(event) {
-    if (event.target.classList.contains(bg_class)) {
+    if (event.target.classList.contains(modalClass)) {
       showModal = false;
     }
   }
@@ -17,12 +18,13 @@
 
 {#if showModal}
   <div 
-    class="fixed inset-0 p-2 bg-neutral-300 bg-opacity-75 flex justify-center items-{position} {bg_class} z-{zindex}"
+    class="fixed inset-0 p-2 bg-transparent bg-opacity-75 flex justify-center {modalClass} {backdropClasses}"
     on:pointerdown={closeOnOutclick} 
-    transition:fade={{duration:300}}
+    in:fly={{y: -500, duration: 500}}
+    out:fly={{y: -500, duration: 800}}
   >
-    <div class="flex shadow-lg bg-transparent rounded-md max-h-[100vh] xl:max-w-[75vh] xl:mt-24" 
-      transition:fade={{duration:300}}
+    <div 
+      class="flex shadow-lg rounded-md max-h-[100vh] bg-transparent {mainClasses}" 
     >
       <slot></slot>
     </div>

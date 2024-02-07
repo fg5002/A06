@@ -2,7 +2,6 @@
   import Calendar from "./Calendar.svelte";
   import TimePicker from "./TimePicker.svelte";
   import Modal from "./Modal.svelte";
-  import BigModal from "./BigModal.svelte";
   
   export let showEditor = false;
 
@@ -12,6 +11,12 @@
   const toggleCalendar = ()=> showCalendar=!showCalendar;
   
   const focus = (node)=>  node.focus();
+
+  const waiter = (ms)=> {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), ms);
+    })
+  }
 
   const tags = [
     {"name": "Példány", "id": 1, "reg": /(^[\d-+]+$)/, "rep": '$1pd'},
@@ -32,6 +37,53 @@
     {"name": "Taxon", "id": 13, "reg": /^([a-z]{4})$/, "rep": '$1'},
     {"name": "X", "id": 13, "reg": /^j$/, "rep": 'járókelő'},
   ]
+
+
+  const newData = {
+    type: "Feature",
+    "properties": {
+      row: 25,
+      data:{
+        id: null,
+        date: {
+          disp: "2023-12-12", 
+          dat: "2023-12-12", 
+          id: 345
+        },
+        taxon: {
+          disp: "Feketerigó (Turdus merula)",
+          id: 2155
+        },
+        attributes: {
+          disp: "20+pd, 3n, átrepülő, fotó",
+          value: ["20+", "2-3", null, null],
+          id: [1, 3, 10, 9]
+        },
+        note: "Kék az ég",
+        place:{
+          disp: "Háros-sziget, Budafok",
+          id: 125877
+        },
+        observer: {
+          disp: "Kiss Péter, Nagy Pál",
+          id: [66, 45], 
+        },
+        media: {
+          disp: "20220510-012.jpg, 20220510-013.jpg, 20220510-105.wma",
+          id: [12, 13, 16]
+        },
+        reference: {
+          disp: "Adatok Budapest flórájához I (2019), Adatok Budapest flórájához II (2021)",
+          id: [41, 45]
+        }
+      },
+      type: 1,
+    },
+    "geometry": {
+      "type": "Point",
+      "coordinates": [19.035544,47.386432]
+    }
+  }
 
   const selectedTags = [
     {"id": 1, "Value": "2-3"},
@@ -63,7 +115,12 @@
 
 </script>
   
-<BigModal bind:showBigModal={showEditor} bgClass=taxon position=start>
+<Modal
+  bind:showModal = {showEditor} 
+  modalClass = "taxon_editor" 
+  backdropClasses = "items-start z-2000"
+  mainClasses = "p-2 gap-2 bg-lime-200"
+>
   <Calendar
     bind:showCalendar
     bind:calDate={currDate}
@@ -94,4 +151,4 @@
       use:focus
     >
   </div>
-</BigModal>
+</Modal>

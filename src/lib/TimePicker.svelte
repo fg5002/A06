@@ -15,8 +15,7 @@
 
 </script>
 
-<Modal bind:showModal={showTimePicker} zindex=2000 position=center bg_class=timepicker>
-  <SveltyPicker
+<Modal bind:showModal={showTimePicker} modalClass = "timepicker" backdropClasses = "items-center z-2000">
     inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md"
     mode = time
     format = "hh:ii"

@@ -16,16 +16,16 @@
   import Modal from "$lib/Modal.svelte";
   import Drawer from "$lib/Drawer.svelte";
   import SveltyPicker from 'svelty-picker';
+  import CoordInput from "$lib/CoordInput.svelte";
   
   import TaxonEditor from "$lib/TaxonEditor.svelte";
-  import BigModal from "$lib/BigModal.svelte";
-
 
   let showCursor = false;
   let cursorPos;
   let showModal = false;
   let showContextMenu = false;
   let drawingToolbar = false;
+  let showCoordInput = false
   let showDrawer = false;
   let showEditor = false;
   let calDate = new Date().toISOString().split('T')[0];
@@ -36,6 +36,7 @@
   const toggleModal = ()=> showModal=!showModal;
   const toggleDrawer = ()=> showDrawer=!showDrawer;
   const toggleEditor = ()=> showEditor=!showEditor;
+  const toggleCoordInput = ()=> showCoordInput=!showCoordInput;
   
   const openEditing = (e)=>{
     cursorPos = e.detail.pos;
@@ -100,6 +101,15 @@
     }
   }
 
+  const setCoord = (e)=>{
+    console.log('e', e.detail);
+    map.getMap().getZoom()<16 ? map.getMap().flyTo(e.detail, 16) : map.getMap().flyTo(e.detail);
+    $mapState.center = e.detail;
+    toggleCoordInput();
+    cursorPos =  e.detail;
+    showCursor = true;
+  }
+
 </script>
 
 <Drawer bind:showDrawer>
@@ -113,22 +123,32 @@
   />
 </Drawer>
 
-<BigModal position = start/>
 <TaxonEditor bind:showEditor/>
 
-<Modal bind:showModal zindex=2000 position=center>
+<CoordInput bind:showCoordInput on:setCoord={setCoord}/>
+
+<Modal 
+  bind:showModal
+  modalClass = "audio" 
+  backdropClasses = "items-center z-2000"
+>
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
     Your browser does not support the audio element
   </audio>
 </Modal>
 
+
 <Leaflet on:mapClick={mapClick } bind:this={map}>
 
   <Cursor bind:showCursor cor={cursorPos}/>
 
-  <Control position={'topleft'}>
+  <!--Control position={'topleft'}>
     <MenuItem img={'images/svgviewer-output.svg'} on:click={toggleDrawer}/>       
+  </Control-->
+
+  <Control position={'topleft'}>
+    <MenuItem img={'images/svgviewer-output.svg'} on:click={toggleCoordInput}/>       
   </Control>
   
   <Control position={'topright'}>
