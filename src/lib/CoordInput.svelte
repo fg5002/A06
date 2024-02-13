@@ -62,7 +62,7 @@
 <Modal
   bind:showModal = {showCoordInput} 
   modalClass = "coord_input" 
-  backdropClasses = "items-start z-2000"
+  backdropClasses = "items-start z-2000 justify-center"
   mainClasses = "mt-12"
 >
   <div class="flex flex-col gap-1 p-1 border-slate-500 border-2 rounded-md bg-lime-200">

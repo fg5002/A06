@@ -119,14 +119,14 @@
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
   backdropClasses = "items-start z-2000"
-  mainClasses = "p-2 gap-2 bg-lime-200"
+  mainClasses = " gap-2"
 >
   <Calendar
     bind:showCalendar
     bind:calDate={currDate}
   />
-  <div class="flex flex-col gap-2 h-[50vh] bg-transparent rounded-md">
-    <div class="flex gap-2 bg-transparent">
+  <div class="flex flex-col p-2 gap-2 h-[50vh] border-slate-500 border-2 rounded-md">
+    <div class="flex gap-2">
       <div class="text-center text-2xl font-bold text-justify-center py-1">
         {currDate}
       </div>

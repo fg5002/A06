@@ -19,6 +19,7 @@
   import CoordInput from "$lib/CoordInput.svelte";
   
   import TaxonEditor from "$lib/TaxonEditor.svelte";
+	import DailyList from "$lib/DailyList.svelte";
 
   let showCursor = false;
   let cursorPos;
@@ -28,6 +29,7 @@
   let showCoordInput = false
   let showDrawer = false;
   let showEditor = false;
+  let showDailyList = false;
   let calDate = new Date().toISOString().split('T')[0];
   let map;
   
@@ -36,6 +38,7 @@
   const toggleModal = ()=> showModal=!showModal;
   const toggleDrawer = ()=> showDrawer=!showDrawer;
   const toggleEditor = ()=> showEditor=!showEditor;
+  const toggleDailyList = ()=> showDailyList=!showDailyList;
   const toggleCoordInput = ()=> showCoordInput=!showCoordInput;
   
   const openEditing = (e)=>{
@@ -124,13 +127,14 @@
 </Drawer>
 
 <TaxonEditor bind:showEditor/>
+<DailyList bind:showDailyList/>
 
 <CoordInput bind:showCoordInput on:setCoord={setCoord}/>
 
 <Modal 
   bind:showModal
   modalClass = "audio" 
-  backdropClasses = "items-center z-2000"
+  backdropClasses = "items-center z-2000 justify-center"
 >
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
@@ -157,6 +161,9 @@
 
   <Control position={'topright'}>      
     <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
+  </Control>
+  <Control position={'topright'}>      
+    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleDailyList}/>  
   </Control>
   
   <Control position={'bottomleft'}>
