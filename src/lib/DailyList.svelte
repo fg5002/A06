@@ -65,14 +65,14 @@
       <h1 class="text-center text-2xl font-bold text-justify-center py-1">2024-02-08</h1>
     </div>
 
-    <div class="h-full flex flex-col p-1 gap-1 border-slate-500 border-2 rounded-md overflow-y-auto snap-y snap-proximity">
+    <div class="h-full flex flex-col p-1 gap-1 border-slate-500 border-2 rounded-md overflow-y-auto snap-y snap-proximity divide-y divide-slate-600">
       {#each items as item, i (item)}
         <div 
-          class="border-2 border-slate-500 rounded-m p-2 select-none text-lg font-bold snap-end 
-          {activeIndex === i ? 'bg-lime-400' : shiftIndex === i ? 'bg-lime-600' : 'bg-yellow-100'}"
+          class="p-2 select-none text-lg font-bold snap-end 
+          {activeIndex === i ? 'bg-lime-400' : shiftIndex === i ? 'bg-lime-400' : 'bg-yellow-100'}"
           animate:flip = "{{duration: 300}}"
           on:contextmenu|preventDefault = {()=> selectItem(i)}
-          role="button"
+          role="link"
           tabindex = 0
         >{item}</div>
       {/each}
