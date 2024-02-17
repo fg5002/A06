@@ -2,11 +2,14 @@
   import Calendar from "./Calendar.svelte";
   import TimePicker from "./TimePicker.svelte";
   import Modal from "./Modal.svelte";
-  
+  import ListSelect from "./ListSelect.svelte";
+
+
   export let showEditor = false;
 
   let currDate = new Date().toISOString().split('T')[0]
   let showCalendar = false;
+  let showSelectList = false;
   
   const toggleCalendar = ()=> showCalendar=!showCalendar;
   
@@ -20,6 +23,8 @@
         setTimeout(() => resolve(), ms);
     })
   }
+
+  const fruits = "alma, körte, szilva, ürge, kajszi, naspolya, édesburgonya, málna, dió, mogyoró, árpa, berkenye, meggy, ribizke, egres, mandula, cseresznye".split(', ');
 
   const tags = [
     {"name": "Példány", "id": 1, "reg": /(^[\d-+]+$)/, "rep": '$1pd'},
@@ -116,6 +121,10 @@
     }
   }
 
+  const submitList = (e)=>{
+    alert(e.detail.join(', '));
+  }
+
 </script>
   
 <Modal
@@ -128,6 +137,15 @@
     bind:showCalendar
     bind:calDate={currDate}
   />
+
+  <ListSelect
+    source = {fruits}
+    bind:showSelectList
+    sorted = true
+    multi = true
+    on:submitList = {submitList}
+  />
+
   <div class="flex flex-col p-2 gap-2 w-full max-h-[50vh] border-slate-500 border-2 rounded-sm">
     <div class="flex gap-2">
       <div class="text-center text-2xl font-bold text-justify-center py-1">
@@ -139,14 +157,20 @@
         >
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
+      <button 
+        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
+        on:click={()=>showSelectList = true}
+        >
+        <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
+      </button>
     </div>
-    <div class="flex flex-col gap-2 content-start items-start bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
-      <input 
-        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
-        type="text" 
-        on:keypress={promptSpace}
-        use:focus
-      >      
+    <input 
+      class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
+      type="text" 
+      on:keypress={promptSpace}
+      use:focus
+    >
+    <div class="flex flex-col gap-2 content-start items-start bg-yellow-100 h-full p-2 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">      
       <div class="flex flex-wrap gap-2 select-none">
         <span class=" font-bold" on:pointerup={()=>alert('Taxon')}>Cserregő nádiposzáta</span>
         <span class="italic">Acrocephalus scirpaceus</span>
