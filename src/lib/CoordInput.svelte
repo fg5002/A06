@@ -63,10 +63,11 @@
   bind:showModal = {showCoordInput} 
   modalClass = "coord_input" 
   backdropClasses = "items-start z-2000 justify-center"
-  mainClasses = "mt-12"
+  mainClasses = "w-full"
 >
-  <div class="flex flex-col gap-1 p-1 border-slate-500 border-2 rounded-md bg-lime-200">
-    <div class="flex justify-between w-full gap-1  bg-lime-200">
+  <div class="flex flex-col w-full gap-1 p-1 border-slate-500 border-2 rounded-sm bg-lime-200">
+    <div class="flex justify-center items-center w-full gap-2  bg-lime-200">
+      <span>Input</span>
       <input 
         class="bg-yellow-200 focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 text-left text-lg" 
         type="text" 
@@ -74,20 +75,21 @@
         bind:value = {coord}
       >
       <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-200 w-auto" 
+        class="border-slate-500 border-2 rounded-md p-2 text-center bg-yellow-200 w-auto" 
         on:click={pasteCoordFromClipboard}
         >
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>  
-    <div class="flex justify-between w-full gap-1 bg-lime-200">
+    <div class="flex justify-center items-center w-full gap-2 bg-lime-200">
+      <span>Find</span>
       <input 
         class="bg-yellow-200 focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 text-left text-lg" 
         type="text" 
         bind:value = {convertedCoord}
       >
       <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-200 w-auto" 
+        class="border-slate-500 border-2 rounded-md p-2 text-center bg-yellow-200 w-auto" 
         on:click={setCoordinate}
         >
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
