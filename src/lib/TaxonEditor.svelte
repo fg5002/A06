@@ -11,7 +11,7 @@
   const toggleCalendar = ()=> showCalendar=!showCalendar;
   
   const focus = async(node)=>{
-    await waiter(1000);
+    await waiter(500);
     node.focus();
   }  
 
