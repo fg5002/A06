@@ -15,22 +15,23 @@
 
   const dispatch = createEventDispatcher();
 
-  const focus = async(node)=>{
+  const focus = async(node)=> {
     await waiter(500);
     node.focus();
   }  
 
   const waiter = (ms)=> {
     return new Promise(resolve => {
-        setTimeout(() => resolve(), ms);
+      setTimeout(() => resolve(), ms);
     })
   }
 
   const selectItem = (i)=> {
+    if(results.findIndex(f=> f === items[i])>-1) return;
     activeIndex = i;
     results.push(items[activeIndex]);
     if(multi){
-      if(sorted) results.sort((a, b) => a.localeCompare(b, 'hu'));
+      if(sorted) results.sort((a, b)=> a.localeCompare(b, 'hu'));
       searchText = "";
       activeIndex = 0;
       inputRef.focus();
@@ -45,18 +46,18 @@
     inputRef.focus();
   }
   
-  const changeList = ()=>{
+  const changeList = ()=> {
     let s = searchText;
     items = s && s.length>0 ? source.filter(f=>f.includes(s) === true).sort((a, b) => a.localeCompare(b, 'hu')) : [];
   }
 
-  const enterPress = (e)=>{
+  const enterPress = (e)=> {
     if (e.keyCode == 13) {
       selectItem(activeIndex);
     }
   }
 
-  const submit = ()=>{
+  const submit = ()=> {
     searchText = "";
     showSelectList = false;
     dispatch('submitList', results);
@@ -72,15 +73,15 @@
   mainClasses = "w-full"
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-[70vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
+  <div class="flex flex-col bg-lime-100 w-full h-[65vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
     <div class="flex gap-2">
       <input 
         class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
         type="text"
-        bind:this={inputRef}
+        bind:this = {inputRef}
         bind:value = {searchText}
         on:input = {changeList}
-        on:keypress={enterPress}
+        on:keypress = {enterPress}
         use:focus
       >
       <button 
@@ -98,7 +99,7 @@
             class="p-2 select-none text-lg font-bold snap-end 
             {activeIndex === i ? 'bg-lime-400' :'bg-yellow-100'}"
             on:contextmenu|preventDefault = {()=> selectItem(i)}
-            role="link"
+            role = "link"
             tabindex = 0
           >{item}</div>
         {/each}
@@ -107,7 +108,7 @@
           <div 
             class="p-2 select-none text-lg font-bold snap-end bg-orange-300"
             on:pointerdown = {()=> removeItem(i)}
-            role="link"
+            role = "link"
             tabindex = 0
           >{item}</div>
         {/each}
