@@ -10,7 +10,10 @@
   
   const toggleCalendar = ()=> showCalendar=!showCalendar;
   
-  const focus = (node)=>  node.focus();
+  const focus = async(node)=>{
+    await waiter(1000);
+    node.focus();
+  }  
 
   const waiter = (ms)=> {
     return new Promise(resolve => {
