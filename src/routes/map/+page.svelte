@@ -113,6 +113,11 @@
     showCursor = true;
   }
 
+  const editDailyItem = (e)=>{
+    console.log(e.detail);
+    toggleEditor();
+  } 
+
 </script>
 
 <Drawer bind:showDrawer>
@@ -127,7 +132,11 @@
 </Drawer>
 
 <TaxonEditor bind:showEditor/>
-<DailyList bind:showDailyList/>
+
+<DailyList 
+  bind:showDailyList
+  on:editDailyItem = {editDailyItem}
+/>
 
 <CoordInput bind:showCoordInput on:setCoord={setCoord}/>
 

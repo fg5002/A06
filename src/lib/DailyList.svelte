@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import { flip } from 'svelte/animate';
   import Modal from "./Modal.svelte";
   import ContextMenu from "./ContextMenu.svelte";
@@ -7,7 +8,7 @@
 
   let showContextMenu = false;
 
-  const toggleContextMenu = ()=> showContextMenu=!showContextMenu;
+  const dispatch = createEventDispatcher();
 
   let activeIndex = null;
   let shiftIndex= null;
@@ -28,18 +29,27 @@
 		items.splice(shiftIndex, 1);
     items.splice(activeIndex>shiftIndex ? activeIndex-1 : activeIndex, 0, item);
 		items = items;    
-    
     clearIndices();
   }
-
+  
   const selectToMove = ()=>{
     shiftIndex = activeIndex;
     activeIndex = null;
   }
-
+  
   const clearIndices = ()=>{
     activeIndex = null;
     shiftIndex = null;
+  }
+
+  const editDailyItem = ()=>{
+  }
+  
+  const editItem = ()=>{
+    dispatch('editDailyItem', items[activeIndex]);
+    clearIndices();
+    showContextMenu = false;
+    showDailyList = false;
   }
 
 </script>
@@ -57,9 +67,10 @@
     on:selectToMove = {selectToMove}
     on:insertItem = {insertItem}
     on:modalClose = {clearIndices}
+    on:editItem = {editItem}
   />
 
-  <div class="flex flex-col bg-lime-100 w-full max-h-[90vh] border-slate-500 border-2 rounded-md p-2 gap-2">
+  <div class="flex flex-col bg-lime-100 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
 
     <div>
       <h1 class="text-center text-2xl font-bold text-justify-center py-1">2024-02-08</h1>

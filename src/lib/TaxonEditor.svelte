@@ -125,7 +125,7 @@
     bind:showCalendar
     bind:calDate={currDate}
   />
-  <div class="flex flex-col p-2 gap-2 h-[50vh] border-slate-500 border-2 rounded-md">
+  <div class="flex flex-col p-2 gap-2 h-[50vh] border-slate-500 border-2 rounded-sm">
     <div class="flex gap-2">
       <div class="text-center text-2xl font-bold text-justify-center py-1">
         {currDate}
@@ -137,12 +137,17 @@
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>
-    <div class="flex flex-wrap gap-2 content-start items-start bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
-      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Taxon')}><b>Cserregő nádiposzáta</b> (Acrocephalus scirpaceus)</span>
-      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Ad')}>2ad</span>
-      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Juv')}>3juv</span>
-      <span class="mr-2 select-none bg-red-300" on:pointerup={()=>alert('Note')}>Run on the field.</span>
-      <span class="mr-2 select-none bg-red-300 text-black" on:pointerup={()=>alert('observer')}>Wintermann Eleonóra Lujza, Kolozsvári Grandpierre Emil</span>
+    <div class="flex flex-col gap-2 content-start items-start bg-yellow-100 h-full p-4 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">
+      <div class="flex flex-wrap gap-2 select-none">
+        <span class=" font-bold" on:pointerup={()=>alert('Taxon')}>Cserregő nádiposzáta</span>
+        <span class="italic">Acrocephalus scirpaceus</span>
+      </div>
+      <div class="flex flex-wrap gap-2 select-none">
+        <span on:pointerup={()=>alert('Ad')}>2ad</span>
+        <span on:pointerup={()=>alert('Juv')}>3juv</span>
+      </div>  
+      <span class="mr-2 select-none" on:pointerup={()=>alert('Note')}>Runs on the field href is an attribute used to define the target of the link. The right attribute to use for click-triggered events is onclick.</span>
+      <span class="mr-2 select-none" on:pointerup={()=>alert('observer')}>Wintermann Eleonóra Lujza, Kolozsvári Grandpierre Emil</span>
     </div>
     <input 
       class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
