@@ -3,7 +3,9 @@
   import Navbar from '$lib/Navbar.svelte';
 </script>
 
-<div class="flex flex-col h-screen w-screen overscroll-contain">
-  <Navbar/>
-  <slot />
-</div>
+<body class="overscroll-contain">
+  <div class="flex flex-col h-screen w-screen">
+    <Navbar/>
+    <slot />
+  </div>
+</body>
