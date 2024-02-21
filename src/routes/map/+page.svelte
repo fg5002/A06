@@ -169,9 +169,6 @@
   </Control>
 
   <Control position={'topright'}>      
-    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
-  </Control>
-  <Control position={'topright'}>      
     <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleDailyList}/>  
   </Control>
   
@@ -201,6 +198,10 @@
     {:else}
       <MenuItem title={"Draw"} img={'images/lead-pencil.svg'} on:click={showDrawingToolbar}/>
     {/if}
+  </Control>
+
+  <Control position={'bottomright'}>      
+    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleEditor}/>  
   </Control>
                   
   <Layers>      

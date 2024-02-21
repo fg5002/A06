@@ -1,7 +1,7 @@
 import {writable, derived} from 'svelte/store';
 
 export const mapState = writable({
-  center: [47.385599,19.036925],
+  center: [47.3914057,19.03352], // 47.385599,19.036925
   zoom : 16,
   baselayer: "OSM",
   //overlays: ["Taxon", "Geo", "Query"]
@@ -456,3 +456,56 @@ export const visibleShapes = derived([mapState, dailyData, geoData, queryData, t
   });
   return res;
 });
+
+export const attributes = [
+  {id: 1, abr: "x", nam: "taxon", rep: "*", ord: 11},
+  {id: 2, abr: "lp", nam: "lepke", rep: null, ord: 22},
+  {id: 3, abr: "bog", nam: "bogár", rep: null, ord: 22},
+  {id: 4, abr: "lgy", nam: "légy", rep: null, ord: 22},
+  {id: 5, abr: "dar", nam: "darázs", rep: null, ord: 22},
+  {id: 6, abr: "pol", nam: "poloska", rep: null, ord: 22},
+  {id: 7, abr: "pok", nam: "pók", rep: null, ord: 22},
+  {id: 8, abr: "rov", nam: "rovar", rep: null, ord: 22},
+  {id: 9, abr: "p", nam: "példány", rep: "*pd", ord: 31},
+  {id: 10, abr: "h", nam: "hím", rep: "*h", ord: 32},
+  {id: 11, abr: "n", nam: "nőstény", rep: "*n", ord: 33},
+  {id: 12, abr: "ad", nam: "adult", rep: "*ad", ord: 34},
+  {id: 13, abr: "jv", nam: "juvenilis", rep: "*juv", ord: 35},
+  {id: 14, abr: "sub", nam: "subadult", rep: "*sub", ord: 36},
+  {id: 15, abr: "im", nam: "immature", rep: "*imm", ord: 37},
+  {id: 16, abr: "pu", nam: "pullus", rep: "*pull", ord: 38},
+  {id: 17, abr: "tj", nam: "tojás", rep: "* tojás", ord: 39},
+  {id: 18, abr: "nh", nam: "néhány pd", rep: null, ord: 41},
+  {id: 19, abr: "tb", nam: "több pd", rep: null, ord: 42},
+  {id: 20, abr: "rk", nam: "ritka", rep: null, ord: 43},
+  {id: 21, abr: "sz", nam: "szórványos", rep: null, ord: 44},
+  {id: 22, abr: "gy", nam: "gyakori", rep: null, ord: 45},
+  {id: 23, abr: "tm", nam: "tömeges", rep: null, ord: 46},
+  {id: 24, abr: "tbf", nam: "többfelé", rep: null, ord: 47},
+  {id: 25, abr: "mdf", nam: "mindenfelé", rep: null, ord: 48},
+  {id: 26, abr: "elf", nam: "előfordul", rep: null, ord: 49},
+  {id: 27, abr: "fsz", nam: "fészek", rep: null, ord: 51},
+  {id: 28, abr: "nym", nam: "nyom", rep: null, ord: 51},
+  {id: 29, abr: "flt", nam: "folt", rep: null, ord: 51},
+  {id: 30, abr: "dg", nam: "dög", rep: null, ord: 51},
+  {id: 31, abr: "kcs", nam: "közös csapatban", rep: null, ord: 51},
+  {id: 32, abr: "tbc", nam: "több csapatban", rep: null, ord: 51},
+  {id: 33, abr: "fe", nam: "irány", rep: "*-felé", ord: 51},
+  {id: 34, abr: "en", nam: "ének", rep: null, ord: 61},
+  {id: 35, abr: "hg", nam: "hang", rep: null, ord: 61},
+  {id: 36, abr: "chg", nam: "csak hang", rep: null, ord: 61},
+  {id: 37, abr: "ri", nam: "riaszt", rep: null, ord: 61},
+  {id: 38, abr: "at", nam: "átrepülő", rep: null, ord: 61},
+  {id: 39, abr: "vr", nam: "virágzik", rep: null, ord: 61},
+  {id: 40, abr: "ell", nam: "ellenőrizendő", rep: null, ord: 71},
+  {id: 41, abr: "kt", nam: "kétes", rep: null, ord: 71},
+  {id: 42, abr: "f", nam: "fotó", rep: null, ord: 71},
+  {id: 43, abr: "fh", nam: "fotóról határozva", rep: null, ord: 71},
+  {id: 44, abr: "idp", nam: "időpont", rep: "*", ord: 71},
+  {id: 45, abr: "kez", nam: "kezdés", rep: "*", ord: 71},
+  {id: 46, abr: "bef", nam: "befejezés", rep: "*", ord: 71},
+  {id: 47, abr: "bir", nam: "birding.hu", rep: "birding.hu/*", ord: 81},
+  {id: 48, abr: "ize", nam: "izeltlabuak.hu", rep: "izeltlabuak.hu/*", ord: 81},
+  {id: 49, abr: "hdb", nam: "herbárium doboz", rep: "*hdb", ord: 81},
+  {id: 50, abr: "hno", nam: "herbárium szám", rep: "*hno", ord: 81},
+]

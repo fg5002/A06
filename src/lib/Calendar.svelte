@@ -9,7 +9,11 @@
 
 </script>
 
-<Modal bind:showModal={showCalendar} modalClass = "calendar" backdropClasses = "items-center z-2000">
+<Modal 
+  bind:showModal={showCalendar}
+  modalClass = "calendar"
+  backdropClasses = "items-start justify-center z-2000"
+>
   <SveltyPicker
     inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md"
     format = "yyyy-mm-dd"

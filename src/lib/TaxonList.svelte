@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
   import Modal from "./Modal.svelte";
 
-  export let showSelectList = false;
+  export let showTaxonList = false;
   export let source = [];
   export let multi = false;
   export let sorted = false;
@@ -30,7 +30,7 @@
     if(result.findIndex(f=> f === items[i])>-1) return;
     activeIndex = i;
     result.push(items[activeIndex]);
-    if(multi){
+    if(multi === true){
       if(sorted) result.sort((a, b)=> a.localeCompare(b, 'hu'));
       searchText = "";
       activeIndex = 0;
@@ -47,8 +47,9 @@
   }
   
   const changeList = ()=> {
+    if(searchText.length<4) return;
     let s = searchText;
-    items = s && s.length>0 ? source.filter(f=>f.includes(s) === true).sort((a, b) => a.localeCompare(b, 'hu')) : [];
+    items = s && s.length>0 ? source.filter(f=>f.hun.toLowerCase().includes(s) === true || f.ltn.toLowerCase().includes(s) === true || f.abr.indexOf(s)>-1).sort((a, b) => a.hun.localeCompare(b.hun, 'hu')) : [];
   }
 
   const enterPress = (e)=> {
@@ -59,16 +60,16 @@
 
   const submit = ()=> {
     searchText = "";
-    showSelectList = false;
-    dispatch('submitList', result);
+    showTaxonList = false;
+    dispatch('submitList', result[0]);
     result = [];
   }
 
 </script>
 
 <Modal
-  bind:showModal = {showSelectList} 
-  modalClass = "select-list" 
+  bind:showModal = {showTaxonList} 
+  modalClass = "taxon-list" 
   backdropClasses = "items-start z-2000"
   mainClasses = "w-full"
 >
@@ -94,23 +95,23 @@
     <div class="h-full flex flex-col p-1 gap-2 border-slate-500 border-2 rounded-md 
       overflow-y-auto snap-y snap-proximity divide-y divide-gray-400">
       {#if searchText}      
-        {#each items as item, i (item)}
+        {#each items as item, i (item.id)}
           <div 
-            class="p-2 select-none text-lg font-bold snap-end 
+            class="p-2 select-none text-lg font-semibold snap-end 
             {activeIndex === i ? 'bg-lime-400' :'bg-yellow-100'}"
-            on:contextmenu|preventDefault = {()=> selectItem(i)}
+            on:pointerup = {()=> selectItem(i)}
             role = "link"
             tabindex = 0
-          >{item}</div>
+          >{item.hun} ({item.ltn})</div>
         {/each}
       {:else}
-        {#each result as item, i (item)}
+        {#each result as item, i (item.id)}
           <div 
             class="p-2 select-none text-lg font-bold snap-end bg-orange-300"
             on:pointerdown = {()=> removeItem(i)}
             role = "link"
             tabindex = 0
-          >{item}</div>
+          >{item.hun}</div>
         {/each}
       {/if}
     </div>
