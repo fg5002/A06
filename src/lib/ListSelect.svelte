@@ -1,17 +1,19 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Modal from "./Modal.svelte";
-
+  
   export let showSelectList = false;
   export let source = [];
+  export let minChars = 1;
+  export let filterList = (f,s)=> f["nam"].toLowerCase().includes(s) === true;
+  export let sortListField = "nam";
   export let multi = false;
-  export let sorted = false;
+  export let sortResult = (a, b)=> a["nam"].localeCompare(b["nam"], 'hu');
   export let result = [];
 
   let searchText = "";
   let items = [];
   let activeIndex = 0;
-  let inputRef;
 
   const dispatch = createEventDispatcher();
 
@@ -30,12 +32,12 @@
     if(result.findIndex(f=> f === items[i])>-1) return;
     activeIndex = i;
     result.push(items[activeIndex]);
-    if(multi){
-      if(sorted) result.sort((a, b)=> a.localeCompare(b, 'hu'));
+    if(multi === true){
+      result.sort((a,b)=> sortResult(a,b));
       searchText = "";
       activeIndex = 0;
-      inputRef.focus();
     }else{
+      result = [items[activeIndex]];
       submit();
     }
   }
@@ -43,12 +45,15 @@
   const removeItem = (i)=> {
     activeIndex = i;
     result = result.filter(f=> f != result[activeIndex]);
-    inputRef.focus();
   }
-  
-  const changeList = ()=> {
-    let s = searchText;
-    items = s && s.length>0 ? source.filter(f=>f.includes(s) === true).sort((a, b) => a.localeCompare(b, 'hu')) : [];
+
+  const updateList = ()=> {
+    if(searchText.length < minChars ) return;
+    items = searchText ? 
+    source
+      .filter(f=> filterList(f, searchText))
+      .sort((a, b)=> a[sortListField].localeCompare(b[sortListField], 'hu')) : 
+    [];
   }
 
   const enterPress = (e)=> {
@@ -68,7 +73,7 @@
 
 <Modal
   bind:showModal = {showSelectList} 
-  modalClass = "select-list" 
+  modalClass = "taxon-list" 
   backdropClasses = "items-start z-2000"
   mainClasses = "w-full"
 >
@@ -78,43 +83,47 @@
       <input 
         class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
         type="text"
-        bind:this = {inputRef}
         bind:value = {searchText}
-        on:input = {changeList}
+        on:input = {updateList}
         on:keypress = {enterPress}
         use:focus
       >
-      <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
-          on:click={submit}
-        >
-        <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
-      </button>
+      {#if multi === true}
+        <button 
+          class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
+            on:click={submit}
+          >
+          <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
+        </button>
+      {/if}
     </div>
-    <div class="h-full flex flex-col p-1 gap-2 border-slate-500 border-2 rounded-md 
+    <div class="h-full flex flex-col p-1 border-slate-500 border-2 rounded-md 
       overflow-y-auto snap-y snap-proximity divide-y divide-gray-400">
       {#if searchText}      
-        {#each items as item, i (item)}
+        {#each items as item, i}
           <div 
-            class="p-2 select-none text-lg font-bold snap-end 
-            {activeIndex === i ? 'bg-lime-400' :'bg-yellow-100'}"
-            on:contextmenu|preventDefault = {()=> selectItem(i)}
+            class=" flex flex-wrap h-auto gap-2 p-2 select-none text-lg snap-end {activeIndex === i ? 'bg-lime-400' :'bg-yellow-100'}"
+            on:pointerup = {()=> selectItem(i)}
             role = "link"
             tabindex = 0
-          >{item}</div>
+          >
+            <slot name="item" {item}/>
+          </div>
         {/each}
-      {:else}
-        {#each result as item, i (item)}
+      {:else if multi === true}
+        {#each result as item, i}
           <div 
-            class="p-2 select-none text-lg font-bold snap-end bg-orange-300"
-            on:pointerdown = {()=> removeItem(i)}
+            class=" flex flex-wrap h-auto gap-2 p-2 select-none text-lg snap-end bg-orange-300"
+            on:pointerup = {()=> removeItem(i)}
             role = "link"
             tabindex = 0
-          >{item}</div>
+          >    
+            <slot name="result" {item}/>        
+          </div>
         {/each}
       {/if}
     </div>
-
+    
   </div>
-
+    
 </Modal>

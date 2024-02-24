@@ -20,6 +20,8 @@
   
   import TaxonEditor from "$lib/TaxonEditor.svelte";
 	import DailyList from "$lib/DailyList.svelte";
+  import DrawingMenu from "$lib/DrawingMenu.svelte";
+  import ShapeContextMenu from "$lib/ShapeContextMenu.svelte";
 
   let showCursor = false;
   let cursorPos;
@@ -30,6 +32,8 @@
   let showDrawer = false;
   let showEditor = false;
   let showDailyList = false;
+  let showDrawingMenu = false;
+  let showShapeContextMenu = false;
   let calDate = new Date().toISOString().split('T')[0];
   let map;
   
@@ -44,7 +48,7 @@
   const openEditing = (e)=>{
     cursorPos = e.detail.pos;
     showContextMenu = false;
-    showContextMenu = true;;
+    showContextMenu = true;
     $tempIndex = $tempGeo.features.findIndex(f=> f.properties.id === e.detail.id);
   }
 
@@ -69,16 +73,16 @@
 
   const showDrawingToolbar = ()=>{
     if(showCursor) return;
-    if(showContextMenu) showContextMenu = false;
+    if(showContextMenu === true) showContextMenu = false;
     drawingToolbar = true;
   }
   
   const drawShape=(e)=>{
     $selectedShape = e;
     showCursor = true;
-    if(drawingToolbar){
+    /*if(drawingToolbar){
       drawingToolbar = false
-    }
+    }*/
   }
   
   const drawQuickPoint = ()=>{
@@ -118,6 +122,11 @@
     toggleEditor();
   } 
 
+  const openwDrawingMenu = ()=> {
+    showContextMenu = false;
+    showDrawingMenu = true;
+  }
+
 </script>
 
 <Drawer bind:showDrawer>
@@ -133,6 +142,11 @@
 
 <TaxonEditor bind:showEditor/>
 
+<DrawingMenu
+  bind:showDrawingMenu
+  on:drawShape = {(e)=>drawShape(e.detail)}
+/>
+
 <DailyList 
   bind:showDailyList
   on:editDailyItem = {editDailyItem}
@@ -147,10 +161,11 @@
 >
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
-    Your browser does not support the audio element
-  </audio>
-</Modal>
-
+      Your browser does not support the audio element
+    </audio>
+  </Modal>
+  
+  <!--ShapeContextMenu bind:showShapeContextMenu = {showContextMenu}/-->
 
 <Leaflet on:mapClick={mapClick } bind:this={map}>
 
@@ -169,7 +184,7 @@
   </Control>
 
   <Control position={'topright'}>      
-    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={toggleDailyList}/>  
+    <MenuItem img={'images/flower-tulip-outline.svg'} on:click={()=> showDailyList = true}/>  
   </Control>
   
   <Control position={'bottomleft'}>
@@ -181,23 +196,16 @@
   </Control>
 
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
-    <MenuItem  title={"Edit"} on:click={beginEdit}/> 
-    <MenuItem  title={"Taxoneditor"} on:click={()=> console.log('Empty')}/> 
-    <MenuItem  title={"Geoeditor"} on:click={()=> console.log('Empty')}/> 
-    <MenuItem  title={"Delete"} on:click={deleteShape}/> 
+    <div class="flex flex-col divide-y divide-slate-500 border-2 border-slate-500 rounded-sm  shadow-2xl">
+      <MenuItem  title={"Edit"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={beginEdit}/> 
+      <MenuItem  title={"Taxoneditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
+      <MenuItem  title={"Geoeditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
+      <MenuItem  title={"Delete"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={deleteShape}/> 
+    </div>
   </LeafletContextMenu>
       
   <Control position='bottomright'>
-    {#if drawingToolbar}
-      <MenuItem title={"Point"} img={'images/circle-medium.svg'} on:click={()=> drawShape('point')}/> 
-      <MenuItem title={"Circle"} img={'images/vector-circle-variant.svg'} on:click={()=> drawShape('circle')}/> 
-      <MenuItem title={"Ellipse"} img={'images/vector-ellipse.svg'} on:click={()=> drawShape('ellipse')}/> 
-      <MenuItem title={"Line"} img={'images/vector-polyline.svg'} on:click={()=> drawShape('line')}/> 
-      <MenuItem title={"Polygon"} img={'images/vector-triangle.svg'} on:click={()=> drawShape('polygon')}/> 
-      <MenuItem title={"Multipolygon"} img={'images/vector-polygon.svg'} on:click={()=> drawShape('multipolygon')}/>
-    {:else}
-      <MenuItem title={"Draw"} img={'images/lead-pencil.svg'} on:click={showDrawingToolbar}/>
-    {/if}
+    <MenuItem img={'images/lead-pencil.svg'} on:click={openwDrawingMenu}/>
   </Control>
 
   <Control position={'bottomright'}>      

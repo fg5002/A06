@@ -1,4 +1,5 @@
 <script>
+  import { fade , fly} from 'svelte/transition';
   import Marker from './Marker.svelte';
   import DivIcon from './DivIcon.svelte';
   
@@ -24,7 +25,11 @@
     bind:this={markerElement}
   >
     <DivIcon options={iconOptions}>
-      <div class="w-auto h-auto flex flex-col gap-1 shadow-2xl bg-transparent">  
+      <div
+        class="w-auto h-auto flex flex-col gap-1 shadow-2xl bg-transparent"
+        in:fade={{duration: 200}} 
+        out:fade={{duration: 300}} 
+      >  
         <slot/>  
       </div>
     </DivIcon>

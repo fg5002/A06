@@ -5,6 +5,8 @@
   import ListSelect from "./ListSelect.svelte";
   import TaxonList from "./TaxonList.svelte";
   import {birds} from "./birds"
+  import NewTaxonList from "./TaxonList.svelte";
+	import AttributeList from "./AttributeList.svelte";
 
 
   export let showEditor = false;
@@ -13,6 +15,7 @@
   let showCalendar = false;
   let showSelectList = false;
   let showTaxonList = false;
+  let showAttributeList = false;
   let searchText = "";
   
   const toggleCalendar = ()=> showCalendar=!showCalendar;
@@ -28,7 +31,25 @@
     })
   }
 
-  const fruits = "alma, körte, szilva, ürge, kajszi, naspolya, édesburgonya, málna, dió, mogyoró, árpa, berkenye, meggy, ribizke, egres, mandula, cseresznye".split(', ');
+  const fruits = [
+    {nam: "alma"},
+    {nam: "körte"},
+    {nam: "szilva"},
+    {nam: "ürge"},
+    {nam: "kajszi"},
+    {nam: "naspolya"},
+    {nam: "édesburgonya"},
+    {nam: "málna"},
+    {nam: "dió"},
+    {nam: "mogyoró"},
+    {nam: "árpa"},
+    {nam: "berkenye"},
+    {nam: "meggy"},
+    {nam: "ribizke"},
+    {nam: "egres"},
+    {nam: "mandula"},
+    {nam: "cseresznye"}
+  ]
 
   const tags = [
     {"id": 1, "abr": "x", "nam": "taxon", "rep": "*", "ord": 11},
@@ -82,6 +103,12 @@
     {"id": 49, "abr": "hdb", "nam": "herbárium doboz", "rep": "*hdb", "ord": 81},
     {"id": 50, "abr": "hno", "nam": "herbárium szám", "rep": "*hno", "ord": 81},
   ]
+  
+  /*
+  Fekete gólya (Ciconia nigra)
+  3pd átrepülő dk-felé
+  https://www.google.com/maps/search/?api=1&query=47.5,19.25
+  */
 
   const newData = {
     type: "Feature",
@@ -90,7 +117,7 @@
       data: {
         id: null,
         date: {dat: {currDate}, id: 345},
-        taxon: {hun: "Feketerigó", ltn: "Turdus merula", id: 215},
+        taxon: {id: 839, hun: 'Fekete rigó', ltn: 'Turdus merula', abr: 'feri,fkri,fkrg', mon: '333333333333'},
         attributes: [],
         note: "Géza kék az ég",
         place: {nam: "Háros-sziget, Budafok", id: 125877},
@@ -175,15 +202,19 @@
   }
 
   const submitTaxonList = (e)=>{
-    console.log(JSON.stringify(e.detail));
-    newData.properties.data.taxon = e.detail;
+    newData.properties.data.taxon = e.detail[0];
     console.log(newData.properties.data.taxon)
+  }
+
+  const submitAttributeList = (e)=>{
+    newData.properties.data.attributes = e.detail;
+    console.log(newData.properties.data.attributes)
   }
 
   const submit = ()=> {
     //console.log(JSON.stringify(newData.properties.data));
     showEditor = false;
-    newData.properties.data.taxon = null;
+    newData.properties.data.taxon = [];
     newData.properties.data.attributes = [];
     newData.properties.data.note = null;
     newData.properties.data.files = [];
@@ -205,17 +236,29 @@
   <ListSelect
     source = {fruits}
     bind:showSelectList
-    sorted = true
     multi = true
     on:submitList = {submitList}
   />
+    
+  <!--TaxonList
+    source = {birds}
+    sortField = {'hun'}
+    resultSortField = {'hun'}
+    multi = {false}
+    bind:showTaxonList
+    on:submitList = {submitTaxonList}
+  /-->
 
   <TaxonList
-    source = {birds}
     bind:showTaxonList
-    sorted = true
-    multi = false
+    source = {birds}
     on:submitList = {submitTaxonList}
+  />
+
+  <AttributeList
+    bind:showAttributeList
+    source = {tags}
+    on:submitList = {submitAttributeList}
   />
 
   <div class="flex flex-col p-2 gap-2 w-full max-h-[65vh] border-slate-500 border-2 rounded-sm">
@@ -223,7 +266,7 @@
       <input 
         class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
         type="text" 
-        on:keypress={promptSpace}
+        on:keypress = {promptSpace}
         use:focus
         bind:value = {searchText}
       >
@@ -234,6 +277,10 @@
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->
         Submit
       </button>
+      <button 
+        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400"
+        on:click={()=> showAttributeList = true}
+      >List</button>
     </div>
 
     <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">      
@@ -244,10 +291,16 @@
         <div class="font-bold text-xl basis-full text-red-600 mr-2 select-none" on:pointerup={toggleCalendar}>Date</div> 
       {/if}
 
-      <div class="flex flex-wrap basis-full" on:pointerup={()=> showTaxonList= true}>
+      <div class="flex flex-wrap basis-full" on:pointerup={()=> showTaxonList = true}>
         {#if newData.properties.data.taxon}
-          <span class="font-bold text-xl mr-2 select-none" on:pointerup|stopPropagation={()=>newData.properties.data.taxon = null}>{newData.properties.data.taxon.hun}</span>
-          <span class="italic mr-2 select-none" on:pointerup|stopPropagation={()=>newData.properties.data.taxon = null}>{newData.properties.data.taxon.ltn}</span>
+          <span 
+            class="font-bold text-xl mr-2 select-none"
+            on:pointerup|stopPropagation={()=>newData.properties.data.taxon = null}
+          >{newData.properties.data.taxon.hun}</span>
+          <span
+            class="italic mr-2 select-none"
+            on:pointerup|stopPropagation={()=>newData.properties.data.taxon = null}
+          >{newData.properties.data.taxon.ltn}</span>
         {:else}
           <div class="font-bold text-xl text-green-600 mr-2 select-none">Taxon</div> 
         {/if}
