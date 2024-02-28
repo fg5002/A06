@@ -26,7 +26,7 @@
   >
     <DivIcon options={iconOptions}>
       <div
-        class="w-auto h-auto flex flex-col gap-1 shadow-2xl bg-transparent"
+        class="w-auto h-auto flex flex-col shadow-2xl bg-transparent"
         in:fade={{duration: 200}} 
         out:fade={{duration: 300}} 
       >  

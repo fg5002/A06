@@ -56,7 +56,7 @@
       switch (feature.properties.type) {
         case 0:
           return {
-            fillColor: 'yellowgreen',
+            fillColor: 'yellow',
             radius: 7,
             color: 'black',
             weight: 2,

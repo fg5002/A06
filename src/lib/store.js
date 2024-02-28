@@ -304,7 +304,8 @@ export const queryData = writable({
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [19.03352,47.3914057],
+        "param": [17,2,146],
+        "coordinates": [19.033752,47.3913200],
       }
     },
     {
@@ -317,7 +318,8 @@ export const queryData = writable({
       },
       "geometry": {
         "type": "Point",
-        "coordinates": [19.03322,47.3910057],
+        "param":[17,2,110],
+        "coordinates": [19.03322,47.3910257],
       }
     },
     {

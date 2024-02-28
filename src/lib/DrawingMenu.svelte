@@ -20,7 +20,7 @@
   backdropClasses = "items-end justify-center z-2000"
   mainClasses = "mb-8"
 >
-  <div class="flex flex-col divide-y divide-slate-500 border-2 border-slate-500 rounded-sm  shadow-2xl">
+  <div class="flex flex-col divide-y divide-slate-500 shadow-2xl">
 
     <MenuItem title={"Point"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/circle-medium.svg'} on:click={()=> drawShape('point')}/> 
     <MenuItem title={"Circle"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-circle-variant.svg'} on:click={()=> drawShape('circle')}/> 

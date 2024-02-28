@@ -13,7 +13,6 @@
   function closeOnOutclick(e) {
     if (e.target.classList.contains(modalClass)) {
       showModal = false;
-      dispatch('modalClose')
     }
   }
 
@@ -30,7 +29,7 @@
     <div 
       class="flex shadow-lg rounded-sm max-h-[100vh] bg-lime-200 {mainClasses}" 
     >
-      <slot></slot>
+      <slot/>
     </div>
   </div>
 {/if}

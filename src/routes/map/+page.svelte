@@ -196,7 +196,7 @@
   </Control>
 
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
-    <div class="flex flex-col divide-y divide-slate-500 border-2 border-slate-500 rounded-sm  shadow-2xl">
+    <div class="flex flex-col divide-y divide-slate-500 shadow-2xl">
       <MenuItem  title={"Edit"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={beginEdit}/> 
       <MenuItem  title={"Taxoneditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
       <MenuItem  title={"Geoeditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
