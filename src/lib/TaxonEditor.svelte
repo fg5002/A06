@@ -3,6 +3,7 @@
   import TimePicker from "./TimePicker.svelte";
   import Modal from "./Modal.svelte";
   import {birds} from "./birds"
+  import {attributes} from "./attributes"
   import TaxonList from "./TaxonList.svelte";
 	import AttributeList from "./AttributeList.svelte";
   import ObserverList from "./ObserverList.svelte";
@@ -35,72 +36,17 @@
   }
 
   const observers = [
-    {id: 1, nam: "Jim Cooper"},
-    {id: 2, nam: "Dave jenkins"},
-    {id: 3, nam: "Chuck Youngblood"},
-    {id: 4, nam: "Chuck Norris"},
-    {id: 5, nam: "Captain Sparrow"},
-    {id: 6, nam: "Lord Nelson"},
-    {id: 7, nam: "Atahutalpa"},
-    {id: 8, nam: "James Cook"},
-    {id: 9, nam: "Johnny Bravo"},
-    {id: 10, nam: "Kiss Péter"}, 
-    {id: 11, nam: "Nagy Pál"}
+    {id: 1, nam: "Ócsag Attila"},
+    {id: 2, nam: "Zsoldos Csaba"},
+    {id: 3, nam: "Szalai Kornél"},
+    {id: 4, nam: "Lendvai Csaba"},
+    {id: 5, nam: "Bajor Zoltán"},
+    {id: 6, nam: "Bodor István"},
+    {id: 7, nam: "Szőke Gábor"},
+    {id: 8, nam: "Novák Gábor"},
+    {id: 9, nam: "Egyéb megfigyelő"}
   ]
 
-  const tags = [
-    {"id": 1, "abr": "x", "nam": "taxon", "rep": "*", "ord": 11, "value": null},
-    {"id": 2, "abr": "lp", "nam": "lepke", "rep": null, "ord": 22, "value": null},
-    {"id": 3, "abr": "bog", "nam": "bogár", "rep": null, "ord": 22, "value": null},
-    {"id": 4, "abr": "lgy", "nam": "légy", "rep": null, "ord": 22, "value": null},
-    {"id": 5, "abr": "dar", "nam": "darázs", "rep": null, "ord": 22, "value": null},
-    {"id": 6, "abr": "pol", "nam": "poloska", "rep": null, "ord": 22, "value": null},
-    {"id": 7, "abr": "pok", "nam": "pók", "rep": null, "ord": 22, "value": null},
-    {"id": 8, "abr": "rov", "nam": "rovar", "rep": null, "ord": 22, "value": null},
-    {"id": 9, "abr": "pd", "nam": "példány", "rep": "*pd", "ord": 31, "value": null},
-    {"id": 10, "abr": "hm", "nam": "hím", "rep": "*h", "ord": 32, "value": null},
-    {"id": 11, "abr": "ns", "nam": "nőstény", "rep": "*n", "ord": 33, "value": null},
-    {"id": 12, "abr": "ad", "nam": "adult", "rep": "*ad", "ord": 34, "value": null},
-    {"id": 13, "abr": "jv", "nam": "juvenilis", "rep": "*juv", "ord": 35, "value": null},
-    {"id": 14, "abr": "sub", "nam": "subadult", "rep": "*sub", "ord": 36, "value": null},
-    {"id": 15, "abr": "im", "nam": "immature", "rep": "*imm", "ord": 37, "value": null},
-    {"id": 16, "abr": "pu", "nam": "pullus", "rep": "*pull", "ord": 38, "value": null},
-    {"id": 17, "abr": "tj", "nam": "tojás", "rep": "* tojás", "ord": 39, "value": null},
-    {"id": 18, "abr": "nh", "nam": "néhány pd", "rep": null, "ord": 41, "value": null},
-    {"id": 19, "abr": "tb", "nam": "több pd", "rep": null, "ord": 42, "value": null},
-    {"id": 20, "abr": "rk", "nam": "ritka", "rep": null, "ord": 43, "value": null},
-    {"id": 21, "abr": "sz", "nam": "szórványos", "rep": null, "ord": 44, "value": null},
-    {"id": 22, "abr": "gy", "nam": "gyakori", "rep": null, "ord": 45, "value": null},
-    {"id": 23, "abr": "tm", "nam": "tömeges", "rep": null, "ord": 46, "value": null},
-    {"id": 24, "abr": "tbf", "nam": "többfelé", "rep": null, "ord": 47, "value": null},
-    {"id": 25, "abr": "mdf", "nam": "mindenfelé", "rep": null, "ord": 48, "value": null},
-    {"id": 26, "abr": "elf", "nam": "előfordul", "rep": null, "ord": 49, "value": null},
-    {"id": 27, "abr": "fsz", "nam": "fészek", "rep": null, "ord": 51, "value": null},
-    {"id": 28, "abr": "nym", "nam": "nyom", "rep": null, "ord": 51, "value": null},
-    {"id": 29, "abr": "flt", "nam": "folt", "rep": null, "ord": 51, "value": null},
-    {"id": 30, "abr": "dg", "nam": "dög", "rep": null, "ord": 51, "value": null},
-    {"id": 31, "abr": "kcs", "nam": "közös csapatban", "rep": null, "ord": 51, "value": null},
-    {"id": 32, "abr": "tbc", "nam": "több csapatban", "rep": null, "ord": 51, "value": null},
-    {"id": 33, "abr": "fe", "nam": "irány", "rep": "*-felé", "ord": 51, "value": null},
-    {"id": 34, "abr": "en", "nam": "ének", "rep": null, "ord": 61, "value": null},
-    {"id": 35, "abr": "hg", "nam": "hang", "rep": null, "ord": 61, "value": null},
-    {"id": 36, "abr": "chg", "nam": "csak hang", "rep": null, "ord": 61, "value": null},
-    {"id": 37, "abr": "ri", "nam": "riaszt", "rep": null, "ord": 61, "value": null},
-    {"id": 38, "abr": "at", "nam": "átrepülő", "rep": null, "ord": 61, "value": null},
-    {"id": 39, "abr": "vr", "nam": "virágzik", "rep": null, "ord": 61, "value": null},
-    {"id": 40, "abr": "ell", "nam": "ellenőrizendő", "rep": null, "ord": 71, "value": null},
-    {"id": 41, "abr": "kt", "nam": "kétes", "rep": null, "ord": 71, "value": null},
-    {"id": 42, "abr": "ft", "nam": "fotó", "rep": null, "ord": 71, "value": null},
-    {"id": 43, "abr": "fh", "nam": "fotóról határozva", "rep": null, "ord": 71, "value": null},
-    {"id": 44, "abr": "idp", "nam": "időpont", "rep": "*", "ord": 71, "value": null},
-    {"id": 45, "abr": "kez", "nam": "kezdés", "rep": "*", "ord": 71, "value": null},
-    {"id": 46, "abr": "bef", "nam": "befejezés", "rep": "*", "ord": 71, "value": null},
-    {"id": 47, "abr": "bir", "nam": "birding.hu", "rep": "birding.hu/*", "ord": 81, "value": null},
-    {"id": 48, "abr": "ize", "nam": "izeltlabuak.hu", "rep": "izeltlabuak.hu/*", "ord": 81, "value": null},
-    {"id": 49, "abr": "hdb", "nam": "herbárium doboz", "rep": "*hdb", "ord": 81, "value": null},
-    {"id": 50, "abr": "hno", "nam": "herbárium szám", "rep": "*hno", "ord": 81, "value": null}
-  ]
-  
   /*
   Fekete gólya (Ciconia nigra)
   3pd átrepülő dk-felé
@@ -168,9 +114,9 @@
     let idx;
     let s = searchText.trim();
 
-    idx = tags.findIndex(d=> (s===d.abr && d.rep === null) || (s.includes(d.abr) && s.length > d.abr.length && d.rep != null));
+    idx = attributes.findIndex(d=> (s===d.abr && d.rep === null) || (s.includes(d.abr) && s.length > d.abr.length && d.rep != null));
     if(idx>-1){
-      res = tags[idx];
+      res = attributes[idx];
       res.value =  res.rep === null ? null : s.replace(res.abr,"");
       res.dis = res.rep === null ? res.nam : res.rep.replace("*", s.replace(res.abr,""));
       curData.attributes = curData.attributes.filter(f=> f.id !=res.id);
@@ -198,11 +144,12 @@
   }
 
   const promptSpace = (e)=>{
-    if (e.code == 'Space') {
+    //console.log(e);
+    if (e.code == 'Space' || e.keyCode === 32) {
       addAttribute();
       searchText = '';
     }
-    if (e.code == 'Enter') {
+    if (e.code == 'Enter' || e.keyCode === 13) {
       submit();
       promptRef.value = "";
     }
@@ -260,7 +207,7 @@
 
   <AttributeList
     bind:showAttributeList
-    source = {tags}
+    source = {attributes}
     on:submit = {submitAttributeList}
   />
 
@@ -283,7 +230,7 @@
       <input 
         class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
         type="text" 
-        on:keydown|stopPropagation = {promptSpace}
+        on:keydown|stopPropagation = {(e)=> promptSpace(e)}
         use:focus
         bind:value = {searchText}
         bind:this={promptRef}
