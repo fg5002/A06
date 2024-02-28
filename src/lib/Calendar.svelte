@@ -15,7 +15,7 @@
   backdropClasses = "items-start justify-center z-2000"
 >
   <SveltyPicker
-    inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md"
+    inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md text-xl"
     format = "yyyy-mm-dd"
     clearBtn = false
     pickerOnly = true
