@@ -1,5 +1,5 @@
 <script>
-  import Calendar from "./Calendar.svelte";
+  import {currDate} from "./store"
   import TimePicker from "./TimePicker.svelte";
   import Modal from "./Modal.svelte";
   import {birds} from "./birds"
@@ -11,16 +11,12 @@
 
   export let showEditor = false;
 
-  let currDate = new Date().toISOString().split('T')[0]
-  let showCalendar = false;
   let showTaxonList = false;
   let showAttributeList = false;
   let showObserverList = false;
   let showEditorNotes = false
   let searchText = "";
   let promptRef = null;
-
-  const toggleCalendar = ()=> showCalendar=!showCalendar;
   
   $: searchText = promptRef && promptRef.value;
 
@@ -56,7 +52,7 @@
 
   const curData = {
     id: null,
-    date: {dat: {currDate}},
+    date: {dat: {$currDate}},
     taxon: null,
     attributes: [],
     note: "",
@@ -75,7 +71,7 @@
     "properties": {
       data: {
         id: null,
-        date: {dat: {currDate}},
+        date: {dat: {$currDate}},
         taxon: null,
         attributes: [],
         note: "",
@@ -132,11 +128,6 @@
       addAttribute();
       promptRef.value = "";
     }
-    if (e.keyCode === 32){
-      e.preventDefault()
-      addAttribute();
-      promptRef.value = "";
-    }
   }
 
   const submitTaxonList = (e)=>{
@@ -176,13 +167,8 @@
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
   backdropClasses = "items-start z-2000"
-  mainClasses = "gap-2 w-full"
+  mainClasses = "gap-2 w-full mt-1.5"
 >
-  <Calendar
-    bind:showCalendar
-    bind:calDate={currDate}
-  />
-
   <TaxonList
     bind:showTaxonList
     source = {birds}
@@ -210,9 +196,9 @@
   />
 
   <div class="flex flex-col p-2 gap-2 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm text-xl text-left font-normal">
-    <div class="flex gap-2">
+    <div class="flex gap-2 items-center">
       <input
-        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 w-[75%] h-auto" 
+        class="bg-yellow-200 focus:bg-yellow-300 border-2 border-slate-500 rounded-md px-2 py-1 m-0 w-[75%] h-auto" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptSpace(e)}
         use:focus
@@ -223,18 +209,9 @@
         class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400 grow" on:pointerup = {submit}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
       </button>
-      <!--button 
-        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400"on:click={()=> showEditorNotes = true}>List
-      </button-->
     </div>
 
     <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 border-slate-500 border-2 rounded-md overflow-y-auto">      
-
-      {#if currDate != null}
-        <div class="font-bold mr-2 text-lime-700 select-none basis-full text-right mb-2" on:pointerup={toggleCalendar}>{currDate}</div>
-      {:else}
-        <div class="font-bold basis-full text-red-600 mr-2 select-none" on:pointerup={toggleCalendar}>Date</div> 
-      {/if}
 
       <div class="flex flex-wrap basis-full" on:pointerup={()=> showTaxonList = true}>
         {#if curData.taxon}

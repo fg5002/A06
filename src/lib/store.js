@@ -8,6 +8,7 @@ export const mapState = writable({
   overlays: ["Query", "Temp"]
 })
 
+export const currDate = writable(new Date().toISOString().split('T')[0]);
 
 export const metersPerPixel = derived([mapState], ([$mapState]) => {
   let mpp = 40075016.686 * Math.abs(Math.cos($mapState.center[0] * Math.PI/180)) / Math.pow(2, $mapState.zoom+8);
