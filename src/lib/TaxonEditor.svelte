@@ -56,50 +56,33 @@
 
   const curData = {
     id: null,
-    date: {dat: {currDate}, id: 345},
-    taxon: {id: 839, hun: 'Fekete rigó', ltn: 'Turdus merula', abr: 'feri,fkri,fkrg', mon: '333333333333'},
+    date: {dat: {currDate}},
+    taxon: null,
     attributes: [],
     note: "",
-    place: {nam: "Háros-sziget, Budafok", id: 125877},
-    observer: [
-      {id: 10, nam: "Kiss Péter"}, 
-      {id: 11, nam: "Nagy Pál"}
-    ],
-    files: [
-      {nam: "0240208-0012.jpg", id: 2},          
-      {nam: "20240208-0014.jpg", id: 5},          
-      {nam: "20240208-0025.jpg", id: 96},    
-    ],
-    reference: [
-      {nam: "Adatok Budapest flórájához I (2019)", id: 41},
-      {nam: "Adatok Budapest flórájához II (2021)", id: 45}
-    ]
+    place: null,
+    observer: [],
+    files: [],
+    reference: [],
+    geometry: {
+      type: null,
+      coordinates: []
+    }
   }
 
   const newData = {
     type: "Feature",
     "properties": {
-      ord: 25,
       data: {
         id: null,
-        date: {dat: {currDate}, id: 345},
-        taxon: {id: 839, hun: 'Fekete rigó', ltn: 'Turdus merula', abr: 'feri,fkri,fkrg', mon: '333333333333'},
+        date: {dat: {currDate}},
+        taxon: null,
         attributes: [],
         note: "",
-        place: {nam: "Háros-sziget, Budafok", id: 125877},
-        observer: [
-          {id: 10, nam: "Kiss Péter"}, 
-          {id: 11, nam: "Nagy Pál"}
-        ],
-        files: [
-          {nam: "0240208-0012.jpg", id: 2},          
-          {nam: "20240208-0014.jpg", id: 5},          
-          {nam: "20240208-0025.jpg", id: 96},    
-        ],
-        reference: [
-          {nam: "Adatok Budapest flórájához I (2019)", id: 41},
-          {nam: "Adatok Budapest flórájához II (2021)", id: 45}
-        ]
+        place: null,
+        observer: [],
+        files: [],
+        reference: []
       },
       type: 1,
     },
@@ -145,12 +128,8 @@
 
   const promptSpace = (e)=>{
     //console.log(e);
-    if (e.code == 'Space' || e.keyCode === 32) {
+    if (e.keyCode === 13) {
       addAttribute();
-      searchText = '';
-    }
-    if (e.code == 'Enter' || e.keyCode === 13) {
-      submit();
       promptRef.value = "";
     }
   }
