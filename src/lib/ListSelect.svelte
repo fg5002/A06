@@ -65,10 +65,10 @@
   mainClasses = "w-full"
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-[65vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
+  <div class="flex flex-col bg-lime-100 w-full h-[65vh] border-slate-500 border-2 rounded-sm p-2 gap-2 text-left text-xl">
     <div class="flex gap-2">  
       <input 
-        class="bg-yellow-200 w-[75%] focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg" 
+        class="bg-yellow-200 w-[75%] focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0" 
         type="text"
         placeholder= {placeHolder}
         bind:value = {searchText}
@@ -84,7 +84,7 @@
         </button>
       {/if}   
     </div>
-    <div class="h-full flex flex-col text-lg p-1 border-slate-500 border-2 rounded-md 
+    <div class="h-full flex flex-col p-1 border-slate-500 border-2 rounded-md 
       overflow-y-auto snap-y snap-proximity divide-y divide-gray-400">
       {#if searchText}      
         {#each items as item, i}

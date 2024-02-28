@@ -133,7 +133,7 @@
       promptRef.value = "";
     }
     if (e.keyCode === 32){
-      e.preventDefault
+      e.preventDefault()
       addAttribute();
       promptRef.value = "";
     }
@@ -209,10 +209,10 @@
     on:submit = {submitObserverList}
   />
 
-  <div class="flex flex-col p-2 gap-2 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm text-lg">
-    <div class="flex gap-2 text-lg">
+  <div class="flex flex-col p-2 gap-2 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm text-xl text-left font-normal">
+    <div class="flex gap-2">
       <input
-        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-xl font-semibold w-[75%] h-auto" 
+        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 w-[75%] h-auto" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptSpace(e)}
         use:focus
@@ -228,18 +228,18 @@
       </button-->
     </div>
 
-    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">      
+    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 border-slate-500 border-2 rounded-md overflow-y-auto">      
 
       {#if currDate != null}
-        <div class="font-bold mr-2 text-lime-700 text-xl select-none basis-full text-right mb-2" on:pointerup={toggleCalendar}>{currDate}</div>
+        <div class="font-bold mr-2 text-lime-700 select-none basis-full text-right mb-2" on:pointerup={toggleCalendar}>{currDate}</div>
       {:else}
-        <div class="font-bold text-xl basis-full text-red-600 mr-2 select-none" on:pointerup={toggleCalendar}>Date</div> 
+        <div class="font-bold basis-full text-red-600 mr-2 select-none" on:pointerup={toggleCalendar}>Date</div> 
       {/if}
 
       <div class="flex flex-wrap basis-full" on:pointerup={()=> showTaxonList = true}>
         {#if curData.taxon}
           <span 
-            class="font-bold text-xl mr-2 select-none"
+            class="font-bold mr-2 select-none"
             on:pointerup|stopPropagation={()=>curData.taxon = null}
           >{curData.taxon.hun}</span>
           <span
@@ -247,7 +247,7 @@
             on:pointerup|stopPropagation={()=>curData.taxon = null}
           >{curData.taxon.ltn}</span>
         {:else}
-          <div class="font-bold text-xl text-green-600 mr-2 select-none">Taxon</div> 
+          <div class="font-bold text-green-600 mr-2 select-none">Taxon</div> 
         {/if}
       </div>
 
@@ -260,7 +260,7 @@
             >{item.dis}</span>
           {/each}
         {:else}
-          <div class="font-bold text-xl text-green-600 mr-2 select-none">Attributes</div> 
+          <div class="font-bold text-green-600 mr-2 select-none">Attributes</div> 
         {/if}
       </div>
       
@@ -268,7 +268,7 @@
         {#if curData.note}
           <div class="mr-2 select-none basis-full">{curData.note}</div>
         {:else}
-          <div class="font-bold text-xl basis-full text-green-600 mr-2 select-none">Note</div> 
+          <div class="font-bold basis-full text-green-600 mr-2 select-none">Note</div> 
         {/if}
       </div>
 
@@ -278,7 +278,7 @@
             <span class="mr-2 select-none" on:pointerup|stopPropagation={()=> curData.observer = deleteFromFieldArray(curData.observer, item.id)}>{item.nam}</span>
           {/each} 
         {:else}
-          <div class="font-bold text-xl text-red-600 mr-2 select-none">Observer</div> 
+          <div class="font-bold text-red-600 mr-2 select-none">Observer</div> 
         {/if}
       </div>
 
@@ -288,14 +288,14 @@
             <span class="mr-2 select-none" on:pointerup={()=> curData.files = deleteFromFieldArray(curData.files, item.id)}>{item.nam}</span>
           {/each}  
         {:else}
-          <div class="font-bold text-xl text-green-600 mr-2 select-none">Files</div> 
+          <div class="font-bold text-green-600 mr-2 select-none">Files</div> 
         {/if}          
       </div>
 
       {#if newData.geometry.type}
         <div class="mr-2 select-none font-bold basis-full" on:pointerup={()=>showEditor = false}>{newData.geometry.type}</div>
       {:else}
-        <div class="font-bold text-xl basis-full text-red-600 mr-2 select-none">Geo</div> 
+        <div class="font-bold basis-full text-red-600 mr-2 select-none">Geo</div> 
       {/if}
       
 

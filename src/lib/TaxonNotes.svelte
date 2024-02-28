@@ -43,10 +43,10 @@
   mainClasses = "w-full h-1/3"
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-full border-slate-500 border-2 rounded-sm p-2 gap-2 text-lg">
+  <div class="flex flex-col bg-lime-100 w-full h-full border-slate-500 border-2 rounded-sm p-2 gap-2 text-xl text-left">
     <div class="flex flex-col gap-2 h-full">
       <textarea 
-        class="bg-yellow-200 border-2 border-zinc-500 rounded-md p-2 m-0 text-left text-lg w-full h-full" 
+        class="bg-yellow-200 border-2 border-zinc-500 rounded-md p-2 m-0 w-full h-full" 
         type="text"
         placeholder= {placeHolder}
         bind:value={noteText}
