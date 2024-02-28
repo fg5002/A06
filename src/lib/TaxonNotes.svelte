@@ -40,31 +40,28 @@
   bind:showModal = {showEditorNotes} 
   modalClass = "editor-notes-list" 
   backdropClasses = "items-start z-2000"
-  mainClasses = "w-full"
+  mainClasses = "w-full h-1/3"
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-[65vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
-    <div class="flex flex-col gap-4">
+  <div class="flex flex-col bg-lime-100 w-full h-full border-slate-500 border-2 rounded-sm p-2 gap-2 text-lg">
+    <div class="flex flex-col gap-2 h-full">
       <textarea 
-        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-full" 
+        class="bg-yellow-200 border-2 border-zinc-500 rounded-md p-2 m-0 text-left text-lg w-full h-full" 
         type="text"
-        rows="12"
         placeholder= {placeHolder}
         bind:value={noteText}
         use:focus
       />
-      <div class="flex justify-between">
+      <div class="flex justify-between gap-2">
         <button 
           class="flex items-center gap-2 border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
           on:click={submit}
           >Submit
-          <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
         </button>
         <button 
           class="flex items-center gap-2 border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
           on:click={clearContent}
           >Clear
-          <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
         </button>
       </div>
     </div>    

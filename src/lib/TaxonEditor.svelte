@@ -128,7 +128,7 @@
 
   const promptSpace = (e)=>{
     //console.log(e);
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 || e.keyCode === 32) {
       addAttribute();
       promptRef.value = "";
     }
@@ -204,10 +204,10 @@
     on:submit = {submitObserverList}
   />
 
-  <div class="flex flex-col p-2 gap-2 w-full max-h-[65vh] border-slate-500 border-2 rounded-sm">
+  <div class="flex flex-col p-2 gap-2 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm text-lg">
     <div class="flex gap-2">
-      <input 
-        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%]" 
+      <input
+        class="bg-yellow-200  focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0 text-left text-lg w-[75%] h-auto" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptSpace(e)}
         use:focus
@@ -218,12 +218,12 @@
         class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" on:pointerup = {submit}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
       </button>
-      <button 
+      <!--button 
         class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400"on:click={()=> showEditorNotes = true}>List
-      </button>
+      </button-->
     </div>
 
-    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 text-lg text-left border-slate-500 border-2 rounded-md overflow-y-auto">      
+    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 text-lg text-left border-slate-500 border-2 rounded-sm overflow-y-auto">      
 
       {#if currDate != null}
         <div class="font-bold mr-2 text-lime-700 text-xl select-none basis-full text-right mb-2" on:pointerup={toggleCalendar}>{currDate}</div>
