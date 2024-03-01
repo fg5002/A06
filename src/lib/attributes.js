@@ -1,5 +1,5 @@
 export const attributes = [
-  {"id": 1, "abr": "x", "nam": "taxon", "rep": "*", "ord": 11, "value": null},
+  {"id": 1, "abr": "xx", "nam": "taxon", "rep": "*", "ord": 11, "value": null},
   {"id": 2, "abr": "lp", "nam": "lepke", "rep": null, "ord": 22, "value": null},
   {"id": 3, "abr": "bog", "nam": "bogár", "rep": null, "ord": 22, "value": null},
   {"id": 4, "abr": "lgy", "nam": "légy", "rep": null, "ord": 22, "value": null},

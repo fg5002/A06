@@ -7,9 +7,7 @@
   import pointOnFeature from '@turf/point-on-feature';  // npm.install @turf/point-on-feature
   import nearestPointOnLine from '@turf/nearest-point-on-line'; // npm.install @turf/nearest-point-on-line
   import explode from '@turf/explode';  // npm.install @turf/explode
-  import {point, lineString, polygon, multiPoint, multiPolygon} from '@turf/helpers'; // npm.install @turf/helpers
-  //import { Geolocation } from '@capacitor/geolocation';
-  
+  import {point, lineString, polygon, multiPoint, multiPolygon} from '@turf/helpers'; // npm.install @turf/helpers 
 
   /**
   * @typedef LatLng
@@ -22,7 +20,9 @@
    * @type {[number, number]}
   */
 
- export const pxToMeter=(pixel=1)=> parseFloat((pixel * (get(metersPerPixel))).toFixed(2));
+  export const randomId = ()=> Math.random().toString(36).substring(2, 10);
+
+  export const pxToMeter=(pixel=1)=> parseFloat((pixel * (get(metersPerPixel))).toFixed(2));
 
  /** @param {LngLatArr} a @returns {LngLatArr} */
   export const trimCoordArray=(a)=> a.map(c=> parseFloat(c.toFixed(6)));
@@ -66,7 +66,7 @@
         sh.geometry.param = [pxToMeter(50)];
         break;
       case 'ellipse':
-        sh.geometry.param = [pxToMeter(50), pxToMeter(25), 180];
+        sh.geometry.param = [pxToMeter(75), pxToMeter(25), 180];
         break;
       case 'line':
         sh = lineString([
@@ -117,6 +117,7 @@
     sh.properties.type = 0;
     sh.properties.data = 'TestData';
     sh.geometry.center = trimCoordArray(pointOnFeature(sh).geometry.coordinates);
+    console.log('sh',sh)
     return sh;
   }
 

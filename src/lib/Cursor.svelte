@@ -1,4 +1,5 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
   import { getContext } from 'svelte';
   import Marker from "$lib/Marker.svelte";
   import DivIcon from "$lib/DivIcon.svelte";
@@ -30,6 +31,8 @@
   let brd;
 
   const map = getContext(L.Map);
+
+  const dispatch = createEventDispatcher();
   
   $:{ 
     if($pointIndex){
@@ -95,7 +98,7 @@
 
   const cursorClick = (e)=> {
     if($controlGeo.features.length===0){
-      drawNewShape(latLngToLngLatArray(e.detail.latlng));
+      dispatch('cursorClick', latLngToLngLatArray(e.detail.latlng));
     }else{
       if($pointIndex){
         $pointIndex = null;
@@ -117,12 +120,13 @@
     }
   }
 
-  const drawNewShape=(cor)=>{
+  /*const drawNewShape=(cor)=>{
     let sh = drawShape($selectedShape, cor);
     $tempGeo.features = [...$tempGeo.features, sh];
+    dispatch('newShapeCreated', $selectedShape);
     $selectedShape = 'point';
     showCursor = false;
-  }
+  }*/
 
   const deleteControlPoint = (e)=>{
     let f = $tempGeo.features[$tempIndex];

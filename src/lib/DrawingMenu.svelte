@@ -7,8 +7,8 @@
 
   const dispatch = createEventDispatcher();
 
-  const drawShape = (p)=> {
-    dispatch('drawShape', p)
+  const selectNewShape = (p)=> {
+    dispatch('selectNewShape', p)
     showDrawingMenu = false;
   }
 
@@ -19,15 +19,17 @@
   modalClass = "drawingmenu"
   backdropClasses = "items-end justify-center z-2000"
   mainClasses = "mb-8"
+  inFly = {{y: 500, duration: 500}}
+  outFly = {{y: 500, duration: 500}}
 >
   <div class="flex flex-col divide-y divide-slate-500 shadow-2xl">
 
-    <MenuItem title={"Point"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/circle-medium.svg'} on:click={()=> drawShape('point')}/> 
-    <MenuItem title={"Circle"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-circle-variant.svg'} on:click={()=> drawShape('circle')}/> 
-    <MenuItem title={"Ellipse"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-ellipse.svg'} on:click={()=> drawShape('ellipse')}/> 
-    <MenuItem title={"Line"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-polyline.svg'} on:click={()=> drawShape('line')}/> 
-    <MenuItem title={"Polygon"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-triangle.svg'} on:click={()=> drawShape('polygon')}/> 
-    <MenuItem title={"Multipolygon"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-polygon.svg'} on:click={()=> drawShape('multipolygon')}/>
+    <MenuItem title={"Point"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/circle-medium.svg'} on:click={()=> selectNewShape('point')}/> 
+    <MenuItem title={"Circle"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-circle-variant.svg'} on:click={()=> selectNewShape('circle')}/> 
+    <MenuItem title={"Ellipse"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-ellipse.svg'} on:click={()=> selectNewShape('ellipse')}/> 
+    <MenuItem title={"Line"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-polyline.svg'} on:click={()=> selectNewShape('line')}/> 
+    <MenuItem title={"Polygon"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-triangle.svg'} on:click={()=> selectNewShape('polygon')}/> 
+    <MenuItem title={"Multipolygon"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} img={'images/vector-polygon.svg'} on:click={()=> selectNewShape('multipolygon')}/>
 
   </div>
 </Modal>

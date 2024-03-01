@@ -1,17 +1,14 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import ListSelect, {inputField } from "./ListSelect.svelte";
+  import { currData } from './store';
 
   export let showTaxonList = false;
   export let source = [];
 
-  const dispatch = createEventDispatcher();
-
   const select = (id)=> {
-    console.log(source[id-1].hun);
     inputField.value = "";
-    inputField.focus();
-    dispatch('submit', source[id-1]);
+    $currData.taxon = source[id-1];
+    showTaxonList = false;
   }
 
 </script>
@@ -27,9 +24,9 @@
   searchText = {inputField && inputField.value}
   on:selectFirstItem = {(e)=> select(e.detail)}
 >
-  <div slot="item" class="p-1" let:item on:pointerup|preventDefault={select(item.id)}>
+  <div slot="item" class="px-2 pt-1" let:item on:pointerup|preventDefault={select(item.id)}>
     <span class="font-bold">{item.hun}</span>
     <span class="italic">{item.ltn}</span>
-    <span class="text-sm self-center">{item.abr && `[${item.abr}]`}</span>
+    <span class="text-red-500 self-center">{item.abr && `[${item.abr}]`}</span>
   </div>
 </ListSelect>

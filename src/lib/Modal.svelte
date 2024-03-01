@@ -6,9 +6,10 @@
   export let backdropClasses = "items-center z-2000";
   export let modalClass = "baseModal";
   export let mainClasses= "";
+  export let inFly = {y: -500, duration: 500};
+  export let outFly = {y: -500, duration: 500};
 
   const dispatch = createEventDispatcher();
-
 
   function closeOnOutclick(e) {
     if (e.target.classList.contains(modalClass)) {
@@ -23,11 +24,11 @@
   <div 
     class="fixed inset-0 flex bg-transparent bg-opacity-75 mt-12 {modalClass} {backdropClasses}"
     on:pointerdown={closeOnOutclick} 
-    in:fly={{x: 500, duration: 500}}
-    out:fly={{x: 500, duration: 800}}
+    in:fly={inFly}
+    out:fly={outFly}
   >
     <div 
-      class="flex shadow-lg rounded-sm max-h-[100vh] bg-lime-200 {mainClasses}" 
+      class="flex shadow-2xl rounded-sm max-h-[100vh] bg-red-200 {mainClasses}" 
     >
       <slot/>
     </div>

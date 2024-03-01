@@ -1,70 +1,24 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import Modal from "./Modal.svelte";
+  import {currData} from "./store";
   
   export let showEditorNotes = false;
-  export let source;
   export let placeHolder = "none";
-
-  let noteText; 
-  
-  $: noteText= source;
-
-  const dispatch = createEventDispatcher();
-
-  const focus = async(node)=> {
-    await waiter(500);
-    node.focus();
-  }  
-
-  const waiter = (ms)=> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(), ms);
-    })
-  }
-
-  const clearContent = ()=> {
-    noteText = ""
-    //dispatch('clearContent', noteText)
-  }
-
-  const submit = ()=> {
-    dispatch('submit', noteText)
-    noteText = ""
-    showEditorNotes = false;
-  }
 
 </script>
 
 <Modal
   bind:showModal = {showEditorNotes} 
   modalClass = "editor-notes-list" 
-  backdropClasses = "items-start z-2000"
-  mainClasses = "w-full h-1/3"
+  backdropClasses = "items-start justify-center z-2000"
+  mainClasses = "w-4/5 h-1/3 mt-1.5 md:w-4/5 xl:w-1/3"
 >
-
-  <div class="flex flex-col bg-lime-100 w-full h-full border-slate-500 border-2 rounded-sm p-2 gap-2 text-xl text-left">
-    <div class="flex flex-col gap-2 h-full">
-      <textarea 
-        class="bg-yellow-200 border-2 border-zinc-500 rounded-md p-2 m-0 w-full h-full" 
-        type="text"
-        placeholder= {placeHolder}
-        bind:value={noteText}
-        use:focus
-      />
-      <div class="flex justify-between gap-2">
-        <button 
-          class="flex items-center gap-2 border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
-          on:click={submit}
-          >Submit
-        </button>
-        <button 
-          class="flex items-center gap-2 border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" 
-          on:click={clearContent}
-          >Clear
-        </button>
-      </div>
-    </div>    
-  </div>
-    
+  <textarea 
+    class="h-full w-full bg-yellow-200 border-2 border-zinc-500 rounded-sm p-2 text-xl" 
+    type="text"
+    placeholder= {placeHolder}
+    bind:value={$currData.note}
+    on:contextmenu={()=> $currData.note =""}
+  />
+  
 </Modal>

@@ -10,8 +10,25 @@ export const mapState = writable({
 
 export const currDate = writable(new Date().toISOString().split('T')[0]);
 
+export const currData = writable({
+  id: null,
+  date: {dat: {currDate}},
+  taxon: null,
+  attributes: [],
+  note: "",
+  place: null,
+  observer: [],
+  files: [],
+  reference: [],
+  geometry: {
+    type: null,
+    id: null
+  }
+})
+
 export const metersPerPixel = derived([mapState], ([$mapState]) => {
   let mpp = 40075016.686 * Math.abs(Math.cos($mapState.center[0] * Math.PI/180)) / Math.pow(2, $mapState.zoom+8);
+  //console.log(mpp.toFixed(3))
   return parseFloat(mpp.toFixed(3));
 });
 

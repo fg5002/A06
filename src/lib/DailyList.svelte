@@ -57,9 +57,11 @@
 <Modal
   bind:showModal = {showDailyList} 
   modalClass = "daily-list" 
-  backdropClasses = "items-start z-2000"
-  mainClasses = "w-full"
+  backdropClasses = "items-start justify-center z-2000"
+  mainClasses = "w-full h-3/4 mt-1.5 md:w-2/3 xl:w-1/3"
   on:modalClose = {clearIndices}
+  inFly = {{x: 500, duration: 500}}
+  outFly = {{x: 500, duration: 500}}
 >
   <ContextMenu 
     bind:showContextMenu
@@ -70,25 +72,17 @@
     on:editItem = {editItem}
   />
 
-  <div class="flex flex-col bg-lime-100 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm p-2 gap-2">
-
-    <div>
-      <h1 class="text-center text-2xl font-bold text-justify-center py-1">2024-02-08</h1>
-    </div>
-
-    <div class="h-full flex flex-col p-1 gap-1 border-slate-500 border-2 rounded-md overflow-y-auto snap-y snap-proximity divide-y divide-slate-600">
-      {#each items as item, i (item)}
-        <div 
-          class="p-2 select-none text-lg font-bold snap-end 
-          {activeIndex === i ? 'bg-lime-400' : shiftIndex === i ? 'bg-lime-400' : 'bg-yellow-100'}"
-          animate:flip = "{{duration: 300}}"
-          on:contextmenu|preventDefault = {()=> selectItem(i)}
-          role="link"
-          tabindex = 0
-        >{item}</div>
-      {/each}
-    </div>
-
+  <div class="h-full w-full flex flex-col font-semibold border-slate-500 border-2 rounded-sm overflow-y-auto snap-y snap-proximity divide-y divide-slate-400">
+    {#each items as item, i (item)}
+      <div 
+        class="p-2 select-none text-lg font-bold snap-end 
+        {activeIndex === i ? 'bg-lime-400' : shiftIndex === i ? 'bg-lime-400' : 'bg-yellow-100'}"
+        animate:flip = "{{duration: 300}}"
+        on:contextmenu|preventDefault = {()=> selectItem(i)}
+        role="link"
+        tabindex = 0
+      >{item}</div>
+    {/each}
   </div>
 
 </Modal>

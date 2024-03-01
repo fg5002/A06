@@ -21,8 +21,9 @@
   const popupContent = (d)=>{
     if(d.data){
       return `<div class="p-2 w-auto flex flex-col">
-                <span>${d.id}</span>
-                <span class="font-bold">${d.data}</span>
+                <!--span>${d.id}</span>
+                <span class="font-bold">${d.data}</span-->
+                <span>${JSON.stringify(d)}</span>
               </div>`
     }
   }
@@ -54,12 +55,12 @@
 
     style: (feature)=>{
       switch (feature.properties.type) {
-        case 0:
+        case 0: // Temp
           return {
-            fillColor: 'yellow',
+            fillColor: 'red',
             radius: 7,
             color: 'black',
-            weight: 2,
+            weight: 1,
             opacity: 1.0,
             fillOpacity: 0.4
           };

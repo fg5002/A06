@@ -9,43 +9,35 @@
 
   import Control from "$lib/Control.svelte";
   import LeafletContextMenu from "$lib/LeafletContextMenu.svelte";
-  import {tempGeo, mapState, dailyData, geoData, queryData, gpsGeo, controlGeo, selectedShape, tempIndex, pointIndex} from '$lib/store';
-  import { drawControlPoints, getCoords } from '$lib/GeoDrawing.js';
+  import {tempGeo, mapState, dailyData, geoData, queryData, gpsGeo, controlGeo, selectedShape, tempIndex, pointIndex, currData} from '$lib/store';
+  import { drawControlPoints, getCoords, drawShape } from '$lib/GeoDrawing.js';
   import MenuItem from "$lib/MenuItem.svelte";
   import SubGroup from "$lib/SubGroup.svelte";
   import Modal from "$lib/Modal.svelte";
-  import Drawer from "$lib/Drawer.svelte";
-  import SveltyPicker from 'svelty-picker';
   import CoordInput from "$lib/CoordInput.svelte";
-  
   import TaxonEditor from "$lib/TaxonEditor.svelte";
 	import DailyList from "$lib/DailyList.svelte";
   import DrawingMenu from "$lib/DrawingMenu.svelte";
-  import ShapeContextMenu from "$lib/ShapeContextMenu.svelte";
 
   let showCursor = false;
   let cursorPos;
   let showModal = false;
   let showContextMenu = false;
-  let drawingToolbar = false;
   let showCoordInput = false
-  let showDrawer = false;
   let showEditor = false;
   let showDailyList = false;
   let showDrawingMenu = false;
-  let showShapeContextMenu = false;
-  let calDate = new Date().toISOString().split('T')[0];
+  let quickPoint = false;
   let map;
   
   $: cursorPos = $mapState.center;
   
   const toggleModal = ()=> showModal=!showModal;
-  const toggleDrawer = ()=> showDrawer=!showDrawer;
   const toggleEditor = ()=> showEditor=!showEditor;
-  const toggleDailyList = ()=> showDailyList=!showDailyList;
   const toggleCoordInput = ()=> showCoordInput=!showCoordInput;
   
   const openEditing = (e)=>{
+    console.log('ooo')
     cursorPos = e.detail.pos;
     showContextMenu = false;
     showContextMenu = true;
@@ -58,11 +50,25 @@
     showContextMenu = false;
   }
 
+  const openInTaxonEditor = ()=>{
+    let f = $tempGeo.features[$tempIndex];
+    $currData.geometry.type = f.geometry.type;
+    $currData.geometry.id = f.properties.id;
+    showContextMenu = false;
+    showEditor = true;
+  }
+
   const closeEditing = ()=>{
     $controlGeo.features = [];
     $pointIndex = null;
     showContextMenu = false;
     showCursor= false;
+    quickPoint = false;
+  }
+
+  const selectNewShape = (e)=> {
+    $selectedShape = e;
+    showCursor = true;
   }
 
   const deleteShape= ()=>{
@@ -70,31 +76,30 @@
     $tempIndex = null;
     showContextMenu = false;
   }
-
-  const showDrawingToolbar = ()=>{
-    if(showCursor) return;
-    if(showContextMenu === true) showContextMenu = false;
-    drawingToolbar = true;
-  }
-  
-  const drawShape=(e)=>{
-    $selectedShape = e;
-    showCursor = true;
-    /*if(drawingToolbar){
-      drawingToolbar = false
-    }*/
-  }
   
   const drawQuickPoint = ()=>{
     if(showCursor) return;
-    drawShape('point');
+    quickPoint = true;
+    selectNewShape('point');
+  }
+
+  const drawNewShape=(e)=>{ //cursorClick
+    let sh = drawShape($selectedShape, e.detail);
+    console.log(e.detail, $selectedShape, sh.properties.id)
+    $tempGeo.features = [...$tempGeo.features, sh];
+    
+    if(quickPoint === true){
+      $currData.geometry.type = $selectedShape;
+      $currData.geometry.id =$tempGeo.features[$tempGeo.features.length-1].properties.id;
+      showEditor = true;
+      quickPoint = false;
+    }
+    $selectedShape = 'point';
+    showCursor = false;
   }
 
   const mapClick = ()=>{
     closeEditing();
-    if(drawingToolbar){
-      drawingToolbar = false
-    }
   }
 
   const getGPS = async()=>{
@@ -129,22 +134,11 @@
 
 </script>
 
-<Drawer bind:showDrawer>
-  <SveltyPicker
-    inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md"
-    format = "yyyy-mm-dd"
-    clearBtn = false
-    pickerOnly = true
-    on:input = {console.log(calDate)}
-    bind:value = {calDate}
-  />
-</Drawer>
-
 <TaxonEditor bind:showEditor/>
 
 <DrawingMenu
   bind:showDrawingMenu
-  on:drawShape = {(e)=>drawShape(e.detail)}
+  on:selectNewShape = {(e)=> selectNewShape(e.detail)}
 />
 
 <DailyList 
@@ -158,6 +152,8 @@
   bind:showModal
   modalClass = "audio" 
   backdropClasses = "items-center z-2000 justify-center"
+  inFly = {{x: -500, duration: 500}}
+  outFly = {{x: -500, duration: 500}}
 >
   <audio controls loop>
     <source src="sounds/Coturnix coturnix.mp3" type="audio/mpeg">
@@ -165,15 +161,13 @@
     </audio>
   </Modal>
   
-  <!--ShapeContextMenu bind:showShapeContextMenu = {showContextMenu}/-->
-
 <Leaflet on:mapClick={mapClick } bind:this={map}>
 
-  <Cursor bind:showCursor cor={cursorPos}/>
-
-  <!--Control position={'topleft'}>
-    <MenuItem img={'images/svgviewer-output.svg'} on:click={toggleDrawer}/>       
-  </Control-->
+  <Cursor 
+    bind:showCursor 
+    cor={cursorPos}
+    on:cursorClick = {drawNewShape}
+  />
 
   <Control position={'topleft'}>
     <MenuItem img={'images/svgviewer-output.svg'} on:click={toggleCoordInput}/>       
@@ -198,7 +192,7 @@
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
     <div class="flex flex-col divide-y divide-slate-500 shadow-2xl">
       <MenuItem  title={"Edit"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={beginEdit}/> 
-      <MenuItem  title={"Taxoneditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
+      <MenuItem  title={"Taxoneditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={openInTaxonEditor}/> 
       <MenuItem  title={"Geoeditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
       <MenuItem  title={"Delete"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={deleteShape}/> 
     </div>

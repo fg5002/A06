@@ -42,11 +42,13 @@
     [];
   }
 
-  const onInput = (e)=> {
+  const onKeyDown = (e)=> {
     if(e.key == 'Enter') {
-      if(items.length > 0){
+      if(e.target.value != "" && items.length > 0){
         dispatch('selectFirstItem', items[0].id);
         inputField.value = "";
+      }else if(e.target.value === ""){
+        submit()
       }
     }
   }
@@ -61,31 +63,30 @@
 <Modal
   bind:showModal = {showSelectList} 
   modalClass = "list-select" 
-  backdropClasses = "items-start z-2000"
-  mainClasses = "w-full"
+  backdropClasses = "items-start justify-center z-2000"
+  mainClasses = "w-full h-1/2 mt-1.5 sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-[65vh] border-slate-500 border-2 rounded-sm p-2 gap-2 text-left text-xl">
-    <div class="flex gap-2">  
+  <div class="flex flex-col bg-lime-100 w-full h-full xl:text-base border border-slate-500 rounded-sm gap-2 text-left text-lg">
+    <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400 text-lg font-semibold">  
       <input 
-        class="bg-yellow-200 w-[75%] focus:bg-yellow-300 border-2 border-zinc-500 rounded-md px-2 py-1 m-0" 
+        class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
         type="text"
         placeholder= {placeHolder}
         bind:value = {searchText}
         on:input = {(e)=>updateList(e)}
-        on:keydown|stopPropagation = {(e)=> onInput(e)}
+        on:keydown|stopPropagation = {(e)=> onKeyDown(e)}
         bind:this={inputField}
         use:focus
       >
       {#if multi}
         <button 
-          class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400" on:pointerup|stopPropagation={submit}>
+          class="px-2 py-1 bg-yellow-300" on:pointerup|stopPropagation={submit}>
           <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
         </button>
       {/if}   
     </div>
-    <div class="h-full flex flex-col p-1 border-slate-500 border-2 rounded-md 
-      overflow-y-auto snap-y snap-proximity divide-y divide-gray-400">
+    <div class="h-full w-full flex flex-col overflow-y-auto snap-y snap-proximity divide-y divide-gray-400">
       {#if searchText}      
         {#each items as item, i}
           <slot name="item" {item}/>

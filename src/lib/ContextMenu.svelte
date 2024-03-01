@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Modal from "./Modal.svelte";
+  import MenuItem from "./MenuItem.svelte";
 
   export let showContextMenu = false;
   export let shiftIndex = -1;
@@ -31,36 +32,16 @@
   bind:showModal = {showContextMenu}
   on:modalClose
   modalClass = "context_menu" 
-  backdropClasses = "z-2000 h-full w-full items-center justify-end"
-  mainClasses = "mr-[5%]"
+  backdropClasses = "z-2000 h-full w-full items-center justify-center"
+  mainClasses = ""
 >
-  <div class="flex flex-col bg-lime-200 w-full h-full border-slate-500 border-2 rounded-md p-2 gap-2">
+  <div class="flex flex-col w-full divide-y divide-slate-500 shadow-2xl">
     {#if shiftIndex != null}
-      <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-2 text-center bg-yellow-400"
-        on:pointerdown={insertItem}      
-        >Insert before
-      </button>
-
+      <MenuItem  title={"Paste before"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={insertItem}/>
     {:else} 
-
-      <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-2 text-center bg-yellow-400"
-        on:pointerdown={editItem}      
-        >Edit
-      </button>
-      
-      <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-2 text-center bg-yellow-400"
-        on:pointerdown={selectToMove}
-        >Shift
-      </button>
-
-      <button 
-      class="border-slate-500 border-2 rounded-md px-2 py-2 text-center bg-yellow-400"
-      on:pointerdown={deleteItem}
-      >Delete
-      </button>
+      <MenuItem  title={"Edit item"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={editItem}/>
+      <MenuItem  title={"Move item"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={selectToMove}/>
+      <MenuItem  title={"Delete item"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={deleteItem}/>
     {/if}
   </div>
 </Modal>

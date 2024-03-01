@@ -9,7 +9,7 @@
   const dispatch = createEventDispatcher();
 
   const select = (id)=> {
-    //console.log(source[id-1].nam);
+    result = result.filter(f=> f.id !=source[id-1].id);
     result.push(source[id-1])
     result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
     inputField.value = "";
@@ -20,7 +20,6 @@
     result = result.filter(f=> f.id !== id)
     inputField.value = "";
     inputField.focus();
-    console.log(result)
   }
 
 </script>
@@ -36,11 +35,11 @@
   on:selectFirstItem = {(e)=> select(e.detail)}
   on:submit
 >
-  <div class="p-2" slot="item" let:item on:pointerup|preventDefault={select(item.id)}>
-    <span class="font-bold p-2">{item.nam}</span>
+  <div class="font-semibold px-2 pt-1" slot="item" let:item on:pointerup|preventDefault={select(item.id)}>
+    <span>{item.nam}</span>
   </div>
   
-  <div slot="result" class="p-2 bg-lime-300" let:item on:pointerup|preventDefault={remove(item.id)}>
-    <span class="font-bold p-2">{item.nam}</span>
+  <div class="font-semibold px-2 pt-1 bg-lime-300" slot="result" let:item on:pointerup|preventDefault={remove(item.id)}>
+    <span class="">{item.nam}</span>
   </div>
 </ListSelect>

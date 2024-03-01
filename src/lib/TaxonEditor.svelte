@@ -1,5 +1,5 @@
 <script>
-  import {currDate} from "./store"
+  import {currData} from "./store";
   import TimePicker from "./TimePicker.svelte";
   import Modal from "./Modal.svelte";
   import {birds} from "./birds"
@@ -49,45 +49,6 @@
   https://www.google.com/maps/search/?api=1&query=47.5,19.25
   */
 
-
-  const curData = {
-    id: null,
-    date: {dat: {$currDate}},
-    taxon: null,
-    attributes: [],
-    note: "",
-    place: null,
-    observer: [],
-    files: [],
-    reference: [],
-    geometry: {
-      type: null,
-      coordinates: []
-    }
-  }
-
-  const newData = {
-    type: "Feature",
-    "properties": {
-      data: {
-        id: null,
-        date: {dat: {$currDate}},
-        taxon: null,
-        attributes: [],
-        note: "",
-        place: null,
-        observer: [],
-        files: [],
-        reference: []
-      },
-      type: 1,
-    },
-    "geometry": {
-      "type": "Point",
-      "coordinates": [19.035544,47.386432]
-    }
-  }
-
   const addAttribute = ()=> {
     let res = null;
     let idx;
@@ -98,9 +59,9 @@
       res = attributes[idx];
       res.value =  res.rep === null ? null : s.replace(res.abr,"");
       res.dis = res.rep === null ? res.nam : res.rep.replace("*", s.replace(res.abr,""));
-      curData.attributes = curData.attributes.filter(f=> f.id !=res.id);
-      curData.attributes.push(res);
-      curData.attributes = curData.attributes.sort((a, b) => a.ord-b.ord);
+      $currData.attributes = $currData.attributes.filter(f=> f.id !=res.id);
+      $currData.attributes.push(res);
+      $currData.attributes = $currData.attributes.sort((a, b) => a.ord-b.ord);
     }else{
       if(s.match(/^[a-z]{4}$/)){
         addTaxon();
@@ -117,7 +78,7 @@
     let s = searchText.trim();
     let idx = birds.findIndex(f=> f.abr.indexOf(s)>-1);
     if(idx>-1){
-      curData.taxon = birds[idx];
+      $currData.taxon = birds[idx];
     }
     promptRef.value = "";
   }
@@ -131,7 +92,7 @@
   }
 
   const submitTaxonList = (e)=>{
-    curData.taxon = e.detail;
+    $currData.taxon = e.detail;
     showTaxonList = false;
   }
 
@@ -142,23 +103,21 @@
 
     res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
     console.log(JSON.stringify(res));*/
-    //curData.attributes = res;
-    curData.attributes = e.detail;
+    //$currData.attributes = res;
+    $currData.attributes = e.detail;
   }
   
   const submitObserverList = (e)=>{
-    curData.observer = e.detail.sort((a, b) => a.nam.localeCompare(b.nam, 'hu'));
-    //curData.observer = curData.observer.sort((a, b) => a.nam.localeCompare(b.nam, 'hu'));
-    console.log(JSON.stringify(curData.observer));
+    $currData.observer = e.detail.sort((a, b) => a.nam.localeCompare(b.nam, 'hu'));
   }
 
   const submit = ()=> {
-    //console.log(JSON.stringify(curData));
+    //console.log(JSON.stringify($currData));
     showEditor = false;
-    curData.taxon = null;
-    curData.attributes = [];
-    curData.note = null;
-    curData.files = [];
+    $currData.taxon = null;
+    $currData.attributes = [];
+    $currData.note = null;
+    $currData.files = [];
   }
 
 </script>
@@ -166,14 +125,10 @@
 <Modal
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
-  backdropClasses = "items-start z-2000"
-  mainClasses = "gap-2 w-full mt-1.5"
+  backdropClasses = "items-start justify-center z-2000"
+  mainClasses = "gap-2 w-full mt-1.5 h-1/2 md:w-2/3 xl:w-1/3 xl:text-base"
 >
-  <TaxonList
-    bind:showTaxonList
-    source = {birds}
-    on:submit = {submitTaxonList}
-  />
+  <TaxonList bind:showTaxonList source={birds}/>
 
   <AttributeList
     bind:showAttributeList
@@ -181,24 +136,19 @@
     on:submit = {submitAttributeList}
   />
 
-  <TaxonNotes
-    bind:showEditorNotes
-    source = {curData.note}
-    placeHolder = "Notes"
-    on:submit={(e)=>curData.note = e.detail}
-  />
+  <TaxonNotes bind:showEditorNotes placeHolder="Notes"/>
 
   <ObserverList
     bind:showObserverList
     source = {observers}
-    result = {curData.observer}
+    result = {$currData.observer}
     on:submit = {submitObserverList}
   />
 
-  <div class="flex flex-col p-2 gap-2 w-full max-h-[70vh] border-slate-500 border-2 rounded-sm text-xl text-left font-normal">
-    <div class="flex gap-2 items-center">
+  <div class="flex flex-col w-full h-full border-slate-500 border rounded-sm text-lg text-left font-normal">
+    <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 text-lg font-semibold">
       <input
-        class="bg-yellow-200 focus:bg-yellow-300 border-2 border-slate-500 rounded-md px-2 py-1 m-0 w-[75%] h-auto" 
+        class="px-2 py-1 w-full h-auto outline-none bg-yellow-200" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptSpace(e)}
         use:focus
@@ -206,74 +156,67 @@
         bind:this={promptRef}
       >
       <button 
-        class="border-slate-500 border-2 rounded-md px-2 py-1 text-center bg-yellow-400 grow" on:pointerup = {submit}>
+        class="px-2 py-1 text-centergrow bg-yellow-300" on:pointerup = {submit}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
-      </button>
+      </button>      
     </div>
 
-    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start items-start bg-yellow-100 h-full p-2 border-slate-500 border-2 rounded-md overflow-y-auto">      
+    <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start bg-yellow-100 h-full p-2 overflow-y-auto">      
 
-      <div class="flex flex-wrap basis-full" on:pointerup={()=> showTaxonList = true}>
-        {#if curData.taxon}
-          <span 
-            class="font-bold mr-2 select-none"
-            on:pointerup|stopPropagation={()=>curData.taxon = null}
-          >{curData.taxon.hun}</span>
-          <span
-            class="italic mr-2 select-none"
-            on:pointerup|stopPropagation={()=>curData.taxon = null}
-          >{curData.taxon.ltn}</span>
+      <div class="flex flex-wrap gap-2 items-center basis-full" on:pointerup={()=> showTaxonList = true}>
+        {#if $currData.taxon}
+        <span class="select-none" on:pointerup|stopPropagation={()=>$currData.taxon = null}>
+          <span class="font-bold select-none mr-2">{$currData.taxon.hun}</span>
+          <span class="italic select-none mr-2">{$currData.taxon.ltn}</span>
+        </span>
         {:else}
-          <div class="font-bold text-green-600 mr-2 select-none">Taxon</div> 
+          <div class="font-bold text-green-600 select-none">Taxon</div> 
         {/if}
       </div>
 
-      <div class="flex flex-wrap basis-full" on:pointerup={()=> showAttributeList = true}>
-        {#if curData.attributes.length>0}      
-          {#each curData.attributes as item, i (item.id)}
-            <span
-              class="mr-2 select-none" 
-              on:pointerup|stopPropagation={()=> curData.attributes = deleteFromFieldArray(curData.attributes, item.id)}
-            >{item.dis}</span>
+      <div class="flex flex-wrap gap-2 items-center basis-full" on:pointerup={()=> showAttributeList = true}>
+        {#if $currData.attributes.length>0}      
+          {#each $currData.attributes as item, i (item.id)}
+            <span class="select-none" on:pointerup|stopPropagation={()=> $currData.attributes = deleteFromFieldArray($currData.attributes, item.id)}>{item.dis}</span>
           {/each}
         {:else}
-          <div class="font-bold text-green-600 mr-2 select-none">Attributes</div> 
+          <div class="font-bold text-green-600 select-none">Attributes</div> 
         {/if}
       </div>
       
-      <div class="flex flex-wrap basis-full" on:pointerup={()=> showEditorNotes = true}>
-        {#if curData.note}
-          <div class="mr-2 select-none basis-full">{curData.note}</div>
+      <div class="basis-full items-center" on:pointerup={()=> showEditorNotes = true}>
+        {#if $currData.note}
+          <div class="select-none basis-full">{$currData.note}</div>
         {:else}
-          <div class="font-bold basis-full text-green-600 mr-2 select-none">Note</div> 
+          <div class="font-bold basis-full text-green-600 select-none">Note</div> 
         {/if}
       </div>
 
-      <div class="flex flex-wrap basis-full" on:pointerup={()=> showObserverList = true}>  
-        {#if curData.observer.length>0}     
-          {#each curData.observer as item, i (item.id)}
-            <span class="mr-2 select-none" on:pointerup|stopPropagation={()=> curData.observer = deleteFromFieldArray(curData.observer, item.id)}>{item.nam}</span>
-          {/each} 
+      <div class="flex flex-wrap gap-2 basis-full items-center" on:pointerup={()=> showObserverList = true}>  
+        {#if $currData.observer.length>0}     
+          <span class="select-none">{$currData.observer.map(f=>f.nam).join(', ')}</span>
         {:else}
           <div class="font-bold text-red-600 mr-2 select-none">Observer</div> 
         {/if}
       </div>
 
-      <div class="flex flex-wrap basis-full">   
-        {#if curData.files.length>0}  
-          {#each curData.files as item, i (item.id)}
-            <span class="mr-2 select-none" on:pointerup={()=> curData.files = deleteFromFieldArray(curData.files, item.id)}>{item.nam}</span>
+      <div class="flex flex-wrap basis-full items-center">   
+        {#if $currData.files.length>0}  
+          {#each $currData.files as item, i (item.id)}
+            <span class="select-none" on:pointerup={()=> $currData.files = deleteFromFieldArray($currData.files, item.id)}>{item.nam}</span>
           {/each}  
         {:else}
-          <div class="font-bold text-green-600 mr-2 select-none">Files</div> 
+          <div class="font-bold text-green-600 select-none">Files</div> 
         {/if}          
       </div>
 
-      {#if newData.geometry.type}
-        <div class="mr-2 select-none font-bold basis-full" on:pointerup={()=>showEditor = false}>{newData.geometry.type}</div>
-      {:else}
-        <div class="font-bold basis-full text-red-600 mr-2 select-none">Geo</div> 
-      {/if}
+      <div class="flex flex-wrap basis-full items-center">
+        {#if $currData.geometry.id}
+          <div class="select-none font-bold basis-full" on:pointerup={()=>showEditor = false}>{$currData.geometry.type} ({$currData.geometry.id})</div>
+        {:else}
+          <div class="font-bold basis-full text-red-600 select-none">Geo</div> 
+        {/if}
+      </div>
       
 
     </div>
