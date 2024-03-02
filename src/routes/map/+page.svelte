@@ -37,7 +37,6 @@
   const toggleCoordInput = ()=> showCoordInput=!showCoordInput;
   
   const openEditing = (e)=>{
-    console.log('ooo')
     cursorPos = e.detail.pos;
     showContextMenu = false;
     showContextMenu = true;
@@ -58,7 +57,7 @@
     showEditor = true;
   }
 
-  const closeEditing = ()=>{
+  const closeEverything = ()=>{
     $controlGeo.features = [];
     $pointIndex = null;
     showContextMenu = false;
@@ -89,8 +88,7 @@
     $tempGeo.features = [...$tempGeo.features, sh];
     
     if(quickPoint === true){
-      $currData.geometry.type = $selectedShape;
-      $currData.geometry.id =$tempGeo.features[$tempGeo.features.length-1].properties.id;
+      $currData.geometry = {type: $selectedShape, id: $tempGeo.features[$tempGeo.features.length-1].properties.id};
       showEditor = true;
       quickPoint = false;
     }
@@ -99,7 +97,7 @@
   }
 
   const mapClick = ()=>{
-    closeEditing();
+    closeEverything();
   }
 
   const getGPS = async()=>{

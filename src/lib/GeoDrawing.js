@@ -117,7 +117,6 @@
     sh.properties.type = 0;
     sh.properties.data = 'TestData';
     sh.geometry.center = trimCoordArray(pointOnFeature(sh).geometry.coordinates);
-    console.log('sh',sh)
     return sh;
   }
 

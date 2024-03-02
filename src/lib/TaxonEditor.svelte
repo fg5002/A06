@@ -1,13 +1,13 @@
 <script>
-  import {currData} from "./store";
-  import TimePicker from "./TimePicker.svelte";
+  import {currData, currDate} from "./store";
   import Modal from "./Modal.svelte";
-  import {birds} from "./birds"
-  import {attributes} from "./attributes"
+  import {birds} from "./taxon"
+  import {attributes, observers} from "./attributes"
   import TaxonList from "./TaxonList.svelte";
 	import AttributeList from "./AttributeList.svelte";
   import ObserverList from "./ObserverList.svelte";
   import TaxonNotes from "./TaxonNotes.svelte";
+  import TaxonEditorItem from "./TaxonEditorItem.svelte";
 
   export let showEditor = false;
 
@@ -18,7 +18,7 @@
   let searchText = "";
   let promptRef = null;
   
-  $: searchText = promptRef && promptRef.value;
+  $: searchText = promptRef && promptRef.value; 
 
   const focus = async(node)=>{
     await waiter(500);
@@ -30,18 +30,6 @@
         setTimeout(() => resolve(), ms);
     })
   }
-
-  const observers = [
-    {id: 1, nam: "Ócsag Attila"},
-    {id: 2, nam: "Zsoldos Csaba"},
-    {id: 3, nam: "Szalai Kornél"},
-    {id: 4, nam: "Lendvai Csaba"},
-    {id: 5, nam: "Bajor Zoltán"},
-    {id: 6, nam: "Bodor István"},
-    {id: 7, nam: "Szőke Gábor"},
-    {id: 8, nam: "Novák Gábor"},
-    {id: 9, nam: "Egyéb megfigyelő"}
-  ]
 
   /*
   Fekete gólya (Ciconia nigra)
@@ -70,10 +58,6 @@
     promptRef.value = "";
   }
 
-  const deleteFromFieldArray = (z,i)=> {
-    return z.filter(f=> f.id != i);
-  }
-  
   const addTaxon = ()=>{
     let s = searchText.trim();
     let idx = birds.findIndex(f=> f.abr.indexOf(s)>-1);
@@ -83,36 +67,16 @@
     promptRef.value = "";
   }
 
-  const promptSpace = (e)=>{
-    //console.log(e);
+  const promptEnter = (e)=>{
     if (e.keyCode === 13){
       addAttribute();
       promptRef.value = "";
     }
   }
-
-  const submitTaxonList = (e)=>{
-    $currData.taxon = e.detail;
-    showTaxonList = false;
-  }
-
-  const submitAttributeList = (e)=>{
-    console.log(JSON.stringify(e.detail));
-    /*let res = e.detail.filter(f=> f.rep === null || (f.rep != null && f.value != null))
-    console.log(JSON.stringify(res));
-
-    res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
-    console.log(JSON.stringify(res));*/
-    //$currData.attributes = res;
-    $currData.attributes = e.detail;
-  }
   
-  const submitObserverList = (e)=>{
-    $currData.observer = e.detail.sort((a, b) => a.nam.localeCompare(b.nam, 'hu'));
-  }
-
-  const submit = ()=> {
-    //console.log(JSON.stringify($currData));
+  const submitTaxonEditor = ()=> {
+    $currData.id = Math.random().toString(36).substring(2, 10);
+    console.log(JSON.stringify($currData));
     showEditor = false;
     $currData.taxon = null;
     $currData.attributes = [];
@@ -128,21 +92,25 @@
   backdropClasses = "items-start justify-center z-2000"
   mainClasses = "gap-2 w-full mt-1.5 h-1/2 md:w-2/3 xl:w-1/3 xl:text-base"
 >
-  <TaxonList bind:showTaxonList source={birds}/>
+  <TaxonList
+    bind:showTaxonList
+    source={birds}
+  />
 
   <AttributeList
     bind:showAttributeList
     source = {attributes}
-    on:submit = {submitAttributeList}
   />
 
-  <TaxonNotes bind:showEditorNotes placeHolder="Notes"/>
+  <TaxonNotes 
+    bind:showEditorNotes
+    placeHolder="Notes"
+  />
 
   <ObserverList
     bind:showObserverList
     source = {observers}
     result = {$currData.observer}
-    on:submit = {submitObserverList}
   />
 
   <div class="flex flex-col w-full h-full border-slate-500 border rounded-sm text-lg text-left font-normal">
@@ -150,74 +118,51 @@
       <input
         class="px-2 py-1 w-full h-auto outline-none bg-yellow-200" 
         type="text" 
-        on:keydown|stopPropagation = {(e)=> promptSpace(e)}
+        on:keydown|stopPropagation = {(e)=> promptEnter(e)}
         use:focus
         bind:value = {searchText}
         bind:this={promptRef}
       >
       <button 
-        class="px-2 py-1 text-centergrow bg-yellow-300" on:pointerup = {submit}>
+        class="px-2 py-1 text-centergrow bg-yellow-300" on:pointerup = {submitTaxonEditor}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
       </button>      
     </div>
 
     <div class="flex flex-wrap w-full gap-2 divide-y divide-gray-400 content-start bg-yellow-100 h-full p-2 overflow-y-auto">      
 
-      <div class="flex flex-wrap gap-2 items-center basis-full" on:pointerup={()=> showTaxonList = true}>
-        {#if $currData.taxon}
-        <span class="select-none" on:pointerup|stopPropagation={()=>$currData.taxon = null}>
-          <span class="font-bold select-none mr-2">{$currData.taxon.hun}</span>
-          <span class="italic select-none mr-2">{$currData.taxon.ltn}</span>
+      <TaxonEditorItem name="Taxon" data={$currData.taxon} editor={()=> showTaxonList=true}>
+        <span class="font-bold select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
+        <span class="italic select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.ltn}</span>
+      </TaxonEditorItem>
+
+      <TaxonEditorItem name="Attributes" data={$currData.attributes} editor={()=> showAttributeList=true}>
+        {#each $currData.attributes as item, i (item.id)}
+          <span class="select-none" 
+            on:pointerup|stopPropagation={()=> $currData.attributes = $currData.attributes.filter(f=> f.id != item.id)}
+          >{item.dis}</span>
+        {/each}
+      </TaxonEditorItem>
+
+      <TaxonEditorItem name="Note" data={$currData.note} editor={()=> showEditorNotes=true}>
+        <span class="select-none basis-full">{$currData.note}</span>
+      </TaxonEditorItem>
+
+      <TaxonEditorItem name="Observer" data={$currData.observer} needed={true} editor={()=> showObserverList=true}>
+        <span class="select-none">{$currData.observer.map(f=>f.nam).join(', ')}</span>
+      </TaxonEditorItem>
+
+      <TaxonEditorItem name="Files" data={$currData.files} editor=null>
+        {#each $currData.files as item, i (item.id)}
+          <span class="select-none" on:pointerup={()=> $currData.files = $currData.files.filter(f=> f.id != item.id)}>{item.nam}</span>
+        {/each}
+      </TaxonEditorItem>
+
+      <TaxonEditorItem name="Geometry" data={$currData.geometry} needed={true} editor=null>
+        <span class="select-none font-bold basis-full" on:pointerup={()=> showEditor=false}>
+          {$currData.geometry.type} ({$currData.geometry.id})
         </span>
-        {:else}
-          <div class="font-bold text-green-600 select-none">Taxon</div> 
-        {/if}
-      </div>
-
-      <div class="flex flex-wrap gap-2 items-center basis-full" on:pointerup={()=> showAttributeList = true}>
-        {#if $currData.attributes.length>0}      
-          {#each $currData.attributes as item, i (item.id)}
-            <span class="select-none" on:pointerup|stopPropagation={()=> $currData.attributes = deleteFromFieldArray($currData.attributes, item.id)}>{item.dis}</span>
-          {/each}
-        {:else}
-          <div class="font-bold text-green-600 select-none">Attributes</div> 
-        {/if}
-      </div>
-      
-      <div class="basis-full items-center" on:pointerup={()=> showEditorNotes = true}>
-        {#if $currData.note}
-          <div class="select-none basis-full">{$currData.note}</div>
-        {:else}
-          <div class="font-bold basis-full text-green-600 select-none">Note</div> 
-        {/if}
-      </div>
-
-      <div class="flex flex-wrap gap-2 basis-full items-center" on:pointerup={()=> showObserverList = true}>  
-        {#if $currData.observer.length>0}     
-          <span class="select-none">{$currData.observer.map(f=>f.nam).join(', ')}</span>
-        {:else}
-          <div class="font-bold text-red-600 mr-2 select-none">Observer</div> 
-        {/if}
-      </div>
-
-      <div class="flex flex-wrap basis-full items-center">   
-        {#if $currData.files.length>0}  
-          {#each $currData.files as item, i (item.id)}
-            <span class="select-none" on:pointerup={()=> $currData.files = deleteFromFieldArray($currData.files, item.id)}>{item.nam}</span>
-          {/each}  
-        {:else}
-          <div class="font-bold text-green-600 select-none">Files</div> 
-        {/if}          
-      </div>
-
-      <div class="flex flex-wrap basis-full items-center">
-        {#if $currData.geometry.id}
-          <div class="select-none font-bold basis-full" on:pointerup={()=>showEditor = false}>{$currData.geometry.type} ({$currData.geometry.id})</div>
-        {:else}
-          <div class="font-bold basis-full text-red-600 select-none">Geo</div> 
-        {/if}
-      </div>
-      
+      </TaxonEditorItem>
 
     </div>
 

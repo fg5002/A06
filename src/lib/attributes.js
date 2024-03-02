@@ -50,3 +50,15 @@ export const attributes = [
   {"id": 49, "abr": "hdb", "nam": "herbárium doboz", "rep": "*hdb", "ord": 81, "value": null},
   {"id": 50, "abr": "hno", "nam": "herbárium szám", "rep": "*hno", "ord": 81, "value": null}
 ]
+
+export const observers = [
+  {id: 1, nam: "Ócsag Attila"},
+  {id: 2, nam: "Zsoldos Csaba"},
+  {id: 3, nam: "Szalai Kornél"},
+  {id: 4, nam: "Lendvai Csaba"},
+  {id: 5, nam: "Bajor Zoltán"},
+  {id: 6, nam: "Bodor István"},
+  {id: 7, nam: "Szőke Gábor"},
+  {id: 8, nam: "Novák Gábor"},
+  {id: 9, nam: "Egyéb megfigyelő"}
+]

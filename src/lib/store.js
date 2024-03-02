@@ -16,14 +16,10 @@ export const currData = writable({
   taxon: null,
   attributes: [],
   note: "",
-  place: null,
   observer: [],
   files: [],
   reference: [],
-  geometry: {
-    type: null,
-    id: null
-  }
+  geometry: null
 })
 
 export const metersPerPixel = derived([mapState], ([$mapState]) => {

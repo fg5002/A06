@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import ListSelect, {inputField} from "./ListSelect.svelte";
+  import TimePicker from "./TimePicker.svelte";
+	import { currData } from './store';
 
   export let showAttributeList = false;
   export let source = [];
@@ -19,7 +21,7 @@
 
   const waiter = (ms)=> {
     return new Promise(resolve => {
-        setTimeout(() => resolve(), ms);
+      setTimeout(() => resolve(), ms);
     })
   }
 
@@ -55,7 +57,18 @@
     console.log(result)
   }
 
-  const submit = ()=> {
+  /*const submitAttributeList = (e)=>{
+    console.log(JSON.stringify(e.detail));
+    /*let res = e.detail.filter(f=> f.rep === null || (f.rep != null && f.value != null))
+    console.log(JSON.stringify(res));
+
+    res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
+    console.log(JSON.stringify(res));
+    $currData.attributes = res;
+    $currData.attributes = e.detail;
+  }*/
+
+  /*const submit = ()=> {
     console.log('ez az')
     let res = result.filter(f=> f.rep === null || (f.rep != null && f.value))
     console.log(JSON.stringify(res));
@@ -63,10 +76,10 @@
     res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
     console.log(JSON.stringify(res));
     dispatch('submitList', res);
-    //newData.properties.data.attributes = res;
+    newData.properties.data.attributes = res;
     result = [];
-
-  }
+    $currData.attributes = result
+  }*/
 
 </script>
 
@@ -80,6 +93,7 @@
   result = {result}
   searchText = {inputField && inputField.value}
   on:selectFirstItem = {(e)=> select(e.detail)}
+  on:submit
 >
   <div slot="item" let:item class="p-1" on:pointerup|preventDefault={select(item.id)}>
     <span class="font-bol p-2">{item.nam}</span>

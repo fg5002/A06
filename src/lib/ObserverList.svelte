@@ -1,17 +1,15 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import ListSelect, {inputField} from "./ListSelect.svelte";
+  import {currData} from "./store";
 
   export let showObserverList = false;
   export let source = [];
   export let result = [];
 
-  const dispatch = createEventDispatcher();
-
   const select = (id)=> {
     result = result.filter(f=> f.id !=source[id-1].id);
     result.push(source[id-1])
-    result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
+    result.sort((a, b)=> a.nam.localeCompare(b.nam, 'hu'));
     inputField.value = "";
     inputField.focus();
   }
@@ -21,6 +19,8 @@
     inputField.value = "";
     inputField.focus();
   }
+
+  const submit = ()=> $currData.observer = result;
 
 </script>
 
@@ -33,7 +33,7 @@
   result = {result}
   searchText = {inputField && inputField.value}
   on:selectFirstItem = {(e)=> select(e.detail)}
-  on:submit
+  on:submit={submit}
 >
   <div class="font-semibold px-2 pt-1" slot="item" let:item on:pointerup|preventDefault={select(item.id)}>
     <span>{item.nam}</span>

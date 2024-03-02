@@ -4,6 +4,18 @@
   
   export let showEditorNotes = false;
   export let placeHolder = "none";
+  
+  const focus = async(node)=>{
+    await waiter(100);
+    node.value = "";
+    node.focus();
+  }  
+
+  const waiter = (ms)=> {
+    return new Promise(resolve => {
+        setTimeout(() => resolve(), ms);
+    })
+  }
 
 </script>
 
@@ -19,6 +31,7 @@
     placeholder= {placeHolder}
     bind:value={$currData.note}
     on:contextmenu={()=> $currData.note =""}
+    use:focus
   />
   
 </Modal>

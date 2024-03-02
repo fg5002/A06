@@ -1,4 +1,4 @@
- <script context="module">
+<script context="module">
   export let inputField = null;
 </script>
 
@@ -13,7 +13,6 @@
   export let sortListField = "nam";
   export let placeHolder = "none";
   export let multi = false;
-  //export let sortResult = (a, b)=> a["nam"].localeCompare(b["nam"], 'hu');
   export let result = [];
 
   export let searchText = "";
