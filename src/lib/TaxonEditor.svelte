@@ -129,7 +129,7 @@
       </button>      
     </div>
 
-    <div class="flex flex-col w-full gap-0 divide-y divide-gray-400 justify-center items-start bg-yellow-100 h-full overflow-y-auto">      
+    <div class="flex flex-col w-full divide-y divide-gray-400 justify-center bg-yellow-100 h-full overflow-y-auto">      
 
       <TaxonEditorItem name="Taxon" data={$currData.taxon} editor={()=> showTaxonList=true}>
         <span class="font-bold select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
