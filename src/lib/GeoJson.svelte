@@ -20,10 +20,9 @@
 
   const popupContent = (d)=>{
     if(d.data){
-      return `<div class="p-2 w-auto flex flex-col">
-                <!--span>${d.id}</span>
-                <span class="font-bold">${d.data}</span-->
-                <span>${JSON.stringify(d)}</span>
+      return `<div class="p-2 w-auto flex flex-col select-none">
+                <span>${d.id}</span>
+                <!--span class="font-semobold text-lg">${d.data}</span-->
               </div>`
     }
   }

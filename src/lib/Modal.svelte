@@ -13,6 +13,7 @@
 
   function closeOnOutclick(e) {
     if (e.target.classList.contains(modalClass)) {
+      dispatch('modalClose')
       showModal = false;
     }
   }

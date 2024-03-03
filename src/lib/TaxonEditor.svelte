@@ -90,7 +90,7 @@
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
   backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "gap-2 w-full mt-1.5 h-1/2 md:w-2/3 xl:w-1/3 xl:text-base"
+  mainClasses = "gap-2 w-full mt-1.5 text-lg h-1/2 md:w-2/3 xl:w-1/3 xl:text-base"
 >
   <TaxonList
     bind:showTaxonList
@@ -113,8 +113,8 @@
     result = {$currData.observer}
   />
 
-  <div class="flex flex-col w-full h-full border-slate-500 border rounded-sm text-lg text-left font-normal">
-    <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 text-lg font-semibold">
+  <div class="flex flex-col w-full h-full border-slate-500 border rounded-sm">
+    <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 font-semibold">
       <input
         class="px-2 py-1 w-full h-auto outline-none bg-yellow-200" 
         type="text" 
@@ -124,7 +124,7 @@
         bind:this={promptRef}
       >
       <button 
-        class="px-2 py-1 text-centergrow bg-yellow-300" on:pointerup = {submitTaxonEditor}>
+        class="px-2 py-1 text-center grow bg-yellow-300" on:pointerup = {submitTaxonEditor}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
       </button>      
     </div>

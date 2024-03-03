@@ -25,7 +25,7 @@
   on:selectFirstItem = {(e)=> select(e.detail)}
 >
   <div slot="item" class="px-2 pt-1" let:item on:pointerup|preventDefault={select(item.id)}>
-    <span class="font-bold">{item.hun}</span>
+    <span class="font-semibold">{item.hun}</span>
     <span class="italic">{item.ltn}</span>
     <span class="text-red-500 self-center">{item.abr && `[${item.abr}]`}</span>
   </div>

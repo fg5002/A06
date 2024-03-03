@@ -115,9 +115,12 @@
     console.log('e', e.detail);
     map.getMap().getZoom()<16 ? map.getMap().flyTo(e.detail, 16) : map.getMap().flyTo(e.detail);
     $mapState.center = e.detail;
-    toggleCoordInput();
-    cursorPos =  e.detail;
-    showCursor = true;
+    //cursorPos =  e.detail;
+    //showCursor = true;
+    let cor = e.detail;
+    [cor[0],cor[1]] = [cor[1],cor[0]]
+    let sh = drawShape('point', cor);
+    $tempGeo.features = [...$tempGeo.features, sh];
   }
 
   const editDailyItem = (e)=>{

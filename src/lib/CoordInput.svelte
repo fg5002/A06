@@ -6,6 +6,7 @@
 
   let coord = null;
   let convertedCoord = null;
+  let convertedCoordText = "";
 
   const dispatch = createEventDispatcher();
 
@@ -26,35 +27,47 @@
         cor = [parseFloat(`${fnd[1]}.${fnd[2]}`), parseFloat(`${fnd[3]}.${fnd[4]}`)];
       }
       if(cor){
-        cor = cor.map(f=>parseFloat(f.toFixed(6)));
         if(cor[1]>cor[0]){
           [cor[0],cor[1]] = [cor[1],cor[0]]      
         }
+        cor = cor.map(f=>parseFloat(f.toFixed(6)));
       }
-      return cor;
+      convertedCoordText = cor ? cor.join(',') : "";
+      convertedCoord = cor ? cor : null;
     } catch (err) {
       alert(err.message);
     }    
+  }
+
+  const coordKeyDown = (e)=> {
+    if(e.key == 'Enter'){
+      convertCoordsToLatLngArray(coord);   
+    }
   }
 
   const pasteCoordFromClipboard=async(e)=>{ 
     try{
       e.stopPropagation()
       coord = await navigator.clipboard.readText();
+      convertCoordsToLatLngArray(coord);
     } catch (err) {
       alert(err.message);
     }
   }
 
-  const setCoordinate = ()=>{
-    let cor = convertCoordsToLatLngArray(coord)
-    if(cor){
-      convertedCoord = cor
-      dispatch('setCoord', cor);
-      console.log('cor', cor)
-      coord = null;
+  const jumpToCoord = ()=>{
+    if(convertedCoord){
+      dispatch('setCoord', convertedCoord);
+      coord = "";
       convertedCoord = null;
-    }
+      convertedCoordText = "";
+    }     
+  }
+
+  const modalClose = ()=>{
+    coord = "";
+    convertedCoord = null;
+    convertedCoordText = "";
   }
 
 </script>
@@ -63,16 +76,19 @@
   bind:showModal = {showCoordInput} 
   modalClass = "coord_input" 
   backdropClasses = "items-start z-2000 justify-center"
-  mainClasses = "w-4/5"
+  mainClasses = "w-4/5 text-lg"
+  on:modalClose={modalClose}
+
 >
   <div class="flex flex-col w-full gap-1 p-2 border-slate-500 border rounded-sm bg-lime-200">
     <div class="flex justify-center items-center w-full gap-2  bg-lime-200">
       <input 
-        class="w-full px-2 py-1 m-0 bg-lime-200 outline-none text-lg border-b border-slate-500" 
+        class="w-full px-2 py-1 m-0 bg-lime-200 outline-none border-b border-slate-500 text-left" 
         type="text"
         placeholder="original"
         use:focus
         bind:value = {coord}
+        on:keydown={coordKeyDown}
       >
       <button 
         class="border-slate-500 border rounded-md p-2 text-center bg-yellow-200 w-auto" 
@@ -81,19 +97,14 @@
         <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
       </button>
     </div>  
-    <div class="flex justify-center items-center w-full gap-2 bg-lime-200">
-      <input 
-      class="w-full px-2 py-1 m-0 bg-lime-200 outline-none text-lg border-b border-slate-500"
-        type="text" 
-        placeholder="converted"
-        bind:value = {convertedCoord}
-      >
+    <div class="flex justify-between items-center w-full gap-2 bg-lime-200">
+      <span class="w-full px-2 py-1">{convertedCoordText}</span>
       <button 
-        class="border-slate-500 border rounded-md p-2 text-center bg-yellow-200 w-auto" 
-        on:click={setCoordinate}
-        >
-        <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
-      </button>      
+      class="border-slate-500 border rounded-md p-2 text-center bg-yellow-200 w-auto" 
+      on:click={jumpToCoord}
+      >
+      <img src={'images/edit.svg'} alt="No" class="w-auto h-auto">
+    </button>
     </div>
   </div>  
 </Modal>

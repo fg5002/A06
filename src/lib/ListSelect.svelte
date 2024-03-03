@@ -57,17 +57,22 @@
     showSelectList = false;
   }
 
+  const modalClose = ()=>{
+    items = [];
+  }
+
 </script>
 
 <Modal
   bind:showModal = {showSelectList} 
   modalClass = "list-select" 
   backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "w-full h-1/2 mt-1.5 sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
+  mainClasses = "w-full h-1/2 mt-1.5 text-lg text-left sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
+  on:modalClose={modalClose}
 >
 
-  <div class="flex flex-col bg-lime-100 w-full h-full xl:text-base border border-slate-500 rounded-sm gap-2 text-left text-lg">
-    <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400 text-lg font-semibold">  
+  <div class="flex flex-col bg-lime-100 w-full h-full xl:text-base border border-slate-500 rounded-sm gap-2">
+    <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400">  
       <input 
         class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
         type="text"
