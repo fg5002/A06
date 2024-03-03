@@ -74,7 +74,7 @@
   <div class="flex flex-col bg-lime-100 w-full h-full xl:text-base border border-slate-500 rounded-sm gap-2">
     <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400">  
       <input 
-        class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
+        class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none tex-lg" 
         type="text"
         placeholder= {placeHolder}
         bind:value = {searchText}
