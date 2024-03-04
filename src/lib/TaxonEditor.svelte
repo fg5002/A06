@@ -116,7 +116,7 @@
   <div class="flex flex-col w-full border-slate-500 border rounded-sm text-lg h-1/2 md:w-2/3 xl:w-1/3 xl:text-base">
     <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 font-semibold">
       <input
-        class="px-2 py-1 w-full h-auto outline-none bg-yellow-200" 
+        class="px-2 py-1 w-3/4 h-auto outline-none bg-yellow-200" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptEnter(e)}
         use:focus
@@ -124,7 +124,7 @@
         bind:this={promptRef}
       >
       <button 
-        class="px-2 py-1 text-center grow bg-yellow-300" on:pointerup = {submitTaxonEditor}>
+        class="px-2 py-1 w-1/4 text-center bg-yellow-300" on:pointerup = {submitTaxonEditor}>
         <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
       </button>      
     </div>
@@ -132,13 +132,13 @@
     <div class="flex flex-col w-full divide-y divide-gray-400 justify-center bg-yellow-100 h-full overflow-y-auto">      
 
       <TaxonEditorItem name="Taxon" data={$currData.taxon} classes = {'justify-self-center'} editor={()=> showTaxonList=true}>
-        <span class="font-bold select-none my-1 mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
-        <span class="italic select-none my-1" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.ltn}</span>
+        <span class="font-bold select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
+        <span class="italic select-none" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.ltn}</span>
       </TaxonEditorItem>
 
-      <TaxonEditorItem name="Attributes" data={$currData.attributes} classes={'pt-1'} editor={()=> showAttributeList=true}>
+      <TaxonEditorItem name="Attributes" data={$currData.attributes} classes={""} editor={()=> showAttributeList=true}>
         {#each $currData.attributes as item, i (item.id)}
-          <span class="select-none px-2 mr-2 mb-1 border border-slate-500 rounded-md shadow-lg" 
+          <span class="select-none px-2 my-1 mr-2 border border-slate-500 rounded-md shadow-lg" 
             on:pointerup|stopPropagation={()=> $currData.attributes = $currData.attributes.filter(f=> f.id != item.id)}
           >{item.dis}</span>
         {/each}

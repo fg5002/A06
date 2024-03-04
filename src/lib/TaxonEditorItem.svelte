@@ -7,9 +7,9 @@
 
 </script>
 
-<div class="flex flex-wrap items-center justify-start basis-full text-lg px-2 {classes}" on:pointerup={editor}>
+<div class="flex flex-wrap items-center basis-full text-lg px-2 py-1 {data === null || data.length === 0 ? 'justify-end' : 'justify-start'} {classes}" on:pointerup={editor}>
   {#if data === null || data.length === 0}
-    <div class="font-bold py-1 select-none {needed ? 'text-red-600' : 'text-green-600'}">{name}</div>
+    <span class="font-bold w-1/4 select-none {needed ? 'text-red-600' : 'text-green-600'}">{name}</span>
   {:else}
     <slot/>
   {/if}

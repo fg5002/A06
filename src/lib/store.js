@@ -15,7 +15,7 @@ export const currData = writable({
   date: {dat: {currDate}},
   taxon: null,
   attributes: [],
-  note: "",
+  note: null,
   observer: [],
   files: [],
   reference: [],
