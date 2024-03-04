@@ -7,7 +7,6 @@
   
   const focus = async(node)=>{
     await waiter(100);
-    node.value = "";
     node.focus();
   }  
 

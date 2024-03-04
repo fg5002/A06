@@ -8,12 +8,12 @@
 
 </script>
 
-<div class="flex justify-between items-center bg-lime-300 p-2 border-b border-slate-500 font-semibold text-lg">
-  <nav class="flex items-center gap-4">
+<div class="flex justify-between items-center bg-lime-300 p-2 border-b border-slate-500 font-semibold">
+  <nav class="flex items-center gap-4 text-lg">
     <a href="{base}/">Home</a>
     <a href="{base}/map">Map</a>
   </nav>
-  <div on:pointerup={()=>showCalendar = true}>{$currDate}</div>
+  <div class="text-lg" on:pointerup={()=>showCalendar = true}>{$currDate}</div>
 </div>
 <Calendar
   bind:showCalendar

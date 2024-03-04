@@ -90,7 +90,7 @@
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
   backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "gap-2 w-full mt-1.5 text-lg h-1/2 md:w-2/3 xl:w-1/3 xl:text-base"
+  mainClasses = "gap-2 w-full mt-1.5"
 >
   <TaxonList
     bind:showTaxonList
@@ -113,7 +113,7 @@
     result = {$currData.observer}
   />
 
-  <div class="flex flex-col w-full h-full border-slate-500 border rounded-sm">
+  <div class="flex flex-col w-full border-slate-500 border rounded-sm text-lg h-1/2 md:w-2/3 xl:w-1/3 xl:text-base">
     <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 font-semibold">
       <input
         class="px-2 py-1 w-full h-auto outline-none bg-yellow-200" 
@@ -131,35 +131,35 @@
 
     <div class="flex flex-col w-full divide-y divide-gray-400 justify-center bg-yellow-100 h-full overflow-y-auto">      
 
-      <TaxonEditorItem name="Taxon" data={$currData.taxon} editor={()=> showTaxonList=true}>
-        <span class="font-bold select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
-        <span class="italic select-none mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.ltn}</span>
+      <TaxonEditorItem name="Taxon" data={$currData.taxon} classes = {'justify-self-center'} editor={()=> showTaxonList=true}>
+        <span class="font-bold select-none my-1 mr-2" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.hun}</span>
+        <span class="italic select-none my-1" on:pointerup|stopPropagation={()=> $currData.taxon=null}>{$currData.taxon.ltn}</span>
       </TaxonEditorItem>
 
-      <TaxonEditorItem name="Attributes" data={$currData.attributes} editor={()=> showAttributeList=true}>
+      <TaxonEditorItem name="Attributes" data={$currData.attributes} classes={'pt-1'} editor={()=> showAttributeList=true}>
         {#each $currData.attributes as item, i (item.id)}
-          <span class="select-none" 
+          <span class="select-none px-2 mr-2 mb-1 border border-slate-500 rounded-md shadow-lg" 
             on:pointerup|stopPropagation={()=> $currData.attributes = $currData.attributes.filter(f=> f.id != item.id)}
           >{item.dis}</span>
         {/each}
       </TaxonEditorItem>
 
       <TaxonEditorItem name="Note" data={$currData.note} editor={()=> showEditorNotes=true}>
-        <span class="select-none basis-full">{$currData.note}</span>
+        <span class="select-none my-1 basis-full">{$currData.note}</span>
       </TaxonEditorItem>
 
       <TaxonEditorItem name="Observer" data={$currData.observer} needed={true} editor={()=> showObserverList=true}>
-        <span class="select-none">{$currData.observer.map(f=>f.nam).join(', ')}</span>
+        <span class="select-none my-1 font-semibold">{$currData.observer.map(f=>f.nam).join(', ')}</span>
       </TaxonEditorItem>
 
       <TaxonEditorItem name="Files" data={$currData.files} editor=null>
         {#each $currData.files as item, i (item.id)}
-          <span class="select-none" on:pointerup={()=> $currData.files = $currData.files.filter(f=> f.id != item.id)}>{item.nam}</span>
+          <span class="select-none my-1" on:pointerup={()=> $currData.files = $currData.files.filter(f=> f.id != item.id)}>{item.nam}</span>
         {/each}
       </TaxonEditorItem>
 
       <TaxonEditorItem name="Geometry" data={$currData.geometry} needed={true} editor=null>
-        <span class="select-none font-bold basis-full" on:pointerup={()=> showEditor=false}>
+        <span class="select-none my-1 font-bold basis-full" on:pointerup={()=> showEditor=false}>
           {$currData.geometry.type} ({$currData.geometry.id})
         </span>
       </TaxonEditorItem>
