@@ -3,85 +3,97 @@
   import ListSelect, {inputField} from "./ListSelect.svelte";
   import TimePicker from "./TimePicker.svelte";
 	import { currData } from './store';
+  import TextInput from './TextInput.svelte';
 
   export let showAttributeList = false;
   export let source = [];
-  export let result = [];
-
+  export let result = $currData.attributes;
+  
+  let showTextModal = false;
+  let showTimePicker = false;
   let inputAttribute = null;
   let edit = false;
+  let selectedItem = null;
+  let selectedValue = null;
+  let selectedPlaceholder = "";
+  let selectedType = "text";
 
   const dispatch = createEventDispatcher();
+  
+  const select = (i)=> {
+    switch (i.type) {
+      case 'bool':
+        i.dis = i.nam;
+        addItemToResult(i);        
+        break;
+      case 'text':
+      case 'tel':
+        selectedItem = i;
+        selectedPlaceholder = selectedItem.nam;
+        selectedType = i.type;
+        showTextModal = true;       
+        break;
+      case 'time':
+        selectedItem = i;
+        selectedPlaceholder = selectedItem.nam;
+        showTimePicker = true;
+        break;
+    }
+  }
 
-  const attributeFocus = async(node)=>{
-    await waiter(100);
-    node.value = "";
-    node.focus();
+  const submitTextModal = (e)=> {
+    selectedItem.value = e.detail;
+    selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
+    addItemToResult(selectedItem);
+    inputField.value = "";
   }  
 
-  const waiter = (ms)=> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(), ms);
-    })
+  const submitTimePicker = (e)=> {
+    selectedItem.value = e.detail;
+    selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
+    addItemToResult(selectedItem);    
   }
 
-  const editField = (e, idx)=> {
-    console.log(idx)
-    if (e.key == 'Enter' && e.target.id === idx) {
-      result[idx].value = e.target.value;
-      edit = false
-      console.log('enter')
-      inputField.value = "";
-      inputField.focus();
-    }
-  }
-  
-  const select = (id)=> {
-    console.log(source[id-1].nam);
-    result.push(source[id-1]);
-    result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
-    inputField.value = "";
-    if(source[id-1].rep !== null){
-      console.log(source[id-1].nam)
-      edit = true
-      inputAttribute && inputAttribute.focus();
-    }else{
-      inputField.focus();
-    }
-  }
-  
-  const remove = (id)=>{
-    result = result.filter(f=> f.id !== id)
+  const addItemToResult = (i)=> {
+    result = result.filter(f=> f.id != i.id);
+    result.push(i);
+    result = result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
     inputField.value = "";
     inputField.focus();
-    console.log(result)
   }
 
-  /*const submitAttributeList = (e)=>{
-    console.log(JSON.stringify(e.detail));
-    /*let res = e.detail.filter(f=> f.rep === null || (f.rep != null && f.value != null))
-    console.log(JSON.stringify(res));
+  const removeItemFromResult = (id)=>{
+    result = result.filter(f=> f.id !== id);
+    inputField.value = "";
+    inputField.focus();
+  }
 
-    res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
-    console.log(JSON.stringify(res));
-    $currData.attributes = res;
-    $currData.attributes = e.detail;
-  }*/
-
-  /*const submit = ()=> {
-    console.log('ez az')
-    let res = result.filter(f=> f.rep === null || (f.rep != null && f.value))
-    console.log(JSON.stringify(res));
-
-    res.map(f=> f.dis = f.rep === null ? f.nam : f.rep.replace("*", f.value.replace(f.abr,"")));
-    console.log(JSON.stringify(res));
-    dispatch('submitList', res);
-    newData.properties.data.attributes = res;
-    result = [];
-    $currData.attributes = result
-  }*/
+  const selectEditor = (i)=> {
+    selectedItem = i;
+    selectedValue = i.value
+    selectedPlaceholder = i.nam;
+    if(i.type === "time"){
+      showTimePicker = true;
+    }else{
+      showTextModal = true;
+    }
+  }
 
 </script>
+
+<TextInput
+  bind:showTextModal = {showTextModal}
+  on:submitTextModal = {submitTextModal}
+  bind:inputData = {selectedValue}
+  bind:placeHolder = {selectedPlaceholder}
+  bind:type = {selectedType}
+/>
+
+<TimePicker
+  bind:showTimePicker = {showTimePicker}
+  bind:time = {selectedValue}
+  on:submitTimePicker = {submitTimePicker}
+/>
 
 <ListSelect
   bind:showSelectList ={showAttributeList}
@@ -89,33 +101,36 @@
   minChars = {1}
   placeHolder = "Attributes"
   filterList = {(f,s)=> f.nam.includes(s) === true || f.abr === s}
-  multi = {true}
   result = {result}
   searchText = {inputField && inputField.value}
-  on:selectFirstItem = {(e)=> select(e.detail)}
+  on:selectFirstItem = {(e)=> select(source.filter(f=> f.id ===e.detail)[0])}
   on:submit
+  on:outroEnd
 >
-  <div slot="item" let:item class="p-1" on:pointerup|preventDefault={select(item.id)}>
-    <span class="font-bol p-2">{item.nam}</span>
+
+  <div
+    slot="item"
+    let:item
+    class="p-1 pl-2  flex justify-between  border-b border-slate-400"
+    on:pointerup|preventDefault={select(item)}
+  >
+    <span class="font-bold">{item.nam}</span>
   </div>
 
-  <div slot="result" let:item let:i class="p-1 flex justify-between items-center">
-    <span class="font-bold p-2 bg-lime-300 grow" on:pointerdown={remove(item.id)}>{item.nam}</span>
-    {#if item.rep !== null}
-      {#if edit}
-        <input 
-          class="id={i} bg-yellow-200 focus:bg-yellow-300 border-2 border-zinc-500 rounded-sm px-2 py-1 m-0 text-left w-1/2" 
-          type="text"
-          id = {item.id}
-          value = {item.value}
-          on:input|stopPropagation|preventDefault={(e)=>item.value = e.target.value}
-          on:keydown|stopPropagation = {(e)=> editField(e, i)}
-          bind:this={inputAttribute}
-          use:attributeFocus
-        >
-      {:else}
-        <span class="font-bold w-1/2 p-2 bg-blue-200">{item.value}</span>
-      {/if}
+  <div
+    slot="result"
+    let:item
+    class="flex justify-between border-b border-slate-400 divide-x divide-slate-400"
+  >
+    <span
+      class="w-1/2 font-bold px-2 py-1"
+      on:pointerdown|preventDefault={removeItemFromResult(item.id)}
+    >{item.nam}</span>
+    {#if item.type != 'bool'}
+      <span
+        class="font-bold w-1/2 bg-yellow-200 px-2 py-1"
+        on:pointerdown|preventDefault={selectEditor(item)}
+      >{item.value}</span>
     {/if}
   </div>
 </ListSelect>

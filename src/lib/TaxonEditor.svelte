@@ -20,17 +20,6 @@
   
   $: searchText = promptRef && promptRef.value; 
 
-  const focus = async(node)=>{
-    await waiter(500);
-    node.focus();
-  }  
-
-  const waiter = (ms)=> {
-    return new Promise(resolve => {
-        setTimeout(() => resolve(), ms);
-    })
-  }
-
   /*
   Fekete gólya (Ciconia nigra)
   3pd átrepülő dk-felé
@@ -46,7 +35,7 @@
     if(idx>-1){
       res = attributes[idx];
       res.value =  res.rep === null ? null : s.replace(res.abr,"");
-      res.dis = res.rep === null ? res.nam : res.rep.replace("*", s.replace(res.abr,""));
+      res.dis = res.rep === null ? res.nam : res.rep.replace("*", res.value);
       $currData.attributes = $currData.attributes.filter(f=> f.id !=res.id);
       $currData.attributes.push(res);
       $currData.attributes = $currData.attributes.sort((a, b) => a.ord-b.ord);
@@ -68,7 +57,7 @@
   }
 
   const promptEnter = (e)=>{
-    if (e.keyCode === 13){
+    if (e.key == 'Enter' || e.key == ' '){
       addAttribute();
       promptRef.value = "";
     }
@@ -84,42 +73,53 @@
     $currData.files = [];
   }
 
+  const focusInput = ()=>{
+    promptRef.focus();
+  }
+
 </script>
   
 <Modal
   bind:showModal = {showEditor} 
   modalClass = "taxon_editor" 
   backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "gap-2 w-full mt-1.5 text-lg md:w-2/3 xl:w-1/3"
+  mainClasses = "gap-2 w-full mt-1.5 md:w-2/3 xl:w-1/3"
+  on:introEnd = {focusInput}
 >
   <TaxonList
     bind:showTaxonList
     source={birds}
+    bind:result = {$currData.taxon}
+    on:outroEnd = {focusInput}
   />
 
   <AttributeList
     bind:showAttributeList
     source = {attributes}
+    bind:result = {$currData.attributes}
+    on:outroEnd = {focusInput}
   />
 
   <TaxonNotes 
     bind:showEditorNotes
     placeHolder="Notes"
+    on:outroEnd = {focusInput}
   />
 
   <ObserverList
     bind:showObserverList
     source = {observers}
-    result = {$currData.observer}
+    bind:result = {$currData.observer}
+    on:outroEnd = {focusInput}
+    on:itemSelected = {focusInput}
   />
 
-  <div class="flex flex-col w-full border-slate-500 border rounded-sm text-lg h-1/2 xl:text-base">
-    <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 text-lg font-bold">
+  <div class="flex flex-col w-full border-slate-500 border rounded-sm h-1/2 xl:text-base">
+    <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 font-bold">
       <input
         class="px-2 py-1 w-3/4 h-auto outline-none bg-yellow-200" 
         type="text" 
         on:keydown|stopPropagation = {(e)=> promptEnter(e)}
-        use:focus
         bind:value = {searchText}
         bind:this={promptRef}
       >

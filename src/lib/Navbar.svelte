@@ -8,7 +8,7 @@
 
 </script>
 
-<div class="flex justify-between items-center bg-lime-300 p-2 border-b border-slate-500 text-lg font-bold">
+<div class="flex justify-between items-center bg-lime-300 p-2 border border-slate-500 text-lg font-bold shadow-xl">
   <nav class="flex items-center gap-4">
     <a href="{base}/">Home</a>
     <a href="{base}/map">Map</a>

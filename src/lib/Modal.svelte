@@ -27,6 +27,8 @@
     on:pointerdown={closeOnOutclick} 
     in:fly={inFly}
     out:fly={outFly}
+    on:introend={()=> dispatch('introEnd')}
+    on:outroend={()=> dispatch('outroEnd')}
   >
     <div 
       class="flex shadow-2xl rounded-sm max-h-[100vh] bg-red-200 {mainClasses}" 
