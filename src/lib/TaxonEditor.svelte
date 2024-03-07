@@ -119,7 +119,7 @@
       <input
         class="px-2 py-1 w-3/4 h-auto outline-none bg-yellow-200" 
         type="text" 
-        on:keydown|stopPropagation = {(e)=> promptEnter(e)}
+        on:keydown|stopPropagation = {promptEnter}
         bind:value = {searchText}
         bind:this={promptRef}
       >

@@ -12,7 +12,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const onKeyDown = (e)=> {
+  const inputKeyDown = (e)=> {
     if(e.key == 'Enter') {
       submitTextModal();
     }
@@ -40,7 +40,7 @@
         class="h-full w-full bg-yellow-200 border-2 border-zinc-500 rounded-sm p-2 text-lg" 
         type= text
         placeholder= {placeHolder}
-        on:keydown = {onKeyDown}
+        on:keydown = {inputKeyDown}
         bind:this={inputRef}
         bind:value={inputData}
       />
@@ -49,7 +49,7 @@
         class="h-full w-full bg-yellow-200 border-2 border-zinc-500 rounded-sm p-2 text-lg" 
         type= tel
         placeholder= {placeHolder}
-        on:keydown = {onKeyDown}
+        on:keydown = {inputKeyDown}
         bind:this={inputRef}
         bind:value={inputData}
       />

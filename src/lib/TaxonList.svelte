@@ -9,9 +9,9 @@
 
   const dispatch = createEventDispatcher();
 
-  const select = (i)=> {
+  const select = (e)=> {
     inputField.value = "";
-    result = i
+    result = e.detail;
     showTaxonList = false;
   }
 
@@ -25,7 +25,7 @@
   filterList = {(f,s)=> f.hun.toLowerCase().includes(s) === true || f.ltn.toLowerCase().includes(s) === true || f.abr.indexOf(s)>-1 && f.mon != null}
   sortListField = "hun"
   searchText = {inputField && inputField.value}
-  on:selectFirstItem = {(e)=> select(e.detail)}
+  on:selectFirstItem = {select}
   on:outroEnd
 >
   <div slot="item" class="px-2 pt-1 border-b border-slate-400" let:item on:pointerup|preventDefault={select(item)}>

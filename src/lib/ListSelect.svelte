@@ -29,11 +29,15 @@
     [];
   }
 
-  const onKeyDown = (e)=> {
+  const selectFirstItem = ()=> {
+    dispatch('selectFirstItem', items[0]);
+    inputField.value = "";   
+  }
+
+  const inputKeyDown = (e)=> {
     if(e.key == 'Enter') {
-      if(e.target.value != "" && items.length > 0){
-        dispatch('selectFirstItem', items[0]);
-        inputField.value = "";
+      if(items.length > 0){
+        selectFirstItem()
       }else if(e.target.value === ""){
         submit()
       }
@@ -68,8 +72,8 @@
         type="text"
         placeholder= {placeHolder}
         bind:value = {searchText}
-        on:input = {(e)=>updateList(e)}
-        on:keydown|stopPropagation = {(e)=> onKeyDown(e)}
+        on:input = {updateList}
+        on:keydown|stopPropagation = {inputKeyDown}
         bind:this={inputField}
       >
       {#if submitBtn}
