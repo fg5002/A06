@@ -30,7 +30,6 @@
   placeHolder = "Taxon"
   filterList = {(f,s)=> f.hun.toLowerCase().includes(s) === true || f.ltn.toLowerCase().includes(s) === true || f.abr.indexOf(s)>-1 && f.mon != null}
   sortListField = "hun"
-  searchText = {inputField && inputField.value}
   on:firstItemSelected = {selectFirst}
   on:outroEnd
   on:modalClose

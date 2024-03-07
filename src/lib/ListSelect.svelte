@@ -14,12 +14,13 @@
   export let placeHolder = "none";
   export let result = [];
   
+  let searchText = "";
   let items = [];
-  export let searchText = "";
   
   const dispatch = createEventDispatcher();
 
-  const updateList = ()=> {
+  const updateList = (e)=> {
+    searchText = e.target.value;
     if(searchText.length < minChars ) {
       items = [];
     }else{
@@ -63,9 +64,9 @@
         class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
         type="text"
         placeholder= {placeHolder}
-        bind:value = {searchText}
         on:input = {updateList}
         on:keydown|stopPropagation = {inputKeyDown}
+        bind:value = {searchText}
         bind:this={inputField}
       >  
     </div>
