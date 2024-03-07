@@ -8,16 +8,16 @@
   export let result = [];
 
 
-  const select = (id)=> {
-    result = result.filter(f=> f.id !=source[id-1].id);
-    result.push(source[id-1])
+  const select = (i)=> {
+    result = result.filter(f=> f.id != i.id);
+    result.push(i)
     result.sort((a, b)=> a.nam.localeCompare(b.nam, 'hu'));
     inputField.value = "";
     inputField.focus();
   }
 
-  const remove = (id)=>{
-    result = result.filter(f=> f.id !== id)
+  const remove = (i)=>{
+    result = result.filter(f=> f.id != i.id)
     inputField.value = "";
     inputField.focus();
   }
@@ -42,7 +42,7 @@
     class="font-semibold px-2 pt-1  border-b border-slate-400" 
     slot="item" 
     let:item 
-    on:pointerdown={select(item.id)}
+    on:pointerdown={select(item)}
   >
     <span>{item.nam}</span>
   </div>
@@ -51,7 +51,7 @@
     class="font-semibold px-2 pt-1 bg-cyan-200  border-b border-slate-400"
     slot="result"
     let:item
-    on:pointerdown={remove(item.id)}
+    on:pointerdown={remove(item)}
   >
     <span class="">{item.nam}</span>
   </div>

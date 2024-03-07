@@ -62,8 +62,8 @@
     inputField.focus();
   }
 
-  const removeItemFromResult = (id)=>{
-    result = result.filter(f=> f.id !== id);
+  const removeItemFromResult = (i)=>{
+    result = result.filter(f=> f.id !== i.id);
     inputField.value = "";
     inputField.focus();
   }
@@ -103,7 +103,7 @@
   filterList = {(f,s)=> f.nam.includes(s) === true || f.abr === s}
   result = {result}
   searchText = {inputField && inputField.value}
-  on:selectFirstItem = {(e)=> select(source.filter(f=> f.id ===e.detail)[0])}
+  on:selectFirstItem = {(e)=> select(e.detail)}
   on:submit
   on:outroEnd
 >
@@ -124,7 +124,7 @@
   >
     <span
       class="w-1/2 font-bold px-2 py-1"
-      on:pointerdown|preventDefault={removeItemFromResult(item.id)}
+      on:pointerdown|preventDefault={removeItemFromResult(item)}
     >{item.nam}</span>
     {#if item.type != 'bool'}
       <span

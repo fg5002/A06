@@ -57,7 +57,7 @@
   }
 
   const promptEnter = (e)=>{
-    if (e.key == 'Enter' || e.key == ' '){
+    if (e.key == 'Enter'){
       addAttribute();
       promptRef.value = "";
     }

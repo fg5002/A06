@@ -13,7 +13,7 @@
   const dispatch = createEventDispatcher();
 
   const onKeyDown = (e)=> {
-    if(e.key == 'Enter' || e.key == ' ') {
+    if(e.key == 'Enter') {
       submitTextModal();
     }
   }

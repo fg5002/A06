@@ -32,7 +32,7 @@
   const onKeyDown = (e)=> {
     if(e.key == 'Enter') {
       if(e.target.value != "" && items.length > 0){
-        dispatch('selectFirstItem', items[0].id);
+        dispatch('selectFirstItem', items[0]);
         inputField.value = "";
       }else if(e.target.value === ""){
         submit()
