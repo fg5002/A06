@@ -1,28 +1,28 @@
 <script>
-  import { fade , fly} from 'svelte/transition';
   import ListSelect from "./ListSelect.svelte";
-  import {currData} from "./store";
 
   export let showObserverList = false;
   export let source = [];
   export let result = [];
 
+  let sText = "";
 
   const select = (i)=> {
     result = result.filter(f=> f.id != i.id);
     result.push(i)
     result.sort((a, b)=> a.nam.localeCompare(b.nam, 'hu'));
+    sText = "";
   }
 
   const remove = (i)=>{
     result = result.filter(f=> f.id != i.id)
-
   }
 
 </script>
 
 <ListSelect
   bind:showSelectList ={showObserverList}
+  bind:searchText = {sText}
   source = {source}
   placeHolder = "Observers"
   minChars = {1}
