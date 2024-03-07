@@ -12,45 +12,37 @@
   export let filterList = (f,s)=> f["nam"].toLowerCase().includes(s) === true;
   export let sortListField = "nam";
   export let placeHolder = "none";
-  export let submitBtn = false;
   export let result = [];
-
-  export let searchText = "";
+  
   let items = [];
-
+  export let searchText = "";
+  
   const dispatch = createEventDispatcher();
 
   const updateList = ()=> {
-    if(searchText.length < minChars ) return;
-    items = searchText ? 
-    source
-      .filter(f=> filterList(f, searchText))
-      .sort((a, b)=> a[sortListField].localeCompare(b[sortListField], 'hu')) : 
-    [];
-  }
-
-  const selectFirstItem = ()=> {
-    dispatch('selectFirstItem', items[0]);
-    inputField.value = "";   
+    if(searchText.length < minChars ) {
+      items = [];
+    }else{
+      items = searchText ? 
+      source
+        .filter(f=> filterList(f, searchText))
+        .sort((a, b)=> a[sortListField].localeCompare(b[sortListField], 'hu')) : 
+      [];
+    }
   }
 
   const inputKeyDown = (e)=> {
     if(e.key == 'Enter') {
-      if(items.length > 0){
-        selectFirstItem()
-      }else if(e.target.value === ""){
-        submit()
+      if(items.length>0){
+        dispatch('firstItemSelected', items[0]);
+        searchText = "";
       }
     }
   }
 
-  const submit = ()=> {
-    dispatch('submit', result);
-    showSelectList = false;
-  }
-
   const modalClose = ()=>{
     items = [];
+    searchText = "";
   }
 
 </script>
@@ -59,13 +51,13 @@
   bind:showModal = {showSelectList} 
   modalClass = "list-select" 
   backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "w-full h-1/2 mt-1.5 text-lg text-left sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
-  on:modalClose={modalClose}
+  mainClasses = "w-full h-1/2 mt-1.5 text-left sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
   on:introEnd = {()=>inputField.focus()}
   on:outroEnd
+  on:modalClose = {modalClose}
 >
 
-  <div class="flex flex-col bg-lime-200 w-full h-full border border-slate-500 rounded-sm">
+  <div class="flex flex-col text-lg bg-lime-200 w-full h-full border border-slate-500 rounded-sm">
     <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400">  
       <input 
         class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
@@ -75,22 +67,16 @@
         on:input = {updateList}
         on:keydown|stopPropagation = {inputKeyDown}
         bind:this={inputField}
-      >
-      {#if submitBtn}
-        <button 
-          class="px-2 py-1 bg-yellow-300" on:pointerup|stopPropagation={submit}>
-          <!--img src={'images/edit.svg'} alt="No" class="w-auto h-auto"-->Submit
-        </button>
-      {/if}   
+      >  
     </div>
     <div class="h-full w-full flex flex-col overflow-y-auto snap-y snap-proximity">
-      {#if searchText}      
+      {#if searchText != ""}      
         {#each items as item, i}
           <slot name="item" {item}/>
         {/each}
       {:else}
         {#each result as item, i}
-          <slot name="result" {item} {i}/>        
+          <slot name="result" {item}/>        
         {/each}
       {/if}
     </div>

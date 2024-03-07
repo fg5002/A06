@@ -6,6 +6,12 @@
   export let placeHolder = "none";
 
   let inputRef = null;
+
+  const enterPressed = (e)=>{
+    if(e.key == 'Enter'){
+      showEditorNotes = false
+    }
+  }
   
 </script>
 
@@ -24,6 +30,7 @@
     bind:value={$currData.note}
     bind:this={inputRef}
     on:contextmenu={()=> $currData.note =""}
+    on:keydown|stopPropagation={enterPressed}
   />
   
 </Modal>

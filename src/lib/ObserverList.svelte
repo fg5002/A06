@@ -22,8 +22,6 @@
     inputField.focus();
   }
 
-  const submit = ()=> $currData.observer = result;
-
 </script>
 
 <ListSelect
@@ -33,13 +31,12 @@
   minChars = {1}
   result = {result}
   searchText = {inputField && inputField.value}
-  on:selectFirstItem = {(e)=> select(e.detail)}
-  on:submit={submit}
+  on:firstItemSelected = {(e)=> select(e.detail)}
   on:introend={()=> inputField.focus()}
   on:outroEnd
 >
   <div
-    class="font-semibold px-2 pt-1  border-b border-slate-400" 
+    class="font-semibold px-2 pt-1 border-b border-slate-400" 
     slot="item" 
     let:item 
     on:pointerdown={select(item)}

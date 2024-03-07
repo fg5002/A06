@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import ListSelect, {inputField} from "./ListSelect.svelte";
   import TimePicker from "./TimePicker.svelte";
 	import { currData } from './store';
@@ -11,20 +10,16 @@
   
   let showTextModal = false;
   let showTimePicker = false;
-  let inputAttribute = null;
-  let edit = false;
   let selectedItem = null;
   let selectedValue = null;
   let selectedPlaceholder = "";
   let selectedType = "text";
-
-  const dispatch = createEventDispatcher();
   
   const select = (i)=> {
     switch (i.type) {
       case 'bool':
         i.dis = i.nam;
-        addItemToResult(i);        
+        addItemToResult(i);      
         break;
       case 'text':
       case 'tel':
@@ -103,7 +98,7 @@
   filterList = {(f,s)=> f.nam.includes(s) === true || f.abr === s}
   result = {result}
   searchText = {inputField && inputField.value}
-  on:selectFirstItem = {(e)=> select(e.detail)}
+  on:firstItemSelected = {(e)=> select(e.detail)}
   on:submit
   on:outroEnd
 >
@@ -120,7 +115,7 @@
   <div
     slot="result"
     let:item
-    class="flex justify-between border-b border-slate-400 divide-x divide-slate-400"
+    class="flex justify-between bg-cyan-200 border-b border-slate-400 divide-x divide-slate-400"
   >
     <span
       class="w-1/2 font-bold px-2 py-1"

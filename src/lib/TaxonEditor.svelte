@@ -85,6 +85,7 @@
   backdropClasses = "items-start justify-center z-2000"
   mainClasses = "gap-2 w-full mt-1.5 md:w-2/3 xl:w-1/3"
   on:introEnd = {focusInput}
+  on:modalClose = {()=>promptRef.value = ""}
 >
   <TaxonList
     bind:showTaxonList
@@ -114,10 +115,10 @@
     on:itemSelected = {focusInput}
   />
 
-  <div class="flex flex-col w-full border-slate-500 border rounded-sm h-1/2 xl:text-base">
+  <div class="flex flex-col w-full border-slate-500 border rounded-sm h-1/2 text-lg xl:text-base">
     <div class="flex justify-between items-center border-b border-slate-500 bg-yellow-200 divide-x divide-gray-400 font-bold">
       <input
-        class="px-2 py-1 w-3/4 h-auto outline-none bg-yellow-200" 
+        class="px-2 py-1 w-3/4 h-auto outline-none bg-yellow-200 te" 
         type="text" 
         on:keydown|stopPropagation = {promptEnter}
         bind:value = {searchText}

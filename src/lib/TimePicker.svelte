@@ -28,7 +28,7 @@
   <SveltyPicker
     inputClasses="p-2 w-auto border-2 border-gray-700 rounded-md"
     mode = time
-    format = "hh:ii"
+    format = "hh.ii"
     pickerOnly = true
     manualInput = true
     on:input = {submitTimePicker}
