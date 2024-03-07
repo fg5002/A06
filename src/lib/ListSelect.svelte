@@ -1,7 +1,3 @@
-<script context="module">
-  export let inputField = null;
-</script>
-
 <script>
   import { createEventDispatcher } from 'svelte';
   import Modal from "./Modal.svelte";
@@ -13,14 +9,14 @@
   export let sortListField = "nam";
   export let placeHolder = "none";
   export let result = [];
+  export let searchText = "";
   
-  let searchText = "";
+  let promptRef = null;
   let items = [];
   
   const dispatch = createEventDispatcher();
 
-  const updateList = (e)=> {
-    searchText = e.target.value;
+  const updateList = ()=> {
     if(searchText.length < minChars ) {
       items = [];
     }else{
@@ -53,7 +49,7 @@
   modalClass = "list-select" 
   backdropClasses = "items-start justify-center z-2000"
   mainClasses = "w-full h-1/2 mt-1.5 text-left sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
-  on:introEnd = {()=>inputField.focus()}
+  on:introEnd = {()=>promptRef.focus()}
   on:outroEnd
   on:modalClose = {modalClose}
 >
@@ -64,10 +60,10 @@
         class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
         type="text"
         placeholder= {placeHolder}
+        bind:value = {searchText}
+        bind:this={promptRef}        
         on:input = {updateList}
         on:keydown|stopPropagation = {inputKeyDown}
-        bind:value = {searchText}
-        bind:this={inputField}
       >  
     </div>
     <div class="h-full w-full flex flex-col overflow-y-auto snap-y snap-proximity">

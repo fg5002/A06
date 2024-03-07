@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import ListSelect, {inputField } from "./ListSelect.svelte";
+  import ListSelect from "./ListSelect.svelte";
 
   export let showTaxonList = false;
   export let source = [];
@@ -11,8 +11,7 @@
 
   const select = (i)=> {
     result = i;
-    inputField.value = "";
-    inputField.focus();
+
     showTaxonList = false;
   }
   

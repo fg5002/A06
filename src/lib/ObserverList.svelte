@@ -1,6 +1,6 @@
 <script>
   import { fade , fly} from 'svelte/transition';
-  import ListSelect, {inputField} from "./ListSelect.svelte";
+  import ListSelect from "./ListSelect.svelte";
   import {currData} from "./store";
 
   export let showObserverList = false;
@@ -12,14 +12,11 @@
     result = result.filter(f=> f.id != i.id);
     result.push(i)
     result.sort((a, b)=> a.nam.localeCompare(b.nam, 'hu'));
-    inputField.value = "";
-    inputField.focus();
   }
 
   const remove = (i)=>{
     result = result.filter(f=> f.id != i.id)
-    inputField.value = "";
-    inputField.focus();
+
   }
 
 </script>
@@ -30,9 +27,7 @@
   placeHolder = "Observers"
   minChars = {1}
   result = {result}
-  searchText = {inputField && inputField.value}
   on:firstItemSelected = {(e)=> select(e.detail)}
-  on:introend={()=> inputField.focus()}
   on:outroEnd
 >
   <div

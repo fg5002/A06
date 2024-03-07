@@ -1,5 +1,5 @@
 <script>
-  import ListSelect, {inputField} from "./ListSelect.svelte";
+  import ListSelect from "./ListSelect.svelte";
   import TimePicker from "./TimePicker.svelte";
 	import { currData } from './store';
   import TextInput from './TextInput.svelte';
@@ -14,6 +14,7 @@
   let selectedValue = null;
   let selectedPlaceholder = "";
   let selectedType = "text";
+  let sText = "";
   
   const select = (i)=> {
     switch (i.type) {
@@ -34,13 +35,14 @@
         showTimePicker = true;
         break;
     }
+    sText = "";
   }
 
   const submitTextModal = (e)=> {
     selectedItem.value = e.detail;
     selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
     addItemToResult(selectedItem);
-    inputField.value = "";
+
   }  
 
   const submitTimePicker = (e)=> {
@@ -53,14 +55,11 @@
     result = result.filter(f=> f.id != i.id);
     result.push(i);
     result = result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
-    inputField.value = "";
-    inputField.focus();
   }
 
   const removeItemFromResult = (i)=>{
     result = result.filter(f=> f.id !== i.id);
-    inputField.value = "";
-    inputField.focus();
+
   }
 
   const selectEditor = (i)=> {
@@ -92,12 +91,12 @@
 
 <ListSelect
   bind:showSelectList ={showAttributeList}
+  bind:searchText = {sText}
   source = {source}
   minChars = {1}
   placeHolder = "Attributes"
   filterList = {(f,s)=> f.nam.includes(s) === true || f.abr === s}
   result = {result}
-  searchText = {inputField && inputField.value}
   on:firstItemSelected = {(e)=> select(e.detail)}
   on:submit
   on:outroEnd
