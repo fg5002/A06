@@ -1,9 +1,10 @@
 <script>
+  //import {getContext} from 'svelte';
   import ListSelect from "./ListSelect.svelte";
   import TimePicker from "./TimePicker.svelte";
 	import { currData } from './store';
   import TextInput from './TextInput.svelte';
-
+  
   export let showAttributeList = false;
   export let source = [];
   export let result = $currData.attributes;
@@ -16,47 +17,50 @@
   let selectedType = "text";
   let sText = "";
   
+  //const {getInputValue} = getContext('input');
+  
   const select = (i)=> {
     switch (i.type) {
       case 'bool':
         i.dis = i.nam;
         addItemToResult(i);      
         break;
-      case 'text':
-      case 'tel':
-        selectedItem = i;
-        selectedPlaceholder = selectedItem.nam;
-        selectedType = i.type;
-        showTextModal = true;       
-        break;
-      case 'time':
-        selectedItem = i;
-        selectedPlaceholder = selectedItem.nam;
-        showTimePicker = true;
-        break;
+        case 'text':
+          case 'tel':
+            selectedItem = i;
+            selectedPlaceholder = selectedItem.nam;
+            selectedType = i.type;
+            showTextModal = true;       
+            break;
+            case 'time':
+              selectedItem = i;
+              selectedPlaceholder = selectedItem.nam;
+              showTimePicker = true;
+              break;
+            }
+      sText = "";
     }
-    sText = "";
+    
+    const submitTextModal = (e)=> {
+      selectedItem.value = e.detail;
+      selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
+      addItemToResult(selectedItem);
+      
+    }  
+    
+    const submitTimePicker = (e)=> {
+      selectedItem.value = e.detail;
+      selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
+      addItemToResult(selectedItem); 
+      console.log(getInputValue());  
+    }
+    
+    const addItemToResult = (i)=> {
+      result = result.filter(f=> f.id != i.id);
+      result.push(i);
+      result = result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
   }
-
-  const submitTextModal = (e)=> {
-    selectedItem.value = e.detail;
-    selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
-    addItemToResult(selectedItem);
-
-  }  
-
-  const submitTimePicker = (e)=> {
-    selectedItem.value = e.detail;
-    selectedItem.dis = selectedItem.rep.replace("*", selectedItem.value);
-    addItemToResult(selectedItem);    
-  }
-
-  const addItemToResult = (i)=> {
-    result = result.filter(f=> f.id != i.id);
-    result.push(i);
-    result = result.sort((a, b)=> parseInt(a["ord"]) - parseInt(b["ord"]));
-  }
-
+  
   const removeItemFromResult = (i)=>{
     result = result.filter(f=> f.id !== i.id);
 
@@ -72,13 +76,40 @@
       showTextModal = true;
     }
   }
+  
+  /*
+  
+  select input
+  searchList
+  listItem click
+  new res add
+  -------------
+  select input
+  -------------
+  if res editable
+  sour item color = selected
+  set input placeholder sour item name
+  set input type
+  if res set input value = res item value
+  input focus
+  
+  input enter 
+  set res item value = input value
+  deselect resitem
+  
+  clear input
+  set placeholder back
+  
+  
+
+  */
 
 </script>
 
 <TextInput
+  bind:inputData = {selectedValue}
   bind:showTextModal = {showTextModal}
   on:submitTextModal = {submitTextModal}
-  bind:inputData = {selectedValue}
   bind:placeHolder = {selectedPlaceholder}
   bind:type = {selectedType}
 />
@@ -126,5 +157,6 @@
         on:pointerdown|preventDefault={selectEditor(item)}
       >{item.value}</span>
     {/if}
+
   </div>
 </ListSelect>

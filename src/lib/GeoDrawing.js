@@ -298,14 +298,14 @@
         break;
       case 1:
         mp[1] = cor
-        p[0] = (distance(mp[0], mp[1], {units:'meters'})).toFixed(1);
+        p[0] = parseFloat((distance(mp[0], mp[1], {units:'meters'})).toFixed(1));
         if(p.length>1){
-          p[2] = (bearing(mp[0], mp[1]) + 90).toFixed(1);
+          p[2] = parseFloat((bearing(mp[0], mp[1]) + 90).toFixed(1));
         }
         break;
       case 2:
         mp[2] = cor;
-        p[1] = (distance(mp[0], mp[2], {units:'meters'})).toFixed(1);
+        p[1] = parseFloat((distance(mp[0], mp[2], {units:'meters'})).toFixed(1));
         break;
       default:
         return false

@@ -33,7 +33,6 @@
   backdropClasses = "items-start justify-center z-3000 bg-lime-100/90 w-full"
   mainClasses = "w-full h-auto mt-1.5 md:w-1/2 xl:w-1/3"
   on:introEnd = {()=> inputRef.focus()}
-  on:outroEnd = {()=> inputRef.focus()}
   >
     {#if type === "text"}
       <input 

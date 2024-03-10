@@ -18,6 +18,7 @@
   import TaxonEditor from "$lib/TaxonEditor.svelte";
 	import DailyList from "$lib/DailyList.svelte";
   import DrawingMenu from "$lib/DrawingMenu.svelte";
+	import TextInput from "../../lib/TextInput.svelte";
 
   let showCursor = false;
   let cursorPos;
@@ -48,6 +49,21 @@
     showCursor = true;
     showContextMenu = false;
   }
+
+  const copyToClipboard = async()=> {
+    try {
+      let geo = $tempGeo.features[$tempIndex].geometry;
+      let text = geo.param ? [...geo.coordinates, ...geo.param] : geo.coordinates;
+      //console.log(JSON.stringify(text));
+      if (navigator?.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      }
+      showContextMenu = false;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 
   const openInTaxonEditor = ()=>{
     let f = $tempGeo.features[$tempIndex];
@@ -193,6 +209,7 @@
   <LeafletContextMenu bind:showContextMenu cor={cursorPos}>
     <div class="flex flex-col divide-y divide-slate-500 shadow-2xl">
       <MenuItem  title={"Edit"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={beginEdit}/> 
+      <MenuItem  title={"Copy"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={copyToClipboard}/> 
       <MenuItem  title={"Taxoneditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={openInTaxonEditor}/> 
       <MenuItem  title={"Geoeditor"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={()=> console.log('Empty')}/> 
       <MenuItem  title={"Delete"} border={false} appearance = {'py-1 px-2 bg-yellow-200'} on:click={deleteShape}/> 

@@ -1,4 +1,5 @@
 <script>
+  import {setContext, onMount} from 'svelte';
   import {currData, currDate} from "./store";
   import Modal from "./Modal.svelte";
   import {birds} from "./taxon"
@@ -8,7 +9,7 @@
   import ObserverList from "./ObserverList.svelte";
   import TaxonNotes from "./TaxonNotes.svelte";
   import TaxonEditorItem from "./TaxonEditorItem.svelte";
-
+  
   export let showEditor = false;
 
   let showTaxonList = false;
@@ -18,14 +19,25 @@
   let searchText = "";
   let promptRef = null;
   
-  $: searchText = promptRef && promptRef.value; 
+  export const getInput = () => promptRef;
 
+  if(showEditor){
+      setContext('input', {inputFocus, getInputValue});
+  }
+
+  $: searchText = promptRef && promptRef.value; 
+  
   /*
   Fekete gólya (Ciconia nigra)
   3pd átrepülő dk-felé
   https://www.google.com/maps/search/?api=1&query=47.5,19.25
   */
 
+  //setContext('mainInput', {inputFocus, getInputValue});
+
+  const inputFocus = ()=> promptRef.focus();
+  const getInputValue = ()=> searchText;
+  
   const addAttribute = ()=> {
     let res = null;
     let idx;
@@ -60,6 +72,14 @@
     if (e.key == 'Enter'){
       addAttribute();
       promptRef.value = "";
+    }
+    if (e.key == ' '){
+      console.log('lefutott')
+      promptRef.blur();
+      console.log('lefutott2')
+      inputFocus();
+      console.log(getInputValue());
+
     }
   }
   
