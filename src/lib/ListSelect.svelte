@@ -29,11 +29,9 @@
   }
 
   const inputKeyDown = (e)=> {
-    if(e.key == 'Enter') {
-      if(items.length>0){
-        dispatch('firstItemSelected', items[0]);
-        searchText = "";
-      }
+    if(e.key == 'Enter' && items.length>0){
+      dispatch('firstItemSelected', items[0]);
+      searchText = "";
     }
   }
 
