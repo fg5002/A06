@@ -23,7 +23,7 @@
 
 {#if showModal}
   <div 
-    class="fixed inset-0 flex bg-transparent bg-opacity-75 mt-12 {modalClass} {backdropClasses}"
+    class="fixed inset-0 flex bg-transparent bg-opacity-90 mt-12 {modalClass} {backdropClasses}"
     on:pointerdown={closeOnOutclick} 
     in:fly={inFly}
     out:fly={outFly}

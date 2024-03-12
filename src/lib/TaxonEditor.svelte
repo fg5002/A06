@@ -143,6 +143,7 @@
         on:keydown|stopPropagation = {promptEnter}
         bind:value = {searchText}
         bind:this={promptRef}
+        placeholder="Abbrevations"
       >
       <button 
         class="px-2 py-1 w-1/4 text-center bg-yellow-300" on:pointerup = {submitTaxonEditor}>

@@ -14,13 +14,17 @@
 
   const inputKeyDown = (e)=> {
     if(e.key == 'Enter') {
-      dispatch('submitTextModal', inputData);
-      inputData = "";
-      placeHolder = "";
-      showTextModal = false;   
+      submitTextModal();
     }
   }
 
+  const submitTextModal = ()=> {
+    dispatch('submitTextModal', inputData);
+    inputData = "";
+    placeHolder = "";
+    showTextModal = false;   
+  }
+  
 </script>
 
 <Modal
@@ -45,8 +49,8 @@
         type= tel
         placeholder= {placeHolder}
         bind:this={inputRef}
-        bind:value={inputData}
         on:keydown|stopPropagation = {inputKeyDown}
+        bind:value={inputData}
       />
     {/if}
 </Modal>

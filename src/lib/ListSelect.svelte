@@ -45,14 +45,14 @@
 <Modal
   bind:showModal = {showSelectList} 
   modalClass = "list-select" 
-  backdropClasses = "items-start justify-center z-2000"
-  mainClasses = "w-full h-1/2 mt-1.5 text-left sm:h-4/5 md:w-2/3 md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
-  on:introEnd = {()=>promptRef.focus()}
+  backdropClasses = "items-start justify-center z-2000 bg-yellow-100"
+  mainClasses = "w-full max-h-[50%] h-auto mt-1.5 text-left sm:h-4/5 md:w-2/3 md:max-h-50% md:h-4/5 xl:h-4/5 xl:w-1/3 xl:text-base"
+  on:introEnd = {()=> promptRef.focus()}
   on:outroEnd
   on:modalClose = {modalClose}
 >
 
-  <div class="flex flex-col text-lg bg-lime-200 w-full h-full border border-slate-500 rounded-sm">
+  <div class="flex flex-col text-lg bg-lime-200 w-full border border-slate-500 rounded-sm">
     <div class="flex justify-between bg-yellow-200 border-b border-slate-500 divide-x divide-gray-400">  
       <input 
         class="w-full px-2 py-1 m-0 bg-yellow-200 outline-none" 
